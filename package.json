@@ -1,29 +1,36 @@
 {
   "name": "dev-tadaa",
   "version": "0.0.1",
-  "description": "A Quasar Project",
-  "productName": "Quasar App",
-  "author": "Catalin Muresian <catalinmuresian@yahoo.com>",
+  "description": "App Tadaa",
+  "productName": "App Tadaa",
+  "author": "Catalin Muresian mcatalin.dev@gmail.com",
   "type": "module",
   "private": true,
   "scripts": {
-    "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "build": "quasar build",
-    "postinstall": "quasar prepare"
+    "build:pwa": "quasar build -m pwa"
   },
   "dependencies": {
+    "@quasar/extras": "^1.16.4",
     "axios": "^1.2.1",
     "pinia": "^3.0.1",
-    "@quasar/extras": "^1.16.4",
     "quasar": "^2.16.0",
+    "register-service-worker": "^1.7.2",
     "vue": "^3.5.22",
     "vue-router": "^5.0.0"
   },
   "devDependencies": {
     "@quasar/app-vite": "^2.1.0",
     "autoprefixer": "^10.4.2",
-    "postcss": "^8.4.14"
+    "postcss": "^8.4.14",
+    "workbox-build": "^7.0.0",
+    "workbox-cacheable-response": "^7.0.0",
+    "workbox-core": "^7.0.0",
+    "workbox-expiration": "^7.0.0",
+    "workbox-precaching": "^7.0.0",
+    "workbox-routing": "^7.0.0",
+    "workbox-strategies": "^7.0.0"
   },
   "engines": {
     "node": "^28 || ^26 || ^24 || ^22 || ^20",

@@ -1,6 +1,9 @@
 import { defineRouter } from '#q-app/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
+import { Cookies } from 'quasar'
+import { useDataStore } from 'stores/data.js'
 import routes from './routes'
+import {pageTransition} from "src/mixins/promiseTransitions.js";
 
 /*
  * If not building with SSR mode, you can
@@ -16,14 +19,38 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     ? createMemoryHistory
     : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory)
 
-  const Router = createRouter({
-    scrollBehavior: () => ({ left: 0, top: 0 }),
+  const Router = new createRouter({
+    scrollBehavior: async (to, from, savedPosition) => {
+      await pageTransition();
+      return {left: 0, top: 0};
+    },
     routes,
 
     // Leave this as is and make changes in quasar.conf.js instead!
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE)
+  })
+
+  Router.beforeEach(async (to) => {
+    const token = Cookies.get('token')
+
+    if (!token) {
+      if (to.name !== 'login') return { name: 'login' }
+      return
+    }
+
+    if (to.name === 'login') return
+
+    const store = useDataStore()
+    if (!store.vendor) {
+      try {
+        await store.checkUser()
+      } catch {
+        Cookies.remove('token', { path: '/' })
+        return { name: 'login' }
+      }
+    }
   })
 
   return Router

@@ -1,102 +1,55 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
+    <q-header elevated style="background-color: #e53935;">
+      <q-toolbar class="main-container">
+        <span class="text-weight-bold" style="font-size: 1.4rem;">{{ store?.vendor }}</span>
+        <q-space />
         <q-btn
+          icon="logout"
           flat
-          dense
           round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
+          size="lg"
+          @click="store.logout()"
         />
-
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn
+          v-if="route.name !== 'dashboard'"
+          icon="home"
+          flat
+          round
+          size="lg"
+          @click="router.push({ name: 'dashboard' })"
+        />
       </q-toolbar>
     </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
-    <q-page-container>
-      <router-view />
+    <q-page-container class="page-container">
+      <router-view v-slot="{ Component, route }">
+        <transition
+          :duration="{ enter: 50, leave: 50 }"
+          :enter-active-class="'animated fadeIn'"
+          :leave-active-class="'animated fadeOut'"
+          @before-leave="transitionOut" @enter="transitionIn"
+          mode="out-in">
+          <component :is="Component" :key="componentKey" />
+        </transition>
+      </router-view>
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+import { useDataStore } from 'stores/data.js'
+import { useRoute, useRouter } from 'vue-router'
+import {transitionIn, transitionOut} from "src/mixins/promiseTransitions.js";
+import {computed} from "vue";
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+const store = useDataStore()
+const route = useRoute()
+const router = useRouter()
 
-const leftDrawerOpen = ref(false)
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
+const componentKey = computed(() => {
+  return route.path;
+})
 </script>
+
+<style lang="scss">
+</style>
