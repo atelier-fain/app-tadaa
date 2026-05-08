@@ -22,7 +22,8 @@
                        dense
                        flat
                        :disable="!ticketsQuantity[_id] || ticketsQuantity[_id] === 0"
-                       @click="handleQty({ action: 'remove', _id })"
+                       @mousedown="handleQty({ action: 'remove', _id })"
+                       @touchstart.prevent="handleQty({ action: 'remove', _id })"
                 />
                 <q-field outlined dense>
                   <template v-slot:control>
@@ -32,7 +33,8 @@
                   </template>
                 </q-field>
                 <q-btn icon="add" dense flat
-                       @click="handleQty({ action: 'add', _id })"
+                       @mousedown="handleQty({ action: 'add', _id })"
+                       @touchstart.prevent="handleQty({ action: 'add', _id })"
                 />
               </div>
             </div>
@@ -184,6 +186,11 @@ defineExpose({ reset, selectedTicketIds })
               display: flex;
               align-items: center;
               gap: 6px;
+
+              .q-btn {
+                touch-action: manipulation !important;
+                user-select: none !important;
+              }
 
               .q-field {
                 width: 50px;

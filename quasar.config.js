@@ -13,7 +13,9 @@ export default defineConfig(() => {
       'material-icons',
     ],
     build: {
-      publicPath: '/app-tadaa/',
+      publicPath: process.env.NODE_ENV === 'production'
+        ? '/app-tadaa/'
+        : '/',
       env: {
         BUILD_VERSION: Date.now()
       },

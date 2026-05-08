@@ -42,7 +42,10 @@
             </div>
 
             <div class="card-footer">
-              <span class="prep-label">Prep time</span>
+              <div class="prep-info">
+                <span class="prep-label">Prep time</span>
+                <span class="prep-val">{{ product.prepTime }} min</span>
+              </div>
               <div class="prep-controls">
                 <q-btn
                   round flat icon="remove" size="sm"
@@ -54,7 +57,6 @@
                   @mouseleave="stopHold"
                   @touchend="stopHold"
                 />
-                <span class="prep-val">{{ product.prepTime }} min</span>
                 <q-btn
                   round flat icon="add" size="sm"
                   class="prep-btn"
@@ -220,21 +222,24 @@ function stopHold() {
   padding-top: 8px;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
+.prep-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 .prep-label {
   font-size: 12px;
   color: $grey-6;
+}
+.prep-val {
+  font-size: 15px;
+  font-weight: 700;
+  color: $dark;
 }
 .prep-controls {
   display: flex;
   align-items: center;
   gap: 4px;
-}
-.prep-val {
-  font-size: 13px;
-  font-weight: 600;
-  color: $dark;
-  min-width: 44px;
-  text-align: center;
 }
 .prep-btn {
   border: 1px solid rgba(0, 0, 0, 0.12) !important;
