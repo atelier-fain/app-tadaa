@@ -144,6 +144,8 @@ function onConfirmCash() {
     border-radius: 0 !important;
     overflow: hidden;
     box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12) !important;
+    background: $dark;
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   .cart-bar-inner {
