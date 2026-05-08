@@ -1,0 +1,1 @@
+.dashboard{padding-top:20px;height:calc(100svh - 70px);overflow-y:auto}.dashboard .main-container{display:flex;justify-content:center;gap:20px;max-width:540px;min-height:100%;margin:0 auto;flex-wrap:wrap;align-items:center;align-content:center}.dashboard .main-container .q-btn{width:100%;padding:0;max-width:150px}

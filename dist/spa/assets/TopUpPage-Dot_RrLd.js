@@ -1,0 +1,1 @@
+import{Q as e}from"./QPage-B7JAe9OT.js";import{_ as r}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{x as t,y as a,z as s,B as p}from"./index-aIqgAlyO.js";import"./render-DjSmuU3c.js";const c={};function n(f,o){return t(),a(e,{class:"q-pa-md"},{default:s(()=>[...o[0]||(o[0]=[p("div",null,"Top Up",-1)])]),_:1})}const l=r(c,[["render",n]]);export{l as default};
