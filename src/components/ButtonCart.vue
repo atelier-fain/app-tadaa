@@ -9,9 +9,9 @@
       <div class="cart-bar-inner" @click="onContinue">
         <div class="cart-bar-left">
           <span class="cart-bar-label">Continue</span>
-          <span class="cart-bar-price" v-html="_formattedPrice(props.totalPrice)" />
         </div>
         <div class="cart-bar-right">
+          <span class="cart-bar-price" v-html="_formattedPrice(props.totalPrice)" />
           <transition
             :appear="startAnimations"
             :key="props.qtyCart"
@@ -145,7 +145,7 @@ function onConfirmCash() {
     overflow: hidden;
     box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12) !important;
     background: $dark;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
   }
 
   .cart-bar-inner {
@@ -171,25 +171,27 @@ function onConfirmCash() {
   }
 
   .cart-bar-label {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 700;
     color: white;
     line-height: 1;
   }
 
-  .cart-bar-price {
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1;
-  }
-
   .cart-bar-right {
-    width: 80px;
     flex-shrink: 0;
     background: $dark;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 10px;
+    padding-right: 18px;
+  }
+
+  .cart-bar-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1;
   }
 
   .cart-bar-icon {
