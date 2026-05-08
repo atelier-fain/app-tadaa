@@ -2,7 +2,11 @@
   <div class="login-page">
     <div class="login-box">
       <div class="text-center q-mb-md">
-        <q-img :src="$img('logo.png')" alt="Logo" class="login-logo" />
+        <q-img
+          no-spinner
+          :src="$img('logo.png')"
+          alt="Logo"
+          class="login-logo" />
       </div>
 
       <q-form ref="formRef">
