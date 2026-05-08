@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated style="background-color: #e53935;">
       <q-toolbar class="main-container">
-        <span class="text-weight-bold" style="font-size: 1.4rem;">{{ store?.vendor }}</span>
+        <span class="text-weight-bold" style="font-size: 18px;">{{ store?.vendor }}</span>
         <q-space />
         <q-btn
           icon="logout"

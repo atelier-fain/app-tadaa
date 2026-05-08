@@ -18,7 +18,7 @@ const props = defineProps({
 
 const $q = useQuasar()
 const enabled = ref(Cookies.get('notif_sound_enabled') !== 'false')
-const audio = new Audio('/sounds/ding.mp3')
+const audio = new Audio(`${import.meta.env.BASE_URL}sounds/ding.mp3`)
 
 function toggle() {
   enabled.value = !enabled.value
