@@ -5,7 +5,9 @@ const BUILD_VERSION = process.env.BUILD_VERSION
 
 export default boot(({ app }) => {
   app.config.globalProperties.$img = (path) => {
-    return `/imgs/${path}?v=${BUILD_VERSION}`
+    return process.env.NODE_ENV === 'production'
+           ? `/app-tadaa/imgs/${path}?v=${BUILD_VERSION}`
+           : `/imgs/${path}?v=${BUILD_VERSION}`
   }
 })
 
