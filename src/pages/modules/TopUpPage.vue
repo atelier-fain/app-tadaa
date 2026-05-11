@@ -28,7 +28,7 @@
       <!-- Sumar suma selectata -->
       <transition name="fade">
         <div v-if="finalAmount" class="amount-summary">
-          <span class="summary-label">Total de incarcat</span>
+          <span class="summary-label">Total to top up</span>
           <span class="summary-value">{{ finalAmount }} lei</span>
         </div>
       </transition>
@@ -215,7 +215,7 @@ const onCheckBalance = () => {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .topup-page {
   display: flex;
   flex-direction: column;
@@ -494,9 +494,7 @@ const onCheckBalance = () => {
   padding-top: 0;
   padding-bottom: 0;
 }
-</style>
 
-<style lang="scss">
 /* ── Payment method dialog ─────────────────────────── */
 .payment-method-dialog {
   .q-dialog__inner {
@@ -678,3 +676,4 @@ const onCheckBalance = () => {
   }
 }
 </style>
+
