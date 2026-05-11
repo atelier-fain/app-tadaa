@@ -15,12 +15,16 @@ export const useDataStore = defineStore('data', {
   },
 
   actions: {
-    async pay_cash (payload) {
+    async pay_cash (payload, onSuccess) {
       this.isFetching = 'pay_cash'
       try {
         await new Promise(resolve => setTimeout(resolve, 1000))
         console.log(payload)
-        this.router.push({ name: 'tickets' })
+        if (onSuccess) {
+          onSuccess()
+        } else {
+          this.router.push({ name: 'tickets' })
+        }
       } catch (e) {
 
       }

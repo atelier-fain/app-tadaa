@@ -1,1 +1,0 @@
-import{Q as s}from"./QPage-B7JAe9OT.js";import{_ as r}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{x as t,y as a,z as o,B as c}from"./index-aIqgAlyO.js";import"./render-DjSmuU3c.js";const n={};function f(m,e){return t(),a(s,{class:"q-pa-md"},{default:o(()=>[...e[0]||(e[0]=[c("div",null,"Access",-1)])]),_:1})}const l=r(n,[["render",f]]);export{l as default};

@@ -1,1 +1,0 @@
-import{Q as r}from"./QPage-B7JAe9OT.js";import{_ as t}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{x as o,y as a,z as s,B as c}from"./index-aIqgAlyO.js";import"./render-DjSmuU3c.js";const n={};function p(f,e){return o(),a(r,{class:"q-pa-md"},{default:s(()=>[...e[0]||(e[0]=[c("div",null,"Report",-1)])]),_:1})}const l=t(n,[["render",p]]);export{l as default};
