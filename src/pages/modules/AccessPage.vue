@@ -18,17 +18,20 @@
       ref="scanInputRef"
       v-model="scanValue"
       @keydown="onKeyDown"
+      @blur="scanInputRef?.focus()"
       style="opacity: 0; pointer-events: none; position: absolute"
       autocomplete="off"
+      inputmode="none"
+      autofocus
     />
   </div>
 </template>
 
 <script setup>
-import {ref, onMounted, onBeforeUnmount, computed} from 'vue'
+import { ref, onBeforeUnmount } from 'vue'
 import { api } from 'src/boot/axios'
 import {useDataStore} from "stores/data.js";
-import { useQuasar } from 'quasar'
+import { useQuasar, QSpinnerOval } from 'quasar'
 
 const storeData = useDataStore()
 const $q = useQuasar()
@@ -36,7 +39,6 @@ const scanValue = ref('')
 const ticketHtml = ref('')
 const bgColor = ref('#1e1e2e')
 const scanInputRef = ref(null)
-let focusInterval = null
 let wakeLock = null
 
 async function requestWakeLock() {
@@ -58,7 +60,7 @@ async function onKeyDown(e) {
 
   const dismiss = $q.notify({
     message: 'Se verifică...',
-    spinner: true,
+    spinner: QSpinnerOval,
     timeout: 0,
     position: 'top',
   })
@@ -78,14 +80,7 @@ async function onKeyDown(e) {
   }
 }
 
-onMounted(() => {
-  focusInterval = setInterval(() => {
-    scanInputRef.value?.focus()
-  }, 1000)
-})
-
 onBeforeUnmount(() => {
-  clearInterval(focusInterval)
   wakeLock?.release()
 })
 </script>
