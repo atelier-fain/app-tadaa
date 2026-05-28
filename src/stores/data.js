@@ -15,6 +15,16 @@ export const useDataStore = defineStore('data', {
   },
 
   actions: {
+    async check_ticket (scannedValue) {
+      try {
+        const { data } = await api.post('/php/check_ticket.php', { code: scannedValue })
+        return data
+
+      } catch (e) {
+
+      }
+    },
+
     async pay_cash (payload, onSuccess) {
       this.isFetching = 'pay_cash'
       try {
