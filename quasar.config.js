@@ -28,6 +28,11 @@ export default defineConfig(() => {
     devServer: {
       open: true,
       proxy: {
+        '/v2/': {
+          target: 'https://api.tadaa.ro/',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/v2/, '')
+        },
         '/storage/': {
           target: 'https://cockpit.gmg.grapeminds.ro/storage/uploads',
           changeOrigin: true,

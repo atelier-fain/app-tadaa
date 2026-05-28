@@ -17,7 +17,7 @@ export const useDataStore = defineStore('data', {
   actions: {
     async check_ticket (scannedValue) {
       try {
-        const { data } = await api.post('/php/check_ticket.php', { code: scannedValue })
+        const { data } = await api.post(ep.checkTicket, { code: scannedValue })
         return data
 
       } catch (e) {
@@ -85,10 +85,11 @@ export const useDataStore = defineStore('data', {
     async login ({user, password}) {
       this.isFetching = 'login'
       try {
-        // const { data } = api.post(ep.login, {
-        //    user,
-        //    password
-        // })
+        const res = api.post(ep.login, {
+           user,
+           password
+        })
+        console.log(res)
         await new Promise(resolve => setTimeout(resolve, 1000))
         const data = {
           token: 'mock-token-abc123',

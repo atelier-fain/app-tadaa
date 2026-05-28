@@ -4,15 +4,19 @@ import axios from 'axios'
 let STORAGE
 let hostname
 
-const api = axios.create({
-  baseURL: process.env.DEV
-    ? 'http://localhost:9100'
-    : process.env.SERVER
-      ? 'http://localhost:3001'
-      : '',
-})
+let api
 
 export default defineBoot(({ app, ssrContext }) => {
+  api = axios.create(
+    {
+      baseURL: process.env.NODE_ENV !== 'production' ? "/v2/" : "https://api.tadaa.ro/",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer 747424c0f4cb4f6bd645e8ea1347c50c"
+      }
+    })
+
+
   hostname =
     process.env.SERVER
       ? ssrContext.req.headers.host

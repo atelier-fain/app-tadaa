@@ -1,4 +1,5 @@
 export const ep = {
-  login: '/api/login/'
+  checkToken: '/api/login/',
+  login: '/v2/app/auth/'
 }
 
