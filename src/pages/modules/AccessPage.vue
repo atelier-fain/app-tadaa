@@ -54,8 +54,12 @@ async function onKeyDown(e) {
   await requestWakeLock()
   if (e.key !== 'Enter') return
 
+
   const scannedValue = scanValue.value
   scanValue.value = ''
+
+  alert(scannedValue)
+
 
 
   const dismiss = $q.notify({
