@@ -9,22 +9,25 @@
           class="login-logo" />
       </div>
 
-      <q-form ref="formRef">
+      <q-form
+        @submit.prevent="handleSubmit"
+        @validation-error="(ref) => scrollToErrorField(ref)"
+        greedy>
         <q-input
-          ref="userRef"
           v-model="form.user"
           label="User"
           filled
           bg-color="white"
+          lazy-rules="ondemand"
           :rules="[val => !!val || 'Userul este obligatoriu']"
         />
         <q-input
-          ref="passwordRef"
           v-model="form.password"
           label="Password"
           type="password"
           filled
           bg-color="white"
+          lazy-rules="ondemand"
           :rules="[
             val => !!val || 'Parola este obligatorie',
             val => val.length >= 4 || 'Minim 4 caractere'
@@ -37,9 +40,9 @@
           class="full-width login-btn"
           unelevated
           no-caps
+          type="submit"
           :loading="store.isFetching === 'login'"
           :disable="store.isFetching === 'login'"
-          @click="handleSubmit"
         />
       </q-form>
     </div>
@@ -47,15 +50,13 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import scrollToErrorField from 'src/mixins/scrollToErrorField.js'
-import {useDataStore} from "stores/data.js";
-
-const formRef = ref(null)
-const userRef = ref(null)
-const passwordRef = ref(null)
+import { useDataStore } from 'stores/data.js'
+import { useQuasar } from 'quasar'
 
 const store = useDataStore()
+const $q = useQuasar()
 
 const form = reactive({
   user: '',
@@ -63,14 +64,15 @@ const form = reactive({
 })
 
 async function handleSubmit() {
-  const valid = await formRef.value.validate()
-  if (!valid) {
-    const firstError = [userRef, passwordRef].find(r => r.value?.hasError)
-    if (firstError) scrollToErrorField(firstError.value)
-    return
+  try {
+    await store.login({ user: form.user, password: form.password })
+  } catch (e) {
+    $q.notify({
+      type: 'negative',
+      message: e.response?.data?.error || 'Eroare la autentificare',
+      position: 'top',
+    })
   }
-  console.log('Login submitted:', { user: form.user, password: form.password })
-  await store.login({user: form.user, password: form.password})
 }
 </script>
 
@@ -94,6 +96,7 @@ async function handleSubmit() {
       height: 56px;
       font-size: 16px !important;
       border-radius: 4px;
+      margin-top: 8px;
 
       &.disabled {
         opacity: 1 !important;
@@ -103,19 +106,6 @@ async function handleSubmit() {
 
     .q-field__control {
       border-radius: 4px;
-
-      &::before {
-        border: none !important;
-      }
-
-      &::after {
-        border: none !important;
-        height: 0 !important;
-      }
-    }
-
-    .q-field--focused .q-field__control {
-      background: white !important;
     }
 
     .q-field__bottom {

@@ -7,7 +7,9 @@ import {nextTick} from "vue";
 export const useDataStore = defineStore('data', {
   state: () => ({
     isFetching: null,
-    vendor: null
+    vendor: null,
+    token: Cookies.get('token') || null,
+    user: null
   }),
 
   getters: {
@@ -15,13 +17,21 @@ export const useDataStore = defineStore('data', {
   },
 
   actions: {
+    _post (endpoint, body = {}) {
+      return api.post(endpoint, {
+        ...body,
+        token: this.token })
+    },
+
     async check_ticket (scannedValue) {
       try {
-        const { data } = await api.post(ep.checkTicket, { code: scannedValue })
+        const { data } = await this._post(ep.checkTicket, {
+          code: scannedValue
+        })
         return data
 
       } catch (e) {
-
+        return e
       }
     },
 
@@ -67,15 +77,6 @@ export const useDataStore = defineStore('data', {
       }
     },
 
-    async checkUser () {
-      const token = Cookies.get('token')
-      // const { data } = await api.post(ep.checkUser, { token })
-      const data = {
-        vendor: 'Acme Corp'
-      }
-      this.vendor = data.vendor
-    },
-
     logout () {
       Cookies.remove('token', { path: '/' })
       this.vendor = null
@@ -85,22 +86,19 @@ export const useDataStore = defineStore('data', {
     async login ({user, password}) {
       this.isFetching = 'login'
       try {
-        const res = api.post(ep.login, {
+        const { data } = await api.post(ep.login, {
            user,
            password
         })
-        console.log(res)
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        const data = {
-          token: 'mock-token-abc123',
-          vendor: 'Acme Corp',
-          user
-        }
-        Cookies.set('token', data.token, { path: '/' })
-        this.vendor = data.vendor
-        this.router.push({name: 'dashboard'})
-      } catch (e) {
 
+        this.token = data?.token
+
+        Cookies.set('token', data.token, { path: '/', expires: 5 })
+        this.user = data.user
+        this.router.push({name: 'dashboard'})
+
+      } catch (e) {
+        throw e
       } finally {
         this.isFetching = null
       }

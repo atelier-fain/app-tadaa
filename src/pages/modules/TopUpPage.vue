@@ -240,17 +240,16 @@ const onCheckBalance = () => {
   font-weight: 500;
   color: #1a1a1a;
   text-align: center;
-  margin: 0;
 }
 
 .amounts-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
   width: 100%;
 
   @media (max-width: 360px) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
@@ -260,7 +259,7 @@ const onCheckBalance = () => {
   border-radius: 6px;
   background: #2e7d1f;
   color: white;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;

@@ -1,5 +1,5 @@
 export const ep = {
-  checkToken: '/api/login/',
+  checkTicket: '/v2/app/access/check/',
   login: '/v2/app/auth/'
 }
 

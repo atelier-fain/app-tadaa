@@ -44,7 +44,8 @@ function handleButton (id) {
 <style lang="scss">
 .dashboard {
   padding-top: 20px;
-  height: calc(100svh - 70px);
+  padding-bottom: 20px;
+  height: calc(100dvh - 60px);
   overflow-y: auto;
   .main-container {
     display: flex;
@@ -59,7 +60,7 @@ function handleButton (id) {
     .q-btn {
       width: 100%;
       padding: 0;
-      max-width: 150px;
+      max-width: 120px;
     }
   }
 }

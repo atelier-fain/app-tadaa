@@ -1,14 +1,26 @@
 <template>
-  <div class="access-page" :style="bgColor ? { backgroundColor: bgColor } : {}">
+  <div class="access-page">
     <div class="access-inner">
+<!--      <pre v-if="debugData" style="background:#000;color:#0f0;padding:12px;border-radius:8px;text-align:left;font-size:12px;word-break:break-all;white-space:pre-wrap;margin-bottom:12px">{{ debugData }}</pre>-->
 
       <div v-if="!ticketHtml" class="idle-state">
-        <q-icon name="qr_code_scanner" size="96px" color="white" class="scan-icon" />
-        <p class="idle-text">Scan the ticket</p>
+        <q-icon
+          :name="isChecking ? 'wifi_tethering' : 'qr_code_scanner'"
+          size="96px"
+          color="white"
+          :class="isChecking ? 'scanning-icon' : 'scan-icon'"
+        />
+        <p class="idle-text">{{ isChecking ? 'Scanning...' : 'Scan the ticket' }}</p>
       </div>
 
-      <div v-else class="result-state">
-        <div id="ticketCode" v-html="ticketHtml" />
+      <div v-else class="result-card" :class="isError ? 'result-card--error' : 'result-card--success'">
+        <q-icon
+          :name="isError ? 'cancel' : 'check_circle'"
+          size="72px"
+          :class="isError ? 'error-icon' : 'success-icon'"
+        />
+        <p class="result-text" v-html="ticketHtml" />
+        <span class="ticket-code-badge">#{{ lastCode }}</span>
       </div>
 
     </div>
@@ -18,7 +30,7 @@
       ref="scanInputRef"
       v-model="scanValue"
       @keydown="onKeyDown"
-      @blur="scanInputRef?.focus()"
+      @blur="setTimeout(() => scanInputRef?.focus(), 50)"
       style="opacity: 0; pointer-events: none; position: absolute"
       autocomplete="off"
       inputmode="none"
@@ -28,16 +40,16 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount } from 'vue'
-import { api } from 'src/boot/axios'
-import {useDataStore} from "stores/data.js";
-import { useQuasar, QSpinnerOval } from 'quasar'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useDataStore } from 'stores/data.js'
 
 const storeData = useDataStore()
-const $q = useQuasar()
 const scanValue = ref('')
 const ticketHtml = ref('')
-const bgColor = ref('#1e1e2e')
+const lastCode = ref('')
+const debugData = ref(null)
+const isChecking = ref(false)
+const isError = ref(false)
 const scanInputRef = ref(null)
 let wakeLock = null
 
@@ -51,38 +63,34 @@ async function requestWakeLock() {
 }
 
 async function onKeyDown(e) {
-  await requestWakeLock()
   if (e.key !== 'Enter') return
-
 
   const scannedValue = scanValue.value
   scanValue.value = ''
 
-  alert(scannedValue)
+  await requestWakeLock()
 
-
-
-  const dismiss = $q.notify({
-    message: 'Se verifică...',
-    spinner: QSpinnerOval,
-    timeout: 0,
-    position: 'top',
-  })
+  lastCode.value = scannedValue
+  isChecking.value = true
+  ticketHtml.value = ''
 
   const data = await storeData.check_ticket(scannedValue)
-  dismiss()
+  debugData.value = JSON.stringify(data, null, 2)
+  isChecking.value = false
 
-  if (data.valid && data.istoday) {
-    ticketHtml.value = `<strong><big>${data.qty} &times; </big> brățară ${data.color}</strong><br><br>Bilet valid<br>${data.ticket_name}<br>${data.ticket_category}`
-    bgColor.value = '#4fb907'
-  } else if (data.valid && !data.istoday) {
-    ticketHtml.value = `Bilet valabil în altă zi:<br>${data.ticket_name}<br>${data.ticket_category}`
-    bgColor.value = '#FF9800'
-  } else {
-    ticketHtml.value = 'Bilet invalid'
-    bgColor.value = '#ce0b0b'
+  if (!data) {
+    isError.value = true
+    ticketHtml.value = 'Eroare de rețea'
+    return
   }
+
+  isError.value = !!data.error
+  ticketHtml.value = data.message
 }
+
+onMounted(() => {
+  scanInputRef.value?.focus()
+})
 
 onBeforeUnmount(() => {
   wakeLock?.release()
@@ -91,11 +99,12 @@ onBeforeUnmount(() => {
 
 <style lang="scss">
 .access-page {
-  height: calc(100vh - 60px);
+  position: relative;
+  height: calc(100dvh - 60px);
+  background-color: #1e1e2e;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.35s ease;
 
   .access-inner {
     text-align: center;
@@ -116,6 +125,10 @@ onBeforeUnmount(() => {
       animation: pulse 2s ease-in-out infinite;
     }
 
+    .scanning-icon {
+      animation: spin 1s linear infinite;
+    }
+
     .idle-text {
       font-size: 1.4rem;
       font-weight: 400;
@@ -124,11 +137,45 @@ onBeforeUnmount(() => {
     }
   }
 
-  .result-state {
-    #ticketCode {
-      font-size: 1.6rem;
-      line-height: 1.7;
+  .result-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem 2rem;
+    border-radius: 20px;
+    animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    &--success {
+      background-color: #4fb907;
+      .success-icon { color: white; }
+    }
+
+    &--error {
+      background-color: #ce0b0b;
+      .error-icon {
+        color: white;
+        animation: shake 0.4s ease;
+      }
+    }
+
+    .result-text {
+      font-size: 1.3rem;
+      line-height: 135%;
       font-weight: 500;
+      margin: 0;
+      color: white;
+    }
+
+    .ticket-code-badge {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.8rem;
+      font-size: 0.7rem;
+      font-family: monospace;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.05em;
     }
   }
 }
@@ -136,5 +183,23 @@ onBeforeUnmount(() => {
 @keyframes pulse {
   0%, 100% { opacity: 0.85; transform: scale(1); }
   50%       { opacity: 1;    transform: scale(1.06); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes pop {
+  0%   { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-10px); }
+  40%       { transform: translateX(10px); }
+  60%       { transform: translateX(-8px); }
+  80%       { transform: translateX(8px); }
 }
 </style>

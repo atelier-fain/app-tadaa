@@ -1,7 +1,6 @@
 import { defineRouter } from '#q-app/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import { Cookies } from 'quasar'
-import { useDataStore } from 'stores/data.js'
 import routes from './routes'
 import {pageTransition} from "src/mixins/promiseTransitions.js";
 
@@ -42,15 +41,6 @@ export default defineRouter(function (/* { store, ssrContext } */) {
 
     if (to.name === 'login') return
 
-    const store = useDataStore()
-    if (!store.vendor) {
-      try {
-        await store.checkUser()
-      } catch {
-        Cookies.remove('token', { path: '/' })
-        return { name: 'login' }
-      }
-    }
   })
 
   return Router

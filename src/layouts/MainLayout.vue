@@ -1,8 +1,8 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated style="background-color: #e53935;">
+    <q-header elevated style="background-color: #e15350;">
       <q-toolbar class="main-container">
-        <span class="text-weight-bold" style="font-size: 18px;">{{ store?.vendor }}</span>
+        <span class="text-weight-bold" style="font-size: 18px;">{{ store?.user?.user }}</span>
         <q-space />
         <q-btn
           icon="logout"
