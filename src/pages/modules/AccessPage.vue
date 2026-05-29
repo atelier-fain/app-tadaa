@@ -13,7 +13,7 @@
         <p class="idle-text">{{ isChecking ? 'Scanning...' : 'Scan the ticket' }}</p>
       </div>
 
-      <div v-else class="result-card" :class="isError ? 'result-card--error' : 'result-card--success'">
+      <div v-else class="result-card" :class="isError ? 'result-card--error' : 'result-card--success'" @click="reset">
         <q-icon
           :name="isError ? 'cancel' : 'check_circle'"
           size="72px"
@@ -86,6 +86,13 @@ async function onKeyDown(e) {
 
   isError.value = !!data.error
   ticketHtml.value = data.message
+}
+
+function reset() {
+  ticketHtml.value = ''
+  isError.value = false
+  lastCode.value = ''
+  setTimeout(() => scanInputRef.value?.focus(), 50)
 }
 
 onMounted(() => {

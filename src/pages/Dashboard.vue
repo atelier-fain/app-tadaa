@@ -60,7 +60,7 @@ function handleButton (id) {
     .q-btn {
       width: 100%;
       padding: 0;
-      max-width: 120px;
+      max-width: 40%;
     }
   }
 }
