@@ -248,7 +248,7 @@ const onCheckBalance = () => {
   gap: 5px;
   width: 100%;
 
-  @media (max-width: 360px) {
+  @media (max-width: 550px) {
     grid-template-columns: repeat(4, 1fr);
   }
 }

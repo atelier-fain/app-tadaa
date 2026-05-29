@@ -9,7 +9,7 @@ export const useDataStore = defineStore('data', {
     isFetching: null,
     vendor: null,
     token: Cookies.get('token') || null,
-    user: null
+    user: Cookies.get('user') || null,
   }),
 
   getters: {
@@ -92,15 +92,19 @@ export const useDataStore = defineStore('data', {
         })
 
         this.token = data?.token
+        this.user = data?.user
 
         Cookies.set('token', data.token, { path: '/', expires: 5 })
-        this.user = data.user
+        Cookies.set('user', data.user, { path: '/', expires: 5 })
+
         this.router.push({name: 'dashboard'})
 
       } catch (e) {
         throw e
       } finally {
-        this.isFetching = null
+        await nextTick(() => {
+          this.isFetching = null
+        })
       }
     }
 

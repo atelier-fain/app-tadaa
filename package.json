@@ -8,8 +8,7 @@
   "private": true,
   "scripts": {
     "dev": "quasar dev",
-    "build": "quasar build",
-    "build:pwa": "quasar build -m pwa"
+    "build": "quasar build"
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
