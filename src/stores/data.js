@@ -23,6 +23,13 @@ export const useDataStore = defineStore('data', {
         token: this.token })
     },
 
+    async check_token () {
+      const { data } = await this._post(ep.checkToken)
+      this.user = data.user
+      Cookies.set('user', data.user, { path: '/', expires: 5 })
+      return data.user
+    },
+
     async check_ticket (scannedValue) {
       try {
         const { data } = await this._post(ep.checkTicket, {

@@ -4,13 +4,11 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', name: 'dashboard', component: () => import('pages/Dashboard.vue') },
-      { path: '/modules/access', name: 'access', component: () => import('pages/modules/AccessPage.vue') },
-      { path: '/modules/access_proedus', name: 'access_proedus', component: () => import('pages/modules/AccessProedusPage.vue') },
-      { path: '/modules/report', name: 'report', component: () => import('pages/modules/ReportPage.vue') },
-      { path: '/modules/tickets', name: 'tickets', component: () => import('pages/modules/TicketsPage.vue') },
-      { path: '/modules/top_up', name: 'top_up', component: () => import('pages/modules/TopUpPage.vue') },
-      { path: '/modules/vendor', name: 'vendor', component: () => import('pages/modules/VendorPage.vue') },
-      { path: '/modules/vendor/settings', name: 'vendor-settings', component: () => import('pages/modules/VendorSettings.vue') }
+      { path: '/modules/access', name: 'access', component: () => import('pages/modules/AccessPage.vue'), meta: { permission: 'app_access' } },
+      { path: '/modules/tickets', name: 'tickets', component: () => import('pages/modules/TicketsPage.vue'), meta: { permission: 'app_tickets' } },
+      { path: '/modules/top_up', name: 'top_up', component: () => import('pages/modules/TopUpPage.vue'), meta: { permission: 'app_topup' } },
+      { path: '/modules/vendor', name: 'vendor', component: () => import('pages/modules/VendorPage.vue'), meta: { permission: 'app_vendor' } },
+      { path: '/modules/vendor/settings', name: 'vendor-settings', component: () => import('pages/modules/VendorSettings.vue'), meta: { permission: 'app_vendor' } }
     ]
   },
   {

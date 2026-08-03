@@ -5,13 +5,6 @@
         <span class="text-weight-bold" style="font-size: 18px;">{{ store?.user?.user }}</span>
         <q-space />
         <q-btn
-          icon="logout"
-          flat
-          round
-          size="lg"
-          @click="store.logout()"
-        />
-        <q-btn
           v-if="route.name !== 'dashboard'"
           icon="home"
           flat
@@ -21,6 +14,15 @@
         />
       </q-toolbar>
     </q-header>
+    <q-btn
+      v-if="route.path === '/'"
+      icon="logout"
+      round
+      size="md"
+      class="fixed-bottom-left text-white"
+      style="margin: 18px; z-index: 2000; background-color: #e15350 !important;"
+      @click="store.logout()"
+    />
     <q-page-container class="page-container">
       <router-view v-slot="{ Component, route }">
         <transition

@@ -11,6 +11,18 @@
           :class="isChecking ? 'scanning-icon' : 'scan-icon'"
         />
         <p class="idle-text">{{ isChecking ? 'Scanning...' : 'Scan the ticket' }}</p>
+
+        <q-btn
+          v-if="!isChecking"
+          round
+          size="lg"
+          color="white"
+          text-color="dark"
+          icon="photo_camera"
+          class="camera-trigger-btn"
+          @click="openCameraScanner"
+        />
+        <p class="camera-trigger-text">or scan with camera</p>
       </div>
 
       <div v-else class="result-card" :class="isError ? 'result-card--error' : 'result-card--success'" @click="reset">
@@ -30,18 +42,35 @@
       ref="scanInputRef"
       v-model="scanValue"
       @keydown="onKeyDown"
-      @blur="setTimeout(() => scanInputRef?.focus(), 50)"
+      @blur="refocusInput"
       style="opacity: 0; pointer-events: none; position: absolute"
       autocomplete="off"
       inputmode="none"
       autofocus
     />
+
+    <q-dialog v-model="showCameraDialog" maximized @hide="stopCameraScanner">
+      <q-card class="camera-dialog-card">
+        <q-btn
+          icon="close"
+          flat
+          round
+          size="lg"
+          color="white"
+          class="camera-close-btn"
+          @click="showCameraDialog = false"
+        />
+        <video ref="videoRef" class="camera-video" autoplay muted playsinline />
+        <p class="camera-hint">Îndreaptă camera spre codul QR de pe bilet</p>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { useDataStore } from 'stores/data.js'
+import QrScanner from 'qr-scanner'
 
 const storeData = useDataStore()
 const scanValue = ref('')
@@ -51,7 +80,10 @@ const debugData = ref(null)
 const isChecking = ref(false)
 const isError = ref(false)
 const scanInputRef = ref(null)
+const showCameraDialog = ref(false)
+const videoRef = ref(null)
 let wakeLock = null
+let qrScanner = null
 
 async function requestWakeLock() {
   try {
@@ -62,11 +94,8 @@ async function requestWakeLock() {
   }
 }
 
-async function onKeyDown(e) {
-  if (e.key !== 'Enter') return
-
-  const scannedValue = scanValue.value
-  scanValue.value = ''
+async function processScan(scannedValue) {
+  if (!scannedValue) return
 
   await requestWakeLock()
 
@@ -88,6 +117,60 @@ async function onKeyDown(e) {
   ticketHtml.value = data.message
 }
 
+async function onKeyDown(e) {
+  if (e.key !== 'Enter') return
+
+  const scannedValue = scanValue.value
+  scanValue.value = ''
+
+  await processScan(scannedValue)
+}
+
+async function openCameraScanner() {
+  showCameraDialog.value = true
+
+  await nextTick()
+
+  qrScanner = new QrScanner(
+    videoRef.value,
+    (result) => onCameraDecode(result.data),
+    {
+      highlightScanRegion: true,
+      highlightCodeOutline: true,
+      preferredCamera: 'environment',
+      maxScansPerSecond: 5,
+    }
+  )
+
+  try {
+    await qrScanner.start()
+  } catch (err) {
+    console.error('Camera error:', err)
+    showCameraDialog.value = false
+  }
+}
+
+function stopCameraScanner() {
+  qrScanner?.stop()
+  qrScanner?.destroy()
+  qrScanner = null
+  showCameraDialog.value = false
+}
+
+async function onCameraDecode(code) {
+  stopCameraScanner()
+
+  scanValue.value = code
+  await processScan(code)
+  scanValue.value = ''
+
+  refocusInput()
+}
+
+function refocusInput() {
+  setTimeout(() => scanInputRef.value?.focus(), 50)
+}
+
 function reset() {
   ticketHtml.value = ''
   isError.value = false
@@ -101,6 +184,9 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   wakeLock?.release()
+  qrScanner?.stop()
+  qrScanner?.destroy()
+  qrScanner = null
 })
 </script>
 
@@ -141,6 +227,19 @@ onBeforeUnmount(() => {
       font-weight: 400;
       margin: 0;
       letter-spacing: 0.03em;
+    }
+
+    .camera-trigger-btn {
+      margin-top: 0.8rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .camera-trigger-text {
+      font-size: 0.85rem;
+      font-weight: 400;
+      margin: 0;
+      opacity: 0.7;
+      letter-spacing: 0.02em;
     }
   }
 
@@ -184,6 +283,46 @@ onBeforeUnmount(() => {
       color: rgba(255, 255, 255, 0.5);
       letter-spacing: 0.05em;
     }
+  }
+}
+
+.camera-dialog-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  .camera-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .camera-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .camera-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    background-color: rgba(0, 0, 0, 0.55);
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
   }
 }
 
