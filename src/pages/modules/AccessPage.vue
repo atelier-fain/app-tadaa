@@ -303,46 +303,47 @@ onBeforeUnmount(() => {
     }
   }
 
-  .result-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    padding: 2rem 2rem;
-    border-radius: 20px;
-    animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
 
-    &--success {
-      background-color: #4fb907;
-      .success-icon { color: white; }
-    }
+.result-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 2rem;
+  border-radius: 20px;
+  animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
-    &--error {
-      background-color: #ce0b0b;
-      .error-icon {
-        color: white;
-        animation: shake 0.4s ease;
-      }
-    }
+  &--success {
+    background-color: #4fb907;
+    .success-icon { color: white; }
+  }
 
-    .result-text {
-      font-size: 1.3rem;
-      line-height: 135%;
-      font-weight: 500;
-      margin: 0;
+  &--error {
+    background-color: #ce0b0b;
+    .error-icon {
       color: white;
+      animation: shake 0.4s ease;
     }
+  }
 
-    .ticket-code-badge {
-      position: absolute;
-      top: 0.6rem;
-      right: 0.8rem;
-      font-size: 0.7rem;
-      font-family: monospace;
-      color: rgba(255, 255, 255, 0.5);
-      letter-spacing: 0.05em;
-    }
+  .result-text {
+    font-size: 1.3rem;
+    line-height: 135%;
+    font-weight: 500;
+    margin: 0;
+    color: white;
+  }
+
+  .ticket-code-badge {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.8rem;
+    font-size: 0.7rem;
+    font-family: monospace;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.05em;
   }
 }
 
