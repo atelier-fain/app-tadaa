@@ -112,6 +112,7 @@ const videoRef = ref(null)
 let wakeLock = null
 let qrScanner = null
 let cameraResumeTimeout = null
+let isProcessingDecode = false
 
 const successSound = new Audio('/sounds/success.mp3')
 const errorSound = new Audio('/sounds/error.mp3')
@@ -169,6 +170,7 @@ async function openCameraScanner() {
   ticketHtml.value = ''
   isError.value = false
   lastCode.value = ''
+  isProcessingDecode = false
   showCameraDialog.value = true
 
   await nextTick()
@@ -177,8 +179,8 @@ async function openCameraScanner() {
     videoRef.value,
     (result) => onCameraDecode(result.data),
     {
-      highlightScanRegion: false,
-      highlightCodeOutline: false,
+      highlightScanRegion: true,
+      highlightCodeOutline: true,
       preferredCamera: 'environment',
       maxScansPerSecond: 5,
     }
@@ -194,6 +196,7 @@ async function openCameraScanner() {
 
 function stopCameraScanner() {
   clearTimeout(cameraResumeTimeout)
+  isProcessingDecode = false
   qrScanner?.stop()
   qrScanner?.destroy()
   qrScanner = null
@@ -205,26 +208,23 @@ function stopCameraScanner() {
 }
 
 async function onCameraDecode(code) {
-  qrScanner?.stop()
+  if (isProcessingDecode || ticketHtml.value) return
+  isProcessingDecode = true
 
   scanValue.value = code
   await processScan(code)
   scanValue.value = ''
 
-  if (!showCameraDialog.value) return
+  if (!showCameraDialog.value) {
+    isProcessingDecode = false
+    return
+  }
 
-  cameraResumeTimeout = setTimeout(async () => {
+  cameraResumeTimeout = setTimeout(() => {
     ticketHtml.value = ''
     isError.value = false
     lastCode.value = ''
-
-    if (!showCameraDialog.value) return
-
-    try {
-      await qrScanner?.start()
-    } catch (err) {
-      console.error('Camera resume error:', err)
-    }
+    isProcessingDecode = false
   }, 2500)
 }
 
@@ -353,14 +353,11 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   background-color: #000;
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
 
   .camera-video-section {
-    position: relative;
-    flex: 0 0 60%;
-    height: 60%;
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -384,7 +381,7 @@ onBeforeUnmount(() => {
 
   .camera-hint {
     position: absolute;
-    bottom: 20px;
+    bottom: calc(40% + 20px);
     left: 50%;
     transform: translateX(-50%);
     color: white;
@@ -399,8 +396,12 @@ onBeforeUnmount(() => {
   }
 
   .camera-result-section {
-    flex: 0 0 40%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
     height: 40%;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
