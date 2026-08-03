@@ -3,37 +3,39 @@
     <div class="access-inner">
 <!--      <pre v-if="debugData" style="background:#000;color:#0f0;padding:12px;border-radius:8px;text-align:left;font-size:12px;word-break:break-all;white-space:pre-wrap;margin-bottom:12px">{{ debugData }}</pre>-->
 
-      <div v-if="!ticketHtml" class="idle-state">
-        <q-icon
-          :name="isChecking ? 'wifi_tethering' : 'qr_code_scanner'"
-          size="96px"
-          color="white"
-          :class="isChecking ? 'scanning-icon' : 'scan-icon'"
-        />
-        <p class="idle-text">{{ isChecking ? 'Scanning...' : 'Scan the ticket' }}</p>
+      <Transition name="result-scale" mode="out-in">
+        <div v-if="!ticketHtml" class="idle-state" key="idle">
+          <q-icon
+            :name="isChecking ? 'wifi_tethering' : 'qr_code_scanner'"
+            size="96px"
+            color="white"
+            :class="isChecking ? 'scanning-icon' : 'scan-icon'"
+          />
+          <p class="idle-text">{{ isChecking ? 'Scanning...' : 'Scan the ticket' }}</p>
 
-        <q-btn
-          v-if="!isChecking"
-          round
-          size="lg"
-          color="white"
-          text-color="dark"
-          icon="photo_camera"
-          class="camera-trigger-btn"
-          @click="openCameraScanner"
-        />
-        <p class="camera-trigger-text">or scan with camera</p>
-      </div>
+          <q-btn
+            v-if="!isChecking"
+            round
+            size="lg"
+            color="white"
+            text-color="dark"
+            icon="photo_camera"
+            class="camera-trigger-btn"
+            @click="openCameraScanner"
+          />
+          <p class="camera-trigger-text">or scan with camera</p>
+        </div>
 
-      <div v-else class="result-card" :class="isError ? 'result-card--error' : 'result-card--success'" @click="reset">
-        <q-icon
-          :name="isError ? 'cancel' : 'check_circle'"
-          size="72px"
-          :class="isError ? 'error-icon' : 'success-icon'"
-        />
-        <p class="result-text" v-html="ticketHtml" />
-        <span class="ticket-code-badge">#{{ lastCode }}</span>
-      </div>
+        <div v-else class="result-card" :class="isError ? 'result-card--error' : 'result-card--success'" @click="reset" key="result">
+          <q-icon
+            :name="isError ? 'cancel' : 'check_circle'"
+            size="72px"
+            :class="isError ? 'error-icon' : 'success-icon'"
+          />
+          <p class="result-text" v-html="ticketHtml" />
+          <span class="ticket-code-badge">#{{ lastCode }}</span>
+        </div>
+      </Transition>
 
     </div>
 
@@ -441,7 +443,18 @@ onBeforeUnmount(() => {
 
 .camera-popup-enter-from,
 .camera-popup-leave-to {
-  transform: translateY(24px);
+  transform: scale(0.85);
+  opacity: 0;
+}
+
+.result-scale-enter-active,
+.result-scale-leave-active {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.result-scale-enter-from,
+.result-scale-leave-to {
+  transform: scale(0.85);
   opacity: 0;
 }
 
