@@ -58,7 +58,7 @@
           size="lg"
           color="white"
           class="camera-close-btn"
-          @click="showCameraDialog = false"
+          @click="stopCameraScanner"
         />
 
         <div class="camera-video-section">
@@ -72,6 +72,7 @@
               v-if="ticketHtml"
               class="result-card"
               :class="isError ? 'result-card--error' : 'result-card--success'"
+              @click="dismissCameraResult"
             >
               <q-icon
                 :name="isError ? 'cancel' : 'check_circle'"
@@ -218,12 +219,15 @@ async function onCameraDecode(code) {
     return
   }
 
-  cameraResumeTimeout = setTimeout(() => {
-    ticketHtml.value = ''
-    isError.value = false
-    lastCode.value = ''
-    isProcessingDecode = false
-  }, 2500)
+  cameraResumeTimeout = setTimeout(dismissCameraResult, 5000)
+}
+
+function dismissCameraResult() {
+  clearTimeout(cameraResumeTimeout)
+  ticketHtml.value = ''
+  isError.value = false
+  lastCode.value = ''
+  isProcessingDecode = false
 }
 
 function refocusInput() {
