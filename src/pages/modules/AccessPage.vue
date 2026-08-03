@@ -63,32 +63,30 @@
 
         <div class="camera-video-section">
           <video ref="videoRef" class="camera-video" autoplay muted playsinline />
-          <p v-if="!ticketHtml" class="camera-hint">Point the camera at the ticket's QR code</p>
+          <p v-if="!ticketHtml && !isChecking" class="camera-hint">Point the camera at the ticket's QR code</p>
         </div>
 
-        <div class="camera-result-section">
-          <div
-            v-if="ticketHtml"
-            class="result-card"
-            :class="isError ? 'result-card--error' : 'result-card--success'"
-          >
-            <q-icon
-              :name="isError ? 'cancel' : 'check_circle'"
-              size="56px"
-              :class="isError ? 'error-icon' : 'success-icon'"
-            />
-            <p class="result-text" v-html="ticketHtml" />
-            <span class="ticket-code-badge">#{{ lastCode }}</span>
+        <Transition name="camera-popup">
+          <div v-if="ticketHtml || isChecking" class="camera-result-popup">
+            <div
+              v-if="ticketHtml"
+              class="result-card"
+              :class="isError ? 'result-card--error' : 'result-card--success'"
+            >
+              <q-icon
+                :name="isError ? 'cancel' : 'check_circle'"
+                size="56px"
+                :class="isError ? 'error-icon' : 'success-icon'"
+              />
+              <p class="result-text" v-html="ticketHtml" />
+              <span class="ticket-code-badge">#{{ lastCode }}</span>
+            </div>
+            <div v-else class="camera-result-placeholder">
+              <q-spinner color="white" size="2rem" />
+              <p>Verifying...</p>
+            </div>
           </div>
-          <div v-else-if="isChecking" class="camera-result-placeholder">
-            <q-spinner color="white" size="2rem" />
-            <p>Verifying...</p>
-          </div>
-          <div v-else class="camera-result-placeholder">
-            <q-icon name="qr_code_scanner" size="2rem" color="white" />
-            <p>The verification result will appear here</p>
-          </div>
-        </div>
+        </Transition>
       </q-card>
     </q-dialog>
   </div>
@@ -381,7 +379,7 @@ onBeforeUnmount(() => {
 
   .camera-hint {
     position: absolute;
-    bottom: calc(40% + 20px);
+    bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
     color: white;
@@ -395,38 +393,51 @@ onBeforeUnmount(() => {
     z-index: 1;
   }
 
-  .camera-result-section {
+  .camera-result-popup {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 40%;
-    z-index: 1;
+    left: 16px;
+    right: 16px;
+    bottom: 24px;
+    z-index: 2;
     display: flex;
-    align-items: center;
     justify-content: center;
-    padding: 1.5rem;
-    background-color: #1e1e2e;
-    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
 
     .result-card {
       width: 100%;
       max-width: 480px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
     }
 
     .camera-result-placeholder {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 0.6rem;
-      color: rgba(255, 255, 255, 0.6);
+      justify-content: center;
+      gap: 0.8rem;
+      width: 100%;
+      max-width: 480px;
+      padding: 1.2rem 1.5rem;
+      border-radius: 16px;
+      background-color: #1e1e2e;
+      color: white;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 
       p {
         margin: 0;
-        font-size: 0.95rem;
+        font-size: 1rem;
       }
     }
   }
+}
+
+.camera-popup-enter-active,
+.camera-popup-leave-active {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.camera-popup-enter-from,
+.camera-popup-leave-to {
+  transform: translateY(24px);
+  opacity: 0;
 }
 
 @keyframes pulse {
