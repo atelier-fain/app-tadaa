@@ -353,14 +353,11 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   background-color: #000;
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
 
   .camera-video-section {
-    position: relative;
-    flex: 0 0 60%;
-    height: 60%;
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -378,13 +375,13 @@ onBeforeUnmount(() => {
     position: absolute;
     top: 12px;
     right: 12px;
-    z-index: 1;
+    z-index: 2;
     background-color: rgba(0, 0, 0, 0.4);
   }
 
   .camera-hint {
     position: absolute;
-    bottom: 20px;
+    bottom: calc(40% + 20px);
     left: 50%;
     transform: translateX(-50%);
     color: white;
@@ -395,16 +392,22 @@ onBeforeUnmount(() => {
     margin: 0;
     text-align: center;
     white-space: nowrap;
+    z-index: 1;
   }
 
   .camera-result-section {
-    flex: 0 0 40%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
     height: 40%;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 1.5rem;
     background-color: #1e1e2e;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
 
     .result-card {
       width: 100%;
