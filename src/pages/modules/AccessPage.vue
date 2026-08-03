@@ -60,8 +60,35 @@
           class="camera-close-btn"
           @click="showCameraDialog = false"
         />
-        <video ref="videoRef" class="camera-video" autoplay muted playsinline />
-        <p class="camera-hint">Îndreaptă camera spre codul QR de pe bilet</p>
+
+        <div class="camera-video-section">
+          <video ref="videoRef" class="camera-video" autoplay muted playsinline />
+          <p v-if="!ticketHtml" class="camera-hint">Point the camera at the ticket's QR code</p>
+        </div>
+
+        <div class="camera-result-section">
+          <div
+            v-if="ticketHtml"
+            class="result-card"
+            :class="isError ? 'result-card--error' : 'result-card--success'"
+          >
+            <q-icon
+              :name="isError ? 'cancel' : 'check_circle'"
+              size="56px"
+              :class="isError ? 'error-icon' : 'success-icon'"
+            />
+            <p class="result-text" v-html="ticketHtml" />
+            <span class="ticket-code-badge">#{{ lastCode }}</span>
+          </div>
+          <div v-else-if="isChecking" class="camera-result-placeholder">
+            <q-spinner color="white" size="2rem" />
+            <p>Verifying...</p>
+          </div>
+          <div v-else class="camera-result-placeholder">
+            <q-icon name="qr_code_scanner" size="2rem" color="white" />
+            <p>The verification result will appear here</p>
+          </div>
+        </div>
       </q-card>
     </q-dialog>
   </div>
@@ -84,6 +111,16 @@ const showCameraDialog = ref(false)
 const videoRef = ref(null)
 let wakeLock = null
 let qrScanner = null
+let cameraResumeTimeout = null
+
+const successSound = new Audio('/sounds/success.mp3')
+const errorSound = new Audio('/sounds/error.mp3')
+
+function playResultSound(hasError) {
+  const sound = hasError ? errorSound : successSound
+  sound.currentTime = 0
+  sound.play().catch((err) => console.error('Sound play error:', err))
+}
 
 async function requestWakeLock() {
   try {
@@ -110,11 +147,13 @@ async function processScan(scannedValue) {
   if (!data) {
     isError.value = true
     ticketHtml.value = 'Eroare de rețea'
+    playResultSound(true)
     return
   }
 
   isError.value = !!data.error
   ticketHtml.value = data.message
+  playResultSound(isError.value)
 }
 
 async function onKeyDown(e) {
@@ -127,6 +166,9 @@ async function onKeyDown(e) {
 }
 
 async function openCameraScanner() {
+  ticketHtml.value = ''
+  isError.value = false
+  lastCode.value = ''
   showCameraDialog.value = true
 
   await nextTick()
@@ -151,20 +193,39 @@ async function openCameraScanner() {
 }
 
 function stopCameraScanner() {
+  clearTimeout(cameraResumeTimeout)
   qrScanner?.stop()
   qrScanner?.destroy()
   qrScanner = null
   showCameraDialog.value = false
+  ticketHtml.value = ''
+  isError.value = false
+  lastCode.value = ''
+  refocusInput()
 }
 
 async function onCameraDecode(code) {
-  stopCameraScanner()
+  qrScanner?.stop()
 
   scanValue.value = code
   await processScan(code)
   scanValue.value = ''
 
-  refocusInput()
+  if (!showCameraDialog.value) return
+
+  cameraResumeTimeout = setTimeout(async () => {
+    ticketHtml.value = ''
+    isError.value = false
+    lastCode.value = ''
+
+    if (!showCameraDialog.value) return
+
+    try {
+      await qrScanner?.start()
+    } catch (err) {
+      console.error('Camera resume error:', err)
+    }
+  }, 2500)
 }
 
 function refocusInput() {
@@ -183,6 +244,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  clearTimeout(cameraResumeTimeout)
   wakeLock?.release()
   qrScanner?.stop()
   qrScanner?.destroy()
@@ -193,7 +255,7 @@ onBeforeUnmount(() => {
 <style lang="scss">
 .access-page {
   position: relative;
-  height: calc(100dvh - 60px);
+  height: calc(100dvh - 50px);
   background-color: #1e1e2e;
   display: flex;
   align-items: center;
@@ -292,9 +354,19 @@ onBeforeUnmount(() => {
   height: 100%;
   background-color: #000;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   overflow: hidden;
+
+  .camera-video-section {
+    position: relative;
+    flex: 0 0 60%;
+    height: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #000;
+  }
 
   .camera-video {
     width: 100%;
@@ -312,7 +384,7 @@ onBeforeUnmount(() => {
 
   .camera-hint {
     position: absolute;
-    bottom: 40px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     color: white;
@@ -323,6 +395,34 @@ onBeforeUnmount(() => {
     margin: 0;
     text-align: center;
     white-space: nowrap;
+  }
+
+  .camera-result-section {
+    flex: 0 0 40%;
+    height: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background-color: #1e1e2e;
+
+    .result-card {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .camera-result-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      color: rgba(255, 255, 255, 0.6);
+
+      p {
+        margin: 0;
+        font-size: 0.95rem;
+      }
+    }
   }
 }
 

@@ -1,6 +1,6 @@
 import { defineRouter } from '#q-app/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
-import { Cookies } from 'quasar'
+import { Cookies, Notify } from 'quasar'
 import routes from './routes'
 import {pageTransition} from "src/mixins/promiseTransitions.js";
 import { useDataStore } from 'stores/data.js'
@@ -32,7 +32,7 @@ export default defineRouter(function ({ store }) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
-  Router.beforeEach(async (to) => {
+  Router.beforeEach((to) => {
     const token = Cookies.get('token')
 
     if (!token) {
@@ -45,16 +45,24 @@ export default defineRouter(function ({ store }) {
     if (to.meta.permission) {
       const dataStore = useDataStore(store)
 
-      let user
-      try {
-        user = await dataStore.check_token()
-      } catch (e) {
-        return { name: 'login' }
-      }
+      dataStore.check_token()
+        .then((user) => {
+          if (Router.currentRoute.value.name !== to.name) return
 
-      if (!user?.[to.meta.permission]) {
-        return { name: 'dashboard' }
-      }
+          if (!user?.[to.meta.permission]) {
+            Notify.create({
+              type: 'negative',
+              message: "You don't have permission to access this module",
+              position: 'top',
+            })
+            Router.replace({ name: 'dashboard' })
+          }
+        })
+        .catch(() => {
+          if (Router.currentRoute.value.name !== to.name) return
+
+          Router.replace({ name: 'login' })
+        })
     }
   })
 

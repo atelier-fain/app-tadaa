@@ -9,7 +9,6 @@
           icon="home"
           flat
           round
-          size="lg"
           @click="router.push({ name: 'dashboard' })"
         />
       </q-toolbar>
