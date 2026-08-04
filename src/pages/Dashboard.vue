@@ -26,6 +26,9 @@
 import {ref, onMounted} from "vue";
 import {useRouter} from "vue-router";
 import {useDataStore} from "stores/data.js";
+import {useQuasar} from "quasar";
+
+const $q = useQuasar();
 
 const router = useRouter()
 const store = useDataStore()
@@ -48,6 +51,7 @@ onMounted(async () => {
     debugInfo.value = JSON.stringify({ user }, null, 2)
   } catch (e) {
     debugInfo.value = JSON.stringify({ error: e?.message || String(e) }, null, 2)
+    $q.notify({ type: 'negative', message: 'Sesiune expirată, te rugăm să te autentifici din nou', position: 'top' })
     await router.push({name: 'login'})
   } finally {
     loaded.value = true

@@ -109,8 +109,12 @@ export const useDataStore = defineStore('data', {
            password
         })
 
-        this.token = data?.token
-        this.user = data?.user
+        if (!data?.token) {
+          throw new Error(data?.error || 'Autentificare eșuată: răspuns invalid de la server')
+        }
+
+        this.token = data.token
+        this.user = data.user
 
         Cookies.set('token', data.token, { path: '/', expires: 5 })
         Cookies.set('user', data.user, { path: '/', expires: 5 })
