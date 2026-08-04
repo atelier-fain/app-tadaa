@@ -37,19 +37,11 @@ async function onConfirmCash() {
 }
 
 function onPayCard () {
-  const data = {
-    "event_id": "c7c284f16635351e8500002e",
-    "last_name": "dsad",
-    "first_name": "dsa",
-    "email": "catalinmuresian@yahoo.com",
-    "phone": "1234",
-    "tickets": [
-      "961201c230393831e800012b",
-      "96130a3e6363662bc200023e"
-    ],
-    "marketing": false
+  const payload = {
+    amount: totalQty.value * totalPrice.value,
+    user: store?.user?.user
   }
-  store.pay_card(data)
+  store.pay_card(payload)
 }
 </script>
 

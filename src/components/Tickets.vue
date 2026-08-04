@@ -54,18 +54,9 @@ const ticketCategories = [
   {
     title: 'Acces General',
     tickets: [
-      { _id: 't1', name: 'Bilet zi 1 - Vineri', price: 15000, compare_at_price: null },
-      { _id: 't2', name: 'Bilet zi 2 - Sâmbătă', price: 15000, compare_at_price: 20000 },
-      { _id: 't3', name: 'Abonament 2 zile', price: 25000, compare_at_price: 35000 },
+      { _id: 't1', name: 'Bilet zi 1', price: 100, compare_at_price: null }
     ],
-  },
-  {
-    title: 'VIP',
-    tickets: [
-      { _id: 't4', name: 'VIP zi 1 - Vineri', price: 40000, compare_at_price: null },
-      { _id: 't5', name: 'VIP abonament 2 zile', price: 70000, compare_at_price: 90000 },
-    ],
-  },
+  }
 ]
 
 const emit = defineEmits(['update:totalQty', 'update:totalPrice'])

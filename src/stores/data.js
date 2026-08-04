@@ -63,16 +63,27 @@ export const useDataStore = defineStore('data', {
     async pay_card (payload) {
       this.isFetching = 'pay_card'
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        const response = {
-          "checkout_url": "https://www.vivapayments.com/web/checkout?ref=6576785459559594",
-          "discount_100": false,
-          "_id": "1a1a82343235306344000386"
-        }
+        const ISVamount = 0;
+        const vivaUrl = "vivapayclient://pay/v1" +
+          "?appId=org.chromium.webpack.abe660f465bd92ffd_v2" +          // Replace with your app's package name
+          "&action=sale" +                      // Action like sale, refund, activatePos
+          "&amount="+ payload?.amount +                     // Amount in cents (e.g., 10000 = 100.00 RON)
+          "&sourceCode=2879 " +
+          "&callback=https://atelier-fain.github.io/app-tadaa/" +
+          "&ISV_amount="+ ISVamount +
+          "&ISV_clientId=36d0ak0fs34pp7ptont4wso291bmzydpuc8mqsd7ydf76.apps.vivapayments.com" +
+          "&ISV_clientSecret=ZdJTeAoE25V7Y8F5P6T5n67Cef8yHH" +
+          "&ISV_sourceCode=6106 " +
+          "&ISV_currencyCode=946" +
+          "&ISV_customerTrns=BigLittleFestival" +
+          "&clientTransactionId="+payload?.user +
+          "&paymentMethod=CardPresent";     // Custom URI scheme for result callback
+        console.log(vivaUrl);
+        // window.location.href = vivaUrl;
 
         await nextTick(() => {
           console.log('redirect to', ' ', 'VIVA PAY URL')
-          // window.open(response?.checkout_url, '_self')
+          window.open(vivaUrl, '_self')
         })
 
 
