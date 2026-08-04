@@ -117,6 +117,21 @@ let isProcessingDecode = false
 
 const successSound = new Audio('/sounds/success.mp3')
 const errorSound = new Audio('/sounds/error.mp3')
+let audioUnlocked = false
+
+function unlockAudioPlayback() {
+  if (audioUnlocked) return
+  audioUnlocked = true
+
+  for (const sound of [successSound, errorSound]) {
+    sound.play()
+      .then(() => {
+        sound.pause()
+        sound.currentTime = 0
+      })
+      .catch(() => {})
+  }
+}
 
 function playResultSound(hasError) {
   const sound = hasError ? errorSound : successSound
@@ -161,6 +176,8 @@ async function processScan(scannedValue) {
 async function onKeyDown(e) {
   if (e.key !== 'Enter') return
 
+  unlockAudioPlayback()
+
   const scannedValue = scanValue.value
   scanValue.value = ''
 
@@ -168,6 +185,8 @@ async function onKeyDown(e) {
 }
 
 async function openCameraScanner() {
+  unlockAudioPlayback()
+
   ticketHtml.value = ''
   isError.value = false
   lastCode.value = ''
