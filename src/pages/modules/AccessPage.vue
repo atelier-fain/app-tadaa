@@ -115,8 +115,8 @@ let qrScanner = null
 let cameraResumeTimeout = null
 let isProcessingDecode = false
 
-const successSound = new Audio('/sounds/success.mp3')
-const errorSound = new Audio('/sounds/error.mp3')
+const successSound = new Audio(`${process.env.VUE_ROUTER_BASE}sounds/success.mp3`)
+const errorSound = new Audio(`${process.env.VUE_ROUTER_BASE}sounds/error.mp3`)
 let audioUnlocked = false
 
 function unlockAudioPlayback() {
