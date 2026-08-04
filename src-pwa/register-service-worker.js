@@ -4,6 +4,21 @@ import { register } from 'register-service-worker'
 // events passes a ServiceWorkerRegistration instance in their arguments.
 // ServiceWorkerRegistration: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration
 
+// The custom service worker calls skipWaiting()/clientsClaim() immediately,
+// so a new SW takes control of open tabs in the background. Without forcing
+// a reload here, the already-running page keeps executing the OLD bundle
+// against the NEW cache/precache manifest, which is what caused users to
+// see broken behavior until they manually closed and reopened the app.
+let refreshing = false
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing) return
+    refreshing = true
+    window.location.reload()
+  })
+}
+
 register(process.env.SERVICE_WORKER_FILE, {
   // The registrationOptions object will be passed as the second argument
   // to ServiceWorkerContainer.register()
@@ -11,8 +26,13 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   // registrationOptions: { scope: './' },
 
-  ready (/* registration */) {
-    // console.log('Service worker is active.')
+  ready (registration) {
+    // Actively re-check for a new deployment every 5 minutes while the app
+    // stays open, since an installed PWA may never trigger a fresh
+    // navigation-based update check on its own.
+    setInterval(() => {
+      registration.update()
+    }, 5 * 60 * 1000)
   },
 
   registered (/* registration */) {
@@ -28,7 +48,9 @@ register(process.env.SERVICE_WORKER_FILE, {
   },
 
   updated (/* registration */) {
-    // console.log('New content is available; please refresh.')
+    // New SW is installed and waiting; the custom SW's skipWaiting() call
+    // activates it right away, which fires 'controllerchange' above and
+    // reloads the page automatically.
   },
 
   offline () {
