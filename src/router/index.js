@@ -32,7 +32,23 @@ export default defineRouter(function ({ store }) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
+  // Viva Payments redirects back with a real page load to /modules/tickets/callback/?...
+  // Since the app uses hash routing, that path is never seen by the router (only the
+  // part after '#' is). Catch it once, on the very first navigation, and hand the
+  // query params over to the 'tickets-callback' route.
+  let handledExternalCallback = false
+
   Router.beforeEach((to) => {
+    if (!handledExternalCallback) {
+      handledExternalCallback = true
+      if (!process.env.SERVER && window.location.pathname.includes('/modules/tickets/callback')) {
+        return {
+          name: 'tickets-callback',
+          query: Object.fromEntries(new URLSearchParams(window.location.search))
+        }
+      }
+    }
+
     const token = Cookies.get('token')
 
     if (!token) {

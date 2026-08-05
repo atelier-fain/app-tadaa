@@ -50,25 +50,22 @@
 import { reactive, computed } from 'vue'
 import _formattedPrice from "src/mixins/formattedPrice.js";
 
-const ticketCategories = [
-  {
-    title: 'Acces General',
-    tickets: [
-      { _id: 't1', name: 'Bilet zi 1', price: 100, compare_at_price: null }
-    ],
-  }
-]
+const props = defineProps({
+  tickets: { type: Object, default: null }
+})
+
+const ticketCategories = computed(() => props.tickets?.ticket_categories || [])
 
 const emit = defineEmits(['update:totalQty', 'update:totalPrice'])
 
 const ticketsQuantity = reactive({})
 
-const allTickets = ticketCategories.flatMap(c => c.tickets)
+const allTickets = computed(() => ticketCategories.value.flatMap(c => c.tickets))
 
 const totalPrice = computed(() =>
   Object.entries(ticketsQuantity).reduce((sum, [id, qty]) => {
-    const ticket = allTickets.find(t => t._id === id)
-    return sum + (ticket ? ticket.price * qty : 0)
+    const ticket = allTickets.value.find(t => t._id === id)
+    return sum + (ticket ? Number(ticket.price) * qty : 0)
   }, 0)
 )
 

@@ -1,11 +1,13 @@
+const dev = process.env.DEV === 'true'
+
 const config = {
   appId: 'org.chromium.webpack.abe660f465bd92ffd_v2',
-  sourceCode: '5428',
-  callback: 'https://atelier-fain.github.io/app-tadaa/',
-  ISV_amount: 0,
-  ISV_clientId: '36d0ak0fs34pp7ptont4wso291bmzydpuc8mqsd7ydf76.apps.vivapayments.com',
-  ISV_clientSecret: 'ZdJTeAoE25V7Y8F5P6T5n67Cef8yHH',
-  ISV_sourceCode: '3654',
+  sourceCode: dev ? process.env.DEV__sourceCode : process.env.sourceCode,
+  callback: 'https://atelier-fain.github.io/app-tadaa/callback',
+  ISV_amount: 4,
+  ISV_clientId: dev ? process.env.DEV__ISVClientID : process.env.ISVClientID,
+  ISV_clientSecret: dev ? process.env.DEV__ISVClientSecret : process.env.ISVClientSecret,
+  ISV_sourceCode: dev ? process.env.DEV__ISCSourceCode : process.env.ISCSourceCode,
   ISV_currencyCode: '946',
   ISV_customerTrns: 'BigLittleFestival',
   paymentMethod: 'CardPresent'
@@ -15,10 +17,10 @@ export function buildVivaPayUrl (payload = {}) {
   const params = {
     appId: config.appId,
     action: 'sale',
-    amount: payload.amount,
+    amount: payload?.totalPrice,
     sourceCode: config.sourceCode,
     callback: config.callback,
-    ISV_amount: config.ISV_amount,
+    ISV_amount: payload?.totalPrice * config.ISV_amount/100 ,
     ISV_clientId: config.ISV_clientId,
     ISV_clientSecret: config.ISV_clientSecret,
     ISV_sourceCode: config.ISV_sourceCode,
