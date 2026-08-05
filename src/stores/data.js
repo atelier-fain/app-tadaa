@@ -3,6 +3,7 @@ import {api} from "boot/axios.js";
 import {ep} from "stores/ep.js";
 import { Cookies } from 'quasar'
 import {nextTick} from "vue";
+import {buildVivaPayUrl} from "stores/viva-pay.js";
 
 export const useDataStore = defineStore('data', {
   state: () => ({
@@ -63,21 +64,7 @@ export const useDataStore = defineStore('data', {
     async pay_card (payload) {
       this.isFetching = 'pay_card'
       try {
-        const ISVamount = 0;
-        const vivaUrl = "vivapayclient://pay/v1" +
-          "?appId=org.chromium.webpack.abe660f465bd92ffd_v2" +          // Replace with your app's package name
-          "&action=sale" +                      // Action like sale, refund, activatePos
-          "&amount="+ payload?.amount +                     // Amount in cents (e.g., 10000 = 100.00 RON)
-          "&sourceCode=5428 " +
-          "&callback=https://atelier-fain.github.io/app-tadaa/" +
-          "&ISV_amount="+ ISVamount +
-          "&ISV_clientId=36d0ak0fs34pp7ptont4wso291bmzydpuc8mqsd7ydf76.apps.vivapayments.com" +
-          "&ISV_clientSecret=ZdJTeAoE25V7Y8F5P6T5n67Cef8yHH" +
-          "&ISV_sourceCode=3654 " +
-          "&ISV_currencyCode=946" +
-          "&ISV_customerTrns=BigLittleFestival" +
-          "&clientTransactionId="+payload?.user +
-          "&paymentMethod=CardPresent";     // Custom URI scheme for result callback
+        const vivaUrl = buildVivaPayUrl(payload)
         console.log(vivaUrl);
         // window.location.href = vivaUrl;
 

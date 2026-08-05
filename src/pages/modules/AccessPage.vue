@@ -74,8 +74,7 @@
               v-if="ticketHtml"
               class="result-card"
               :class="isError ? 'result-card--error' : 'result-card--success'"
-              @click="dismissCameraResult"
-            >
+              @click="dismissCameraResult">
               <q-icon
                 :name="isError ? 'cancel' : 'check_circle'"
                 size="56px"
