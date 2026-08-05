@@ -7,9 +7,7 @@ import { ep } from 'stores/ep.js'
 // own Authorization token here instead of reusing `api` from boot/axios.js.
 const headers = {
   'Content-Type': 'application/json',
-  'Authorization': "Bearer FG.-,thVup'y1XkyEH*QWf:E5bjfR#[#QR[,S+}bsq#YlUyL*-Q]Uj(.gd|Z[Xd7",
-  'DEV-TOKEN': 'JflYIp5gX7cezVhx6wYHIR1XJkilQ5sx57xZH4GmlIV8j9hW8Mo4airUwt8urTqT',
-  "DOMAIN": 'app.tadaa.ro'
+  'Authorization': "Bearer FG.-,thVup'y1XkyEH*QWf:E5bjfR#[#QR[,S+}bsq#YlUyL*-Q]Uj(.gd|Z[Xd7"
 }
 
 const dev_headers = {
@@ -17,12 +15,11 @@ const dev_headers = {
   'Authorization': "Bearer FG.-,thVup'y1XkyEH*QWf:E5bjfR#[#QR[,S+}bsq#YlUyL*-Q]Uj(.gd|Z[Xd7",
   'DEV-TOKEN': 'JflYIp5gX7cezVhx6wYHIR1XJkilQ5sx57xZH4GmlIV8j9hW8Mo4airUwt8urTqT',
   "DOMAIN": 'app.tadaa.ro'
-
 }
 
 const bileteApi = axios.create({
   baseURL: process.env.NODE_ENV !== 'production' ? '/v2/' : 'https://api.tadaa.ro/',
-  headers: process.env.NODE_ENV !== 'production' ? dev_headers : headers
+  headers: process.env.NODE_ENV !== 'production' ? dev_headers : dev_headers
 })
 
 export const useContentStore = defineStore('content', {
