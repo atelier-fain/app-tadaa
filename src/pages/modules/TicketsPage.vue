@@ -37,7 +37,8 @@ const ticketsRef = ref(null)
 const totalQty = ref(0)
 const totalPrice = ref(0)
 
-const tickets = computed(() => storeContent.content.events?.[0])
+const tickets = computed(() => storeContent.content?.events?.[0])
+const eventID = computed(() => storeContent.content?.events?.[0]?.slug)
 
 
 async function onConfirmCash() {
@@ -56,7 +57,7 @@ function onPayCard () {
 
 onMounted(async () => {
   await storeContent.get_data({router})
-  console.log(tickets.value)
+  console.log(eventID.value)
 })
 </script>
 
