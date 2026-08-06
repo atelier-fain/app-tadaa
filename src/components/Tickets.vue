@@ -86,13 +86,24 @@ const selectedTicketIds = computed(() =>
   )
 )
 
+const selectedTickets = computed(() =>
+  selectedTicketIds.value.map(id => {
+    const ticket = allTickets.value.find(t => t._id === id)
+    return {
+      ticket_id: id,
+      name: ticket?.name,
+      price: String(ticket?.price)
+    }
+  })
+)
+
 function reset() {
   Object.keys(ticketsQuantity).forEach(k => delete ticketsQuantity[k])
   emit('update:totalQty', 0)
   emit('update:totalPrice', 0)
 }
 
-defineExpose({ reset, selectedTicketIds })
+defineExpose({ reset, selectedTicketIds, selectedTickets })
 </script>
 
 <style lang="scss">

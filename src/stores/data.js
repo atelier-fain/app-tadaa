@@ -11,6 +11,7 @@ export const useDataStore = defineStore('data', {
     vendor: null,
     token: Cookies.get('token') || null,
     user: Cookies.get('user') || null,
+    pendingOrder: Cookies.get('pendingOrder') || null,
   }),
 
   getters: {
@@ -43,11 +44,24 @@ export const useDataStore = defineStore('data', {
       }
     },
 
-    async pay_cash (payload, onSuccess) {
+    async pay_cash (payload, onSuccess = null) {
       this.isFetching = 'pay_cash'
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        console.log(payload)
+        if (payload.source === 'tickets') {
+          const transactionId = crypto.randomUUID()
+          this.pendingOrder = {
+            source: payload.source,
+            tickets: payload.tickets || [],
+            transactionId,
+            shortOrderCode: transactionId.slice(0, 8).toUpperCase()
+          }
+          Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
+
+          await this.buy_tickets('cash')
+        } else {
+          await new Promise(resolve => setTimeout(resolve, 1000))
+        }
+
         if (onSuccess) {
           onSuccess()
         } else {
@@ -64,12 +78,23 @@ export const useDataStore = defineStore('data', {
     async pay_card (payload) {
       this.isFetching = 'pay_card'
       try {
+        // payload.source is only set on the initial call from TicketsPage/TopUpPage; a
+        // retry from Callback.vue omits it and reuses the pendingOrder from the failed attempt.
+        if (payload.source) {
+          const transactionId = crypto.randomUUID()
+          this.pendingOrder = {
+            source: payload.source,
+            tickets: payload.tickets || [],
+            transactionId,
+            shortOrderCode: transactionId.slice(0, 8).toUpperCase()
+          }
+          Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
+        }
+
         const vivaUrl = buildVivaPayUrl(payload)
-        console.log(vivaUrl);
-        // window.location.href = vivaUrl;
+        window.location.href = vivaUrl;
 
         await nextTick(() => {
-          console.log('redirect to', ' ', 'VIVA PAY URL')
           window.open(vivaUrl, '_self')
         })
 
@@ -79,6 +104,28 @@ export const useDataStore = defineStore('data', {
       }
       finally {
         this.isFetching = null
+      }
+    },
+
+    async buy_tickets (method = 'card') {
+      if (!this.pendingOrder) return
+
+      const { tickets, transactionId, shortOrderCode } = this.pendingOrder
+
+      try {
+        const { data } = await this._post(ep.buyTickets, {
+          tickets,
+          method,
+          transactionId,
+          shortOrderCode
+        })
+
+        this.pendingOrder = null
+        Cookies.remove('pendingOrder', { path: '/' })
+
+        return data
+      } catch (e) {
+        console.error('buy_tickets failed', e)
       }
     },
 

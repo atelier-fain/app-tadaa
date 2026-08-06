@@ -199,7 +199,7 @@ const onCashClick = () => {
 
 const onCardClick = () => {
   if (store.isFetching === 'pay_card') return
-  store.pay_card({ amount: finalAmount.value })
+  store.pay_card({ amount: finalAmount.value, source: 'topup' })
 }
 
 const onConfirmCash = () => {

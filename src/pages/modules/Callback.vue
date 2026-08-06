@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useDataStore } from 'stores/data.js'
 import _formattedPrice from '../../mixins/formattedPrice.js'
@@ -49,13 +49,22 @@ const isSuccess = computed(() => status.value === 'success')
 const amount = computed(() => Number(route.query.amount) || 0)
 const message = computed(() => route.query.message || '')
 
+onMounted(() => {
+  if (!store.pendingOrder) {
+    router.replace({ name: 'dashboard' })
+    return
+  }
+
+  if (isSuccess.value && store.pendingOrder?.source === 'tickets') {
+    store.buy_tickets()
+  }
+})
+
 function onNewOrder () {
   router.push({ name: 'tickets' })
 }
 
 function onRetry () {
-  // buildVivaPayUrl computes amount as `amount * totalPrice`, so passing amount:1
-  // resends the exact same total that just failed (matches the old app's retry link).
   store.pay_card({ amount: 1, totalPrice: amount.value, user: store.user?.user })
 }
 

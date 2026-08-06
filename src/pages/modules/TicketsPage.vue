@@ -42,15 +42,19 @@ const eventID = computed(() => storeContent.content?.events?.[0]?.slug)
 
 
 async function onConfirmCash() {
-  const tickets = ticketsRef.value.selectedTicketIds
-  await store.pay_cash(tickets)
+  await store.pay_cash({
+    tickets: ticketsRef.value.selectedTickets,
+    source: 'tickets'
+  })
   ticketsRef.value.reset()
 }
 
 function onPayCard () {
   const payload = {
     totalPrice: totalPrice.value,
-    user: store?.user?.user
+    user: store?.user?.user,
+    tickets: ticketsRef.value.selectedTickets,
+    source: 'tickets'
   }
   store.pay_card(payload)
 }
