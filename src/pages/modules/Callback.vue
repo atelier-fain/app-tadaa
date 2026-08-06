@@ -47,6 +47,7 @@ const store = useDataStore()
 
 const hasError = ref(false)
 const errorMessage = ref('')
+const orderSource = ref(null)
 
 const status = computed(() => route.query.status)
 const isSuccess = computed(() => status.value === 'success' && !hasError.value)
@@ -63,6 +64,8 @@ onMounted(() => {
     return
   }
 
+  orderSource.value = pendingOrder.source
+
   if (isSuccess.value && pendingOrder?.source === 'tickets') {
     store.buy_tickets({
       tickets: pendingOrder.tickets,
@@ -75,10 +78,24 @@ onMounted(() => {
       errorMessage.value = 'Could not complete the order'
     })
   }
+
+  if (isSuccess.value && pendingOrder?.source === 'topup') {
+    store.charge_prepaid_card({
+      _id: pendingOrder.cardId,
+      amount: amount.value,
+      method: 'card',
+      transactionId: transactionId.value,
+      shortOrderCode: shortOrderCode.value
+    }).catch((e) => {
+      console.error('charge_prepaid_card failed', e)
+      hasError.value = true
+      errorMessage.value = 'Could not complete the top up'
+    })
+  }
 })
 
 function onNewOrder () {
-  router.push({ name: 'tickets' })
+  router.push({ name: orderSource.value === 'topup' ? 'top_up' : 'tickets' })
 }
 
 function onRetry () {
@@ -86,7 +103,7 @@ function onRetry () {
 }
 
 function onCancel () {
-  router.push({ name: 'tickets' })
+  router.push({ name: orderSource.value === 'topup' ? 'top_up' : 'tickets' })
 }
 </script>
 

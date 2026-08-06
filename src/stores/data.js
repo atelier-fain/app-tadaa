@@ -37,6 +37,26 @@ export const useDataStore = defineStore('data', {
       return data
     },
 
+    async cash_out_prepaid_card (_id) {
+      const { data } = await this._post(ep.cashOutPrepaidCard, { _id })
+      return data
+    },
+
+    async charge_prepaid_card ({ _id, amount, method = 'cash', transactionId = '', shortOrderCode = '' } = {}) {
+      const { data } = await this._post(ep.chargePrepaidCard, {
+        _id,
+        amount,
+        method,
+        transactionId,
+        shortOrderCode
+      })
+
+      this.pendingOrder = null
+      Cookies.remove('pendingOrder', { path: '/' })
+
+      return data
+    },
+
     async check_ticket (scannedValue) {
       try {
         const { data } = await this._post(ep.checkTicket, {
@@ -52,6 +72,8 @@ export const useDataStore = defineStore('data', {
     async pay_cash (payload, onSuccess = null) {
       this.isFetching = 'pay_cash'
       try {
+        let data
+
         if (payload.source === 'tickets') {
           this.pendingOrder = {
             source: payload.source,
@@ -59,7 +81,6 @@ export const useDataStore = defineStore('data', {
           }
           Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
 
-          let data
           try {
             data = await this.buy_tickets({ tickets: payload.tickets || [], method: 'cash', transactionId: '', shortOrderCode: '' })
           } catch (e) {
@@ -80,8 +101,41 @@ export const useDataStore = defineStore('data', {
           }
         }
 
+        if (payload.source === 'topup') {
+          this.pendingOrder = {
+            source: payload.source,
+            cardId: payload.cardId
+          }
+          Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
+
+          try {
+            data = await this.charge_prepaid_card({
+              _id: payload.cardId,
+              amount: payload.amount,
+              method: 'cash',
+              transactionId: '',
+              shortOrderCode: ''
+            })
+          } catch (e) {
+            Notify.create({
+              type: 'negative',
+              message: e?.response?.data?.message || 'Payment could not be confirmed',
+              position: 'top'
+            })
+            return
+          }
+
+          if (data?.message) {
+            Notify.create({
+              type: 'positive',
+              message: data.message || 'Transaction succesfull',
+              position: 'top'
+            })
+          }
+        }
+
         if (onSuccess) {
-          onSuccess()
+          onSuccess(data)
         } else {
           this.router.push({ name: 'tickets' })
         }
@@ -101,7 +155,8 @@ export const useDataStore = defineStore('data', {
         if (payload.source) {
           this.pendingOrder = {
             source: payload.source,
-            tickets: payload.tickets || []
+            tickets: payload.tickets || [],
+            cardId: payload.cardId || null
           }
           Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
         }

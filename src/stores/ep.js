@@ -4,6 +4,8 @@ export const ep = {
   checkToken: '/v2/app/auth/check_token/',
   getEvents: '/v2/tickets/domain/get/',
   buyTickets: '/v2/app/tickets/buy/',
-  checkPrepaidCard: '/v2/app/prepaid/check/'
+  checkPrepaidCard: '/v2/app/prepaid/check/',
+  chargePrepaidCard: '/v2/app/prepaid/charge/',
+  cashOutPrepaidCard: '/v2/app/prepaid/cash_out/'
 }
 

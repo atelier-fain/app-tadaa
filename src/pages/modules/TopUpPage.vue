@@ -12,7 +12,7 @@
       <button
         v-if="nfcStatus !== 'scanning' && nfcStatus !== 'verifying'"
         class="nfc-scan-btn"
-        @click="startNfcScan"
+        @click="onScanClick"
       >
         {{ nfcStatus === 'error' || nfcStatus === 'unsupported' ? 'Try again' : 'Scan card' }}
       </button>
@@ -46,7 +46,7 @@
         </div>
         <div v-if="cardData.balance !== undefined" class="card-details-row">
           <span class="card-details-label">Balance</span>
-          <span class="card-details-value">{{ cardData.balance }} lei</span>
+          <span class="card-details-value" v-html="_formattedPrice(Number(cardData.balance) || 0)" />
         </div>
       </div>
 
@@ -91,8 +91,12 @@
       >
         Confirm Top Up
       </button>
-      <button class="btn-secondary" @click="onCheckBalance">
-        Check Balance
+      <button
+        v-if="Number(cardData?.balance) > 0"
+        class="btn-cashout"
+        @click="onCashOutClick"
+      >
+        Cash Out
       </button>
     </div>
 
@@ -180,16 +184,41 @@
       </q-card>
     </q-dialog>
 
+    <!-- Cash out confirm dialog -->
+    <q-dialog v-model="showCashOutConfirm" persistent class="cashout-confirm-dialog">
+      <q-card class="cashout-confirm-card">
+        <div class="co-icon-wrap">
+          <q-icon name="payments" />
+        </div>
+        <div class="co-title">Cash Out</div>
+        <div class="co-amount" v-html="_formattedPrice(Number(cardData?.balance) || 0)" />
+        <div class="co-desc">Give this amount in cash to the customer and remove it from the card?</div>
+        <div class="co-actions">
+          <q-btn outline no-caps label="Cancel" class="co-btn co-btn--cancel" :disable="isCashingOut" v-close-popup />
+          <q-btn
+            no-caps
+            label="Confirm"
+            class="co-btn co-btn--confirm"
+            :loading="isCashingOut"
+            :disable="isCashingOut"
+            @click="onConfirmCashOut"
+          />
+        </div>
+      </q-card>
+    </q-dialog>
+
   </q-page>
 </template>
 
 <script setup>
-import { ref, computed, nextTick, watch, onBeforeUnmount } from 'vue'
+import { ref, computed, nextTick, watch, onMounted, onBeforeUnmount } from 'vue'
 import { Cookies, Notify } from 'quasar'
 import { useDataStore } from 'stores/data.js'
 import _formattedPrice from '../../mixins/formattedPrice.js'
 
 const store = useDataStore()
+
+const isDev = !!process.env.DEV
 
 const tdid = ref(null)
 const cardData = ref(null)
@@ -205,6 +234,14 @@ const nfcStatusText = computed(() => {
   if (nfcStatus.value === 'error') return 'Could not read the card'
   return "Scan the customer's card to continue"
 })
+
+function onScanClick () {
+  if (isDev) {
+    simulateScan()
+    return
+  }
+  startNfcScan()
+}
 
 async function startNfcScan () {
   nfcError.value = ''
@@ -302,6 +339,12 @@ function extractTdid (records) {
   return null
 }
 
+function simulateScan () {
+  nfcError.value = ''
+  tdid.value = '5cf92e5a323132060400025b'
+  verifyCard(tdid.value)
+}
+
 function onNfcError (message) {
   nfcStatus.value = 'error'
   nfcError.value = message
@@ -330,6 +373,15 @@ function resetCard () {
   Cookies.remove('scannedCard', { path: '/' })
 }
 
+onMounted(() => {
+  const saved = Cookies.get('scannedCard')
+  if (!saved?.tdid) return
+
+  tdid.value = saved.tdid
+  cardData.value = saved
+  refreshCardBalance()
+})
+
 onBeforeUnmount(() => {
   stopNfcScan()
   Cookies.remove('scannedCard', { path: '/' })
@@ -344,6 +396,8 @@ const customInputRef = ref(null)
 
 const showPaymentModal = ref(false)
 const showCashConfirm = ref(false)
+const showCashOutConfirm = ref(false)
+const isCashingOut = ref(false)
 
 const finalAmount = computed(() => {
   if (selectedAmount.value === 'other') return Number(customAmount.value) || null
@@ -392,19 +446,59 @@ const onCashClick = () => {
 
 const onCardClick = () => {
   if (store.isFetching === 'pay_card') return
-  store.pay_card({ amount: finalAmount.value, source: 'topup' })
-}
-
-const onConfirmCash = () => {
-  store.pay_cash({ amount: finalAmount.value }, () => {
-    showCashConfirm.value = false
-    selectedAmount.value = null
-    customAmount.value = ''
+  store.pay_card({
+    totalPrice: finalAmount.value * 100,
+    user: store.user?.user,
+    cardId: cardData.value?._id,
+    source: 'topup'
   })
 }
 
-const onCheckBalance = () => {
-  console.log('Check balance')
+const onConfirmCash = () => {
+  store.pay_cash({
+    amount: finalAmount.value * 100,
+    cardId: cardData.value?._id,
+    source: 'topup'
+  }, async () => {
+    showCashConfirm.value = false
+    selectedAmount.value = null
+    customAmount.value = ''
+    await refreshCardBalance()
+  })
+}
+
+async function refreshCardBalance () {
+  if (!tdid.value) return
+  try {
+    const data = await store.check_prepaid_card(tdid.value)
+    cardData.value = data
+    Cookies.set('scannedCard', { tdid: tdid.value, ...data }, { path: '/', expires: 1 })
+  } catch (e) {
+    console.error('Failed to refresh card balance', e)
+  }
+}
+
+const onCashOutClick = () => {
+  if (!(Number(cardData.value?.balance) > 0)) return
+  showCashOutConfirm.value = true
+}
+
+const onConfirmCashOut = async () => {
+  isCashingOut.value = true
+  try {
+    const data = await store.cash_out_prepaid_card(cardData.value._id)
+    Notify.create({ type: 'positive', message: data?.message || 'Cash out successful', position: 'top' })
+    showCashOutConfirm.value = false
+    await refreshCardBalance()
+  } catch (e) {
+    Notify.create({
+      type: 'negative',
+      message: e?.response?.data?.message || 'Cash out could not be confirmed',
+      position: 'top'
+    })
+  } finally {
+    isCashingOut.value = false
+  }
 }
 </script>
 
@@ -691,6 +785,32 @@ const onCheckBalance = () => {
   &:hover {
     border-color: #2e7d1f;
     color: #2e7d1f;
+  }
+}
+
+.btn-cashout {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #e8720c;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, opacity 0.15s;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled):hover {
+    background: #f5871f;
   }
 }
 
@@ -984,6 +1104,86 @@ const onCheckBalance = () => {
 
       &--confirm {
         background: #1D9E75 !important;
+        color: white !important;
+      }
+    }
+  }
+}
+
+/* ── Cash out confirm dialog ──────────────────────── */
+.cashout-confirm-dialog {
+  .cashout-confirm-card {
+    width: 300px;
+    border-radius: 20px !important;
+
+    > div:not(.q--avoid-card-border) {
+      border-radius: 20px !important;
+    }
+    padding: 28px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14) !important;
+  }
+
+  .co-icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: #FCE4CC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+
+    .q-icon {
+      font-size: 32px;
+      color: #e8720c;
+    }
+  }
+
+  .co-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: $dark;
+    margin-top: 2px;
+  }
+
+  .co-amount {
+    font-size: 28px;
+    font-weight: 800;
+    color: $dark;
+    margin: 4px 0 2px;
+  }
+
+  .co-desc {
+    font-size: 13px;
+    color: $grey-6;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .co-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: 6px;
+
+    .co-btn {
+      flex: 1;
+      height: 44px;
+      border-radius: 10px !important;
+      font-size: 14px;
+      font-weight: 600;
+
+      &--cancel {
+        border-color: rgba(0, 0, 0, 0.18) !important;
+        color: $grey-7 !important;
+      }
+
+      &--confirm {
+        background: #e8720c !important;
         color: white !important;
       }
     }
