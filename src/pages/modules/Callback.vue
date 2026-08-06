@@ -1,7 +1,7 @@
 <template>
   <q-page class="callback-module">
     <div class="callback-card" :class="{ 'callback-card--failed': !isSuccess }">
-      <pre>{{ route }}</pre>
+      <div>{{ route }}</div>
 
       <template v-if="isSuccess">
         <div class="callback-icon callback-icon--success">
