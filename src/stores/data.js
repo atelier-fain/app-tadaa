@@ -57,16 +57,25 @@ export const useDataStore = defineStore('data', {
           }
           Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
 
-          const data = await this.buy_tickets('cash')
+          let data
+          try {
+            data = await this.buy_tickets('cash')
+          } catch (e) {
+            Notify.create({
+              type: 'negative',
+              message: e?.response?.data?.message || 'Payment could not be confirmed',
+              position: 'top'
+            })
+            return
+          }
+
           if (data?.message) {
             Notify.create({
               type: 'positive',
-              message: data.message,
+              message: data.message || 'Transaction succesfull',
               position: 'top'
             })
           }
-        } else {
-          await new Promise(resolve => setTimeout(resolve, 1000))
         }
 
         if (onSuccess) {
@@ -119,21 +128,17 @@ export const useDataStore = defineStore('data', {
 
       const { tickets, transactionId, shortOrderCode } = this.pendingOrder
 
-      try {
-        const { data } = await this._post(ep.buyTickets, {
-          tickets,
-          method,
-          transactionId,
-          shortOrderCode
-        })
+      const { data } = await this._post(ep.buyTickets, {
+        tickets,
+        method,
+        transactionId,
+        shortOrderCode
+      })
 
-        this.pendingOrder = null
-        Cookies.remove('pendingOrder', { path: '/' })
+      this.pendingOrder = null
+      Cookies.remove('pendingOrder', { path: '/' })
 
-        return data
-      } catch (e) {
-        console.error('buy_tickets failed', e)
-      }
+      return data
     },
 
     logout () {

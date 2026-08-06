@@ -56,7 +56,7 @@ onMounted(() => {
   }
 
   if (isSuccess.value && store.pendingOrder?.source === 'tickets') {
-    store.buy_tickets()
+    store.buy_tickets().catch((e) => console.error('buy_tickets failed', e))
   }
 })
 
