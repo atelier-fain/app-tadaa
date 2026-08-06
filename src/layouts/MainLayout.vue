@@ -22,6 +22,7 @@
       style="margin: 18px; z-index: 2000; background-color: #e15350 !important;"
       @click="store.logout()"
     />
+
     <q-page-container class="page-container">
       <router-view v-slot="{ Component, route }">
         <transition
