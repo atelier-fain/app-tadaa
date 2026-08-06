@@ -37,12 +37,8 @@
         </div>
 
         <div class="card-details-row">
-          <span class="card-details-label">TDID</span>
+          <span class="card-details-label">ID</span>
           <span class="card-details-value">{{ tdid }}</span>
-        </div>
-        <div v-if="cardData.user" class="card-details-row">
-          <span class="card-details-label">User</span>
-          <span class="card-details-value">{{ cardData.user }}</span>
         </div>
         <div v-if="cardData.balance !== undefined" class="card-details-row">
           <span class="card-details-label">Balance</span>
