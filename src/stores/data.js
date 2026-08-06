@@ -48,18 +48,15 @@ export const useDataStore = defineStore('data', {
       this.isFetching = 'pay_cash'
       try {
         if (payload.source === 'tickets') {
-          const transactionId = crypto.randomUUID()
           this.pendingOrder = {
             source: payload.source,
-            tickets: payload.tickets || [],
-            transactionId,
-            shortOrderCode: transactionId.slice(0, 8).toUpperCase()
+            tickets: payload.tickets || []
           }
           Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
 
           let data
           try {
-            data = await this.buy_tickets('cash')
+            data = await this.buy_tickets({ method: 'cash' })
           } catch (e) {
             Notify.create({
               type: 'negative',
@@ -97,12 +94,9 @@ export const useDataStore = defineStore('data', {
         // payload.source is only set on the initial call from TicketsPage/TopUpPage; a
         // retry from Callback.vue omits it and reuses the pendingOrder from the failed attempt.
         if (payload.source) {
-          const transactionId = crypto.randomUUID()
           this.pendingOrder = {
             source: payload.source,
-            tickets: payload.tickets || [],
-            transactionId,
-            shortOrderCode: transactionId.slice(0, 8).toUpperCase()
+            tickets: payload.tickets || []
           }
           Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
         }
@@ -123,10 +117,10 @@ export const useDataStore = defineStore('data', {
       }
     },
 
-    async buy_tickets (method = 'card') {
+    async buy_tickets ({ method = 'card', transactionId, shortOrderCode } = {}) {
       if (!this.pendingOrder) return
 
-      const { tickets, transactionId, shortOrderCode } = this.pendingOrder
+      const { tickets } = this.pendingOrder
 
       const { data } = await this._post(ep.buyTickets, {
         tickets,

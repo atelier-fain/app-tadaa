@@ -48,6 +48,8 @@ const status = computed(() => route.query.status)
 const isSuccess = computed(() => status.value === 'success')
 const amount = computed(() => Number(route.query.amount) || 0)
 const message = computed(() => route.query.message || '')
+const transactionId = computed(() => route.query.transactionId || '')
+const shortOrderCode = computed(() => route.query.shortOrderCode || '')
 
 onMounted(() => {
   if (!store.pendingOrder) {
@@ -56,7 +58,11 @@ onMounted(() => {
   }
 
   if (isSuccess.value && store.pendingOrder?.source === 'tickets') {
-    store.buy_tickets().catch((e) => console.error('buy_tickets failed', e))
+    store.buy_tickets({
+      method: 'card',
+      transactionId: transactionId.value,
+      shortOrderCode: shortOrderCode.value
+    }).catch((e) => console.error('buy_tickets failed', e))
   }
 })
 
