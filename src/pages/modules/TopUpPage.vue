@@ -1,7 +1,46 @@
 <template>
   <q-page class="topup-page">
 
-    <div class="topup-inner">
+    <div v-if="!cardId" class="nfc-scan-screen">
+      <q-icon
+        :name="nfcStatus === 'scanning' ? 'wifi_tethering' : 'nfc'"
+        size="96px"
+        class="nfc-icon"
+        :class="{ 'nfc-icon--scanning': nfcStatus === 'scanning' }"
+      />
+      <p class="nfc-text">{{ nfcStatusText }}</p>
+      <button
+        v-if="nfcStatus !== 'scanning'"
+        class="nfc-scan-btn"
+        @click="startNfcScan"
+      >
+        {{ nfcStatus === 'error' || nfcStatus === 'unsupported' ? 'Try again' : 'Scan card' }}
+      </button>
+      <p v-if="nfcError" class="nfc-error-text">{{ nfcError }}</p>
+    </div>
+
+    <div v-else class="topup-inner">
+      <div class="card-details">
+        <div class="card-details-header">
+          <q-icon name="nfc" size="18px" />
+          <span>Card detected</span>
+          <q-btn flat dense round icon="close" size="10px" class="card-badge-close" @click="resetCard" />
+        </div>
+
+        <div class="card-details-row">
+          <span class="card-details-label">Serial number</span>
+          <span class="card-details-value">{{ cardId }}</span>
+        </div>
+
+        <template v-if="scanRecords.length">
+          <div v-for="(record, i) in scanRecords" :key="i" class="card-details-row">
+            <span class="card-details-label">{{ record.recordType }}<template v-if="record.mediaType"> · {{ record.mediaType }}</template></span>
+            <span class="card-details-value">{{ record.data }}</span>
+          </div>
+        </template>
+        <p v-else class="card-details-empty">No NDEF data on this card</p>
+      </div>
+
       <h1 class="topup-title">Select prepaid amount</h1>
 
       <!-- Grid sume -->
@@ -35,7 +74,7 @@
     </div>
 
     <!-- Sticky bottom actions -->
-    <div class="bottom-actions">
+    <div v-if="cardId" class="bottom-actions">
       <button
         class="btn-proceed"
         :disabled="!finalAmount"
@@ -136,11 +175,91 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick, watch } from 'vue'
+import { ref, computed, nextTick, watch, onBeforeUnmount } from 'vue'
 import { useDataStore } from 'stores/data.js'
 import _formattedPrice from '../../mixins/formattedPrice.js'
 
 const store = useDataStore()
+
+const cardId = ref(null)
+const scanRecords = ref([])
+const nfcStatus = ref('idle') // idle | scanning | error | unsupported
+const nfcError = ref('')
+let nfcAbortController = null
+
+const nfcStatusText = computed(() => {
+  if (nfcStatus.value === 'scanning') return 'Hold the card near the back of your phone...'
+  if (nfcStatus.value === 'unsupported') return 'NFC is not supported on this device'
+  if (nfcStatus.value === 'error') return 'Could not read the card'
+  return "Scan the customer's card to continue"
+})
+
+async function startNfcScan () {
+  nfcError.value = ''
+
+  if (!('NDEFReader' in window)) {
+    nfcStatus.value = 'unsupported'
+    return
+  }
+
+  try {
+    nfcAbortController = new AbortController()
+    const ndef = new NDEFReader()
+    await ndef.scan({ signal: nfcAbortController.signal })
+    nfcStatus.value = 'scanning'
+
+    ndef.onreading = (event) => {
+      cardId.value = event.serialNumber
+      scanRecords.value = Array.from(event.message.records).map((record) => ({
+        recordType: record.recordType,
+        mediaType: record.mediaType,
+        id: record.id,
+        data: decodeRecordData(record)
+      }))
+      nfcStatus.value = 'idle'
+      nfcAbortController?.abort()
+    }
+
+    ndef.onreadingerror = () => {
+      nfcStatus.value = 'error'
+      nfcError.value = 'The card could not be read, try again'
+    }
+  } catch (e) {
+    console.error('NFC scan error:', e)
+    nfcStatus.value = 'error'
+    nfcError.value = e.message || 'Could not start NFC scan'
+  }
+}
+
+function decodeRecordData (record) {
+  try {
+    if (record.recordType === 'text') {
+      const decoder = new TextDecoder(record.encoding || 'utf-8')
+      return decoder.decode(record.data)
+    }
+    if (record.recordType === 'url') {
+      const decoder = new TextDecoder()
+      return decoder.decode(record.data)
+    }
+    return Array.from(new Uint8Array(record.data.buffer))
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join(' ')
+  } catch (e) {
+    return '(unreadable)'
+  }
+}
+
+function resetCard () {
+  nfcAbortController?.abort()
+  cardId.value = null
+  scanRecords.value = []
+  nfcStatus.value = 'idle'
+  nfcError.value = ''
+}
+
+onBeforeUnmount(() => {
+  nfcAbortController?.abort()
+})
 
 const amounts = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550]
 const selectedAmount = ref(null)
@@ -222,6 +341,128 @@ const onCheckBalance = () => {
   background: white;
   min-height: 100vh;
   padding: 0 16px;
+}
+
+/* NFC scan screen */
+.nfc-scan-screen {
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.nfc-icon {
+  color: #2e7d1f;
+  animation: nfc-pulse 2s ease-in-out infinite;
+
+  &--scanning {
+    animation: nfc-spin 1s linear infinite;
+  }
+}
+
+.nfc-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.nfc-scan-btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 999px;
+  background: #2e7d1f;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &:hover {
+    background: #3a9426;
+  }
+}
+
+.nfc-error-text {
+  font-size: 13px;
+  color: $negative;
+  margin: 0;
+}
+
+@keyframes nfc-pulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50%       { opacity: 1;    transform: scale(1.06); }
+}
+
+@keyframes nfc-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Card details */
+.card-details {
+  width: 100%;
+  border-radius: 12px;
+  background: #f0f9ee;
+  border: 1px solid #2e7d1f;
+  padding: 10px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-details-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #2e7d1f;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 2px;
+
+  span {
+    flex: 1;
+  }
+
+  .card-badge-close {
+    color: #2e7d1f;
+  }
+}
+
+.card-details-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+
+  .card-details-label {
+    color: #5a7a52;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+  }
+
+  .card-details-value {
+    color: #1a1a1a;
+    font-family: monospace;
+    word-break: break-all;
+    text-align: right;
+  }
+}
+
+.card-details-empty {
+  font-size: 12px;
+  color: #5a7a52;
+  margin: 2px 0 0;
 }
 
 .topup-inner {

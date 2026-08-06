@@ -56,7 +56,7 @@ export const useDataStore = defineStore('data', {
 
           let data
           try {
-            data = await this.buy_tickets({ tickets: payload.tickets || [], method: 'cash' })
+            data = await this.buy_tickets({ tickets: payload.tickets || [], method: 'cash', transactionId: '', shortOrderCode: '' })
           } catch (e) {
             Notify.create({
               type: 'negative',
