@@ -3,7 +3,7 @@ const dev = process.env.DEV === 'true'
 const config = {
   appId: 'org.chromium.webpack.abe660f465bd92ffd_v2',
   sourceCode: dev ? process.env.DEV__sourceCode : process.env.sourceCode,
-  callback: 'https://atelier-fain.github.io/app-tadaa/modules/tickets/callback',
+  callback: 'https://atelier-fain.github.io/app-tadaa/callback',
   ISV_amount: 4,
   ISV_clientId: dev ? process.env.DEV__ISVClientID : process.env.ISVClientID,
   ISV_clientSecret: dev ? process.env.DEV__ISVClientSecret : process.env.ISVClientSecret,

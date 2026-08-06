@@ -5,29 +5,29 @@
         <div class="callback-icon callback-icon--success">
           <q-icon name="check_circle" />
         </div>
-        <h2 class="callback-title">Plată reușită</h2>
+        <h2 class="callback-title">Payment successful</h2>
         <p class="callback-subtitle">
-          Plata ta de <strong v-html="_formattedPrice(amount)" /> a fost efectuată cu succes.
+          Your payment of <strong v-html="_formattedPrice(amount)" /> was successful.
         </p>
-        <q-btn no-caps label="Comandă nouă" class="callback-btn callback-btn--primary" @click="onNewOrder" />
+        <q-btn no-caps label="New order" class="callback-btn callback-btn--primary" @click="onNewOrder" />
       </template>
 
       <template v-else>
         <div class="callback-icon callback-icon--failed">
           <q-icon name="cancel" />
         </div>
-        <h2 class="callback-title">Plată eșuată</h2>
-        <p v-if="message" class="callback-subtitle">Motiv: <strong>{{ message }}</strong></p>
+        <h2 class="callback-title">Payment failed</h2>
+        <p v-if="message" class="callback-subtitle">Reason: <strong>{{ message }}</strong></p>
         <div class="callback-actions">
           <q-btn
             no-caps
-            label="Reîncearcă plata"
+            label="Retry payment"
             class="callback-btn callback-btn--primary"
             :loading="store.isFetching === 'pay_card'"
             :disable="!amount"
             @click="onRetry"
           />
-          <q-btn no-caps outline label="Anulează" class="callback-btn callback-btn--cancel" @click="onCancel" />
+          <q-btn no-caps outline label="Cancel" class="callback-btn callback-btn--cancel" @click="onCancel" />
         </div>
       </template>
     </div>
@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Cookies } from 'quasar'
 import { useDataStore } from 'stores/data.js'
@@ -45,10 +45,13 @@ const route = useRoute()
 const router = useRouter()
 const store = useDataStore()
 
+const hasError = ref(false)
+const errorMessage = ref('')
+
 const status = computed(() => route.query.status)
-const isSuccess = computed(() => status.value === 'success')
+const isSuccess = computed(() => status.value === 'success' && !hasError.value)
 const amount = computed(() => Number(route.query.amount) || 0)
-const message = computed(() => route.query.message || '')
+const message = computed(() => errorMessage.value || route.query.message || '')
 const transactionId = computed(() => route.query.transactionId || '')
 const shortOrderCode = computed(() => route.query.shortOrderCode || '')
 
@@ -60,13 +63,17 @@ onMounted(() => {
     return
   }
 
-  if (isSuccess.value && pendingOrder.source === 'tickets') {
+  if (isSuccess.value && pendingOrder?.source === 'tickets') {
     store.buy_tickets({
       tickets: pendingOrder.tickets,
       method: 'card',
       transactionId: transactionId.value,
       shortOrderCode: shortOrderCode.value
-    }).catch((e) => console.error('buy_tickets failed', e))
+    }).catch((e) => {
+      console.error('buy_tickets failed', e)
+      hasError.value = true
+      errorMessage.value = 'Could not complete the order'
+    })
   }
 })
 

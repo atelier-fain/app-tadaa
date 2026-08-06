@@ -41,7 +41,7 @@ export default defineRouter(function ({ store }) {
   Router.beforeEach((to) => {
     if (!handledExternalCallback) {
       handledExternalCallback = true
-      if (!process.env.SERVER && window.location.pathname.includes('/modules/tickets/callback')) {
+      if (!process.env.SERVER && window.location.pathname.includes('/callback')) {
         return {
           name: 'tickets-callback',
           query: Object.fromEntries(new URLSearchParams(window.location.search))
