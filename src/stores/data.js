@@ -1,7 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import {api} from "boot/axios.js";
 import {ep} from "stores/ep.js";
-import { Cookies } from 'quasar'
+import { Cookies, Notify } from 'quasar'
 import {nextTick} from "vue";
 import {buildVivaPayUrl} from "stores/viva-pay.js";
 
@@ -57,7 +57,14 @@ export const useDataStore = defineStore('data', {
           }
           Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
 
-          await this.buy_tickets('cash')
+          const data = await this.buy_tickets('cash')
+          if (data?.message) {
+            Notify.create({
+              type: 'positive',
+              message: data.message,
+              position: 'top'
+            })
+          }
         } else {
           await new Promise(resolve => setTimeout(resolve, 1000))
         }
