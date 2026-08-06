@@ -343,6 +343,8 @@ function simulateScan () {
   nfcError.value = ''
   tdid.value = '5cf92e5a323132060400025b'
   verifyCard(tdid.value)
+
+
 }
 
 function onNfcError (message) {
