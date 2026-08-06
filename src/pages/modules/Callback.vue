@@ -37,6 +37,7 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { Cookies } from 'quasar'
 import { useDataStore } from 'stores/data.js'
 import _formattedPrice from '../../mixins/formattedPrice.js'
 
@@ -52,13 +53,16 @@ const transactionId = computed(() => route.query.transactionId || '')
 const shortOrderCode = computed(() => route.query.shortOrderCode || '')
 
 onMounted(() => {
-  if (!store.pendingOrder) {
+  const pendingOrder = Cookies.get('pendingOrder')
+
+  if (!pendingOrder) {
     router.replace({ name: 'dashboard' })
     return
   }
 
-  if (isSuccess.value && store.pendingOrder?.source === 'tickets') {
+  if (isSuccess.value && pendingOrder.source === 'tickets') {
     store.buy_tickets({
+      tickets: pendingOrder.tickets,
       method: 'card',
       transactionId: transactionId.value,
       shortOrderCode: shortOrderCode.value

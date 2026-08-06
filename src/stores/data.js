@@ -56,7 +56,7 @@ export const useDataStore = defineStore('data', {
 
           let data
           try {
-            data = await this.buy_tickets({ method: 'cash' })
+            data = await this.buy_tickets({ tickets: payload.tickets || [], method: 'cash' })
           } catch (e) {
             Notify.create({
               type: 'negative',
@@ -102,7 +102,6 @@ export const useDataStore = defineStore('data', {
         }
 
         const vivaUrl = buildVivaPayUrl(payload)
-        window.location.href = vivaUrl;
 
         await nextTick(() => {
           window.open(vivaUrl, '_self')
@@ -117,11 +116,7 @@ export const useDataStore = defineStore('data', {
       }
     },
 
-    async buy_tickets ({ method = 'card', transactionId, shortOrderCode } = {}) {
-      if (!this.pendingOrder) return
-
-      const { tickets } = this.pendingOrder
-
+    async buy_tickets ({ tickets, method = 'card', transactionId, shortOrderCode } = {}) {
       const { data } = await this._post(ep.buyTickets, {
         tickets,
         method,
