@@ -9,7 +9,7 @@
         <p class="callback-subtitle">
           Your payment of <strong v-html="_formattedPrice(amount)" /> was successful.
         </p>
-        <q-btn no-caps label="New order" class="callback-btn callback-btn--primary" @click="onNewOrder" />
+        <q-btn no-caps :label="newOrderLabel" class="callback-btn callback-btn--primary" @click="onNewOrder" />
       </template>
 
       <template v-else>
@@ -55,6 +55,7 @@ const amount = computed(() => Number(route.query.amount) || 0)
 const message = computed(() => errorMessage.value || route.query.message || '')
 const transactionId = computed(() => route.query.transactionId || '')
 const shortOrderCode = computed(() => route.query.shortOrderCode || '')
+const newOrderLabel = computed(() => orderSource.value === 'topup' ? 'Top up again' : 'New order')
 
 onMounted(() => {
   const pendingOrder = Cookies.get('pendingOrder')
