@@ -22,8 +22,7 @@
                        dense
                        flat
                        :disable="!ticketsQuantity[_id] || ticketsQuantity[_id] === 0"
-                       @mousedown="handleQty({ action: 'remove', _id })"
-                       @touchstart.prevent="handleQty({ action: 'remove', _id })"
+                       @click="handleQty({ action: 'remove', _id })"
                 />
                 <q-field outlined dense>
                   <template v-slot:control>
@@ -33,8 +32,7 @@
                   </template>
                 </q-field>
                 <q-btn icon="add" dense flat
-                       @mousedown="handleQty({ action: 'add', _id })"
-                       @touchstart.prevent="handleQty({ action: 'add', _id })"
+                       @click="handleQty({ action: 'add', _id })"
                 />
               </div>
             </div>
