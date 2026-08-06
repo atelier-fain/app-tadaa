@@ -13,7 +13,6 @@
         />
       </q-toolbar>
     </q-header>
-    <div style="margin-top: 60px;">{{ route }}</div>
     <q-btn
       v-if="route.path === '/'"
       icon="logout"

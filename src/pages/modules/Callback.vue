@@ -1,8 +1,6 @@
 <template>
   <q-page class="callback-module">
     <div class="callback-card" :class="{ 'callback-card--failed': !isSuccess }">
-      <div>{{ route }}</div>
-
       <template v-if="isSuccess">
         <div class="callback-icon callback-icon--success">
           <q-icon name="check_circle" />
@@ -54,23 +52,23 @@ const message = computed(() => route.query.message || '')
 const transactionId = computed(() => route.query.transactionId || '')
 const shortOrderCode = computed(() => route.query.shortOrderCode || '')
 
-// onMounted(() => {
-//   const pendingOrder = Cookies.get('pendingOrder')
-//
-//   if (!pendingOrder) {
-//     router.replace({ name: 'dashboard' })
-//     return
-//   }
-//
-//   if (isSuccess.value && pendingOrder.source === 'tickets') {
-//     store.buy_tickets({
-//       tickets: pendingOrder.tickets,
-//       method: 'card',
-//       transactionId: transactionId.value,
-//       shortOrderCode: shortOrderCode.value
-//     }).catch((e) => console.error('buy_tickets failed', e))
-//   }
-// })
+onMounted(() => {
+  const pendingOrder = Cookies.get('pendingOrder')
+
+  if (!pendingOrder) {
+    router.replace({ name: 'dashboard' })
+    return
+  }
+
+  if (isSuccess.value && pendingOrder.source === 'tickets') {
+    store.buy_tickets({
+      tickets: pendingOrder.tickets,
+      method: 'card',
+      transactionId: transactionId.value,
+      shortOrderCode: shortOrderCode.value
+    }).catch((e) => console.error('buy_tickets failed', e))
+  }
+})
 
 function onNewOrder () {
   router.push({ name: 'tickets' })
