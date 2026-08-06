@@ -3,6 +3,7 @@ export const ep = {
   login: '/v2/app/auth/',
   checkToken: '/v2/app/auth/check_token/',
   getEvents: '/v2/tickets/domain/get/',
-  buyTickets: '/v2/app/tickets/buy/'
+  buyTickets: '/v2/app/tickets/buy/',
+  checkPrepaidCard: '/v2/app/prepaid/check/'
 }
 

@@ -1,16 +1,16 @@
 <template>
   <q-page class="topup-page">
 
-    <div v-if="!cardId" class="nfc-scan-screen">
+    <div v-if="!cardData" class="nfc-scan-screen">
       <q-icon
-        :name="nfcStatus === 'scanning' ? 'wifi_tethering' : 'nfc'"
+        :name="nfcStatus === 'scanning' || nfcStatus === 'verifying' ? 'wifi_tethering' : 'nfc'"
         size="96px"
         class="nfc-icon"
-        :class="{ 'nfc-icon--scanning': nfcStatus === 'scanning' }"
+        :class="{ 'nfc-icon--scanning': nfcStatus === 'scanning' || nfcStatus === 'verifying' }"
       />
       <p class="nfc-text">{{ nfcStatusText }}</p>
       <button
-        v-if="nfcStatus !== 'scanning'"
+        v-if="nfcStatus !== 'scanning' && nfcStatus !== 'verifying'"
         class="nfc-scan-btn"
         @click="startNfcScan"
       >
@@ -24,21 +24,30 @@
         <div class="card-details-header">
           <q-icon name="nfc" size="18px" />
           <span>Card detected</span>
-          <q-btn flat dense round icon="close" size="10px" class="card-badge-close" @click="resetCard" />
+          <q-btn
+            flat
+            dense
+            no-caps
+            icon="refresh"
+            label="Rescan"
+            size="sm"
+            class="card-badge-close"
+            @click="resetCard"
+          />
         </div>
 
         <div class="card-details-row">
-          <span class="card-details-label">Serial number</span>
-          <span class="card-details-value">{{ cardId }}</span>
+          <span class="card-details-label">TDID</span>
+          <span class="card-details-value">{{ tdid }}</span>
         </div>
-
-        <template v-if="scanRecords.length">
-          <div v-for="(record, i) in scanRecords" :key="i" class="card-details-row">
-            <span class="card-details-label">{{ record.recordType }}<template v-if="record.mediaType"> · {{ record.mediaType }}</template></span>
-            <span class="card-details-value">{{ record.data }}</span>
-          </div>
-        </template>
-        <p v-else class="card-details-empty">No NDEF data on this card</p>
+        <div v-if="cardData.user" class="card-details-row">
+          <span class="card-details-label">User</span>
+          <span class="card-details-value">{{ cardData.user }}</span>
+        </div>
+        <div v-if="cardData.balance !== undefined" class="card-details-row">
+          <span class="card-details-label">Balance</span>
+          <span class="card-details-value">{{ cardData.balance }} lei</span>
+        </div>
       </div>
 
       <h1 class="topup-title">Select prepaid amount</h1>
@@ -74,7 +83,7 @@
     </div>
 
     <!-- Sticky bottom actions -->
-    <div v-if="cardId" class="bottom-actions">
+    <div v-if="cardData" class="bottom-actions">
       <button
         class="btn-proceed"
         :disabled="!finalAmount"
@@ -176,19 +185,22 @@
 
 <script setup>
 import { ref, computed, nextTick, watch, onBeforeUnmount } from 'vue'
+import { Cookies, Notify } from 'quasar'
 import { useDataStore } from 'stores/data.js'
 import _formattedPrice from '../../mixins/formattedPrice.js'
 
 const store = useDataStore()
 
-const cardId = ref(null)
-const scanRecords = ref([])
-const nfcStatus = ref('idle') // idle | scanning | error | unsupported
+const tdid = ref(null)
+const cardData = ref(null)
+const nfcStatus = ref('idle') // idle | scanning | verifying | error | unsupported
 const nfcError = ref('')
 let nfcAbortController = null
+let nfcReader = null
 
 const nfcStatusText = computed(() => {
   if (nfcStatus.value === 'scanning') return 'Hold the card near the back of your phone...'
+  if (nfcStatus.value === 'verifying') return 'Verifying card...'
   if (nfcStatus.value === 'unsupported') return 'NFC is not supported on this device'
   if (nfcStatus.value === 'error') return 'Could not read the card'
   return "Scan the customer's card to continue"
@@ -205,40 +217,68 @@ async function startNfcScan () {
   try {
     nfcAbortController = new AbortController()
     const ndef = new NDEFReader()
+    nfcReader = ndef
     await ndef.scan({ signal: nfcAbortController.signal })
     nfcStatus.value = 'scanning'
+    document.addEventListener('visibilitychange', onVisibilityChange)
 
     ndef.onreading = (event) => {
-      cardId.value = event.serialNumber
-      scanRecords.value = Array.from(event.message.records).map((record) => ({
+      // Guard against events delivered after the session was already stopped
+      // (e.g. leftover reads while tearing down on navigation/tab-hide).
+      if (nfcStatus.value !== 'scanning') return
+
+      stopNfcScan()
+
+      const records = Array.from(event.message.records).map((record) => ({
         recordType: record.recordType,
-        mediaType: record.mediaType,
-        id: record.id,
         data: decodeRecordData(record)
       }))
-      nfcStatus.value = 'idle'
-      nfcAbortController?.abort()
+
+      const scannedTdid = extractTdid(records)
+      if (!scannedTdid) {
+        onNfcError('This card does not contain a valid TDID')
+        return
+      }
+
+      tdid.value = scannedTdid
+      verifyCard(scannedTdid)
     }
 
     ndef.onreadingerror = () => {
-      nfcStatus.value = 'error'
-      nfcError.value = 'The card could not be read, try again'
+      if (nfcStatus.value !== 'scanning') return
+      stopNfcScan()
+      onNfcError('The card could not be read, try again')
     }
   } catch (e) {
     console.error('NFC scan error:', e)
-    nfcStatus.value = 'error'
-    nfcError.value = e.message || 'Could not start NFC scan'
+    onNfcError(e.message || 'Could not start NFC scan')
+  }
+}
+
+function stopNfcScan () {
+  document.removeEventListener('visibilitychange', onVisibilityChange)
+
+  if (nfcReader) {
+    nfcReader.onreading = null
+    nfcReader.onreadingerror = null
+    nfcReader = null
+  }
+
+  nfcAbortController?.abort()
+  nfcAbortController = null
+}
+
+function onVisibilityChange () {
+  if (document.hidden && nfcStatus.value === 'scanning') {
+    stopNfcScan()
+    nfcStatus.value = 'idle'
   }
 }
 
 function decodeRecordData (record) {
   try {
-    if (record.recordType === 'text') {
+    if (record.recordType === 'text' || record.recordType === 'url') {
       const decoder = new TextDecoder(record.encoding || 'utf-8')
-      return decoder.decode(record.data)
-    }
-    if (record.recordType === 'url') {
-      const decoder = new TextDecoder()
       return decoder.decode(record.data)
     }
     return Array.from(new Uint8Array(record.data.buffer))
@@ -249,16 +289,50 @@ function decodeRecordData (record) {
   }
 }
 
+function extractTdid (records) {
+  for (const record of records) {
+    if (record.recordType !== 'text') continue
+    try {
+      const parsed = JSON.parse(record.data)
+      if (parsed?.TDID) return String(parsed.TDID)
+    } catch (e) {
+      // not JSON, ignore
+    }
+  }
+  return null
+}
+
+function onNfcError (message) {
+  nfcStatus.value = 'error'
+  nfcError.value = message
+  Notify.create({ type: 'negative', message, position: 'top' })
+}
+
+async function verifyCard (scannedTdid) {
+  nfcStatus.value = 'verifying'
+
+  try {
+    const data = await store.check_prepaid_card(scannedTdid)
+    cardData.value = data
+    Cookies.set('scannedCard', { tdid: scannedTdid, ...data }, { path: '/', expires: 1 })
+    nfcStatus.value = 'idle'
+  } catch (e) {
+    onNfcError(e?.response?.data?.message || 'Card verification failed')
+  }
+}
+
 function resetCard () {
-  nfcAbortController?.abort()
-  cardId.value = null
-  scanRecords.value = []
+  stopNfcScan()
+  tdid.value = null
+  cardData.value = null
   nfcStatus.value = 'idle'
   nfcError.value = ''
+  Cookies.remove('scannedCard', { path: '/' })
 }
 
 onBeforeUnmount(() => {
-  nfcAbortController?.abort()
+  stopNfcScan()
+  Cookies.remove('scannedCard', { path: '/' })
 })
 
 const amounts = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550]

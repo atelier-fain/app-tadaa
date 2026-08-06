@@ -32,6 +32,11 @@ export const useDataStore = defineStore('data', {
       return data.user
     },
 
+    async check_prepaid_card (_id) {
+      const { data } = await this._post(ep.checkPrepaidCard, { _id })
+      return data
+    },
+
     async check_ticket (scannedValue) {
       try {
         const { data } = await this._post(ep.checkTicket, {
