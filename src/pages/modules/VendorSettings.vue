@@ -38,7 +38,7 @@
             </div>
 
             <div class="card-meta">
-              <span>{{ product.price }} RON</span>
+              <span>{{ product.price }} lei</span>
             </div>
 
             <div class="card-footer">

@@ -7,7 +7,7 @@
       </div>
       <div class="summary-chip">
         <span class="chip-label">Today's total</span>
-        <span class="chip-val">{{ totalToday }} RON</span>
+        <span class="chip-val">{{ totalToday }} lei</span>
       </div>
       <div class="summary-actions">
         <NotificationsBell :trigger="notifTrigger" :notification="notifData" />
@@ -95,7 +95,7 @@
                 <div class="card-footer">
                   <div>
                     <span class="total-label">Total</span>
-                    <span class="order-total">{{ order.total }} RON</span>
+                    <span class="order-total">{{ order.total }} lei</span>
                   </div>
                   <q-btn
                     v-if="order.status === 'lucru'"
@@ -203,7 +203,7 @@ function simulateNewOrder() {
   notifData.value = {
     icon: 'notifications_active',
     message: `New order ${orderId}`,
-    caption: '1× Pizza Quattro Formagi · 45 RON',
+    caption: '1× Pizza Quattro Formagi · 45 lei',
     actions: [{ label: 'View', color: 'white', noCaps: true, handler: () => scrollToOrder(orderId) }]
   }
   notifTrigger.value++

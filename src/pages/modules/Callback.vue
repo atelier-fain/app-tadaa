@@ -103,7 +103,7 @@ onMounted(() => {
 
   if (isSuccess.value && pendingOrder?.source === 'vendor') {
     const order = vendorStore.addOrder(pendingOrder.cart || [])
-    vendorStore.reportOrderPayment(order, 'card')
+    vendorStore.reportOrderPayment(order, route.query.paymentMethod || 'card')
   }
 })
 

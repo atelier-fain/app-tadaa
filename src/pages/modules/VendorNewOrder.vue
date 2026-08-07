@@ -32,7 +32,7 @@
         <div class="product-main">
           <div class="product-info">
             <span class="product-name">{{ product.name }}</span>
-            <span class="product-price">{{ product.price }} RON</span>
+            <span class="product-price">{{ product.price }} lei</span>
           </div>
           <div class="product-actions">
             <q-btn
@@ -80,7 +80,7 @@
           </div>
 
           <div class="extras-footer">
-            <span class="extras-total" v-html="formatPrice(expandedTotal)" />
+            <span class="extras-total" v-html="formatPrice(expandedTotal, true)" />
             <q-btn no-caps unelevated label="Add to order" class="add-btn" @click="confirmAdd(product)" />
           </div>
         </div>
@@ -94,7 +94,7 @@
         <q-btn no-caps unelevated class="cart-btn" @click="showPaymentModal = true">
           <span class="cart-count">{{ cartQty }}</span>
           <span class="cart-label">Place order</span>
-          <span class="cart-total">{{ cartTotal }} RON</span>
+          <span class="cart-total">{{ cartTotal }} lei</span>
         </q-btn>
       </div>
     </q-page-sticky>
@@ -165,7 +165,7 @@
           <span class="festival-scan-title">Card Festival</span>
         </div>
 
-        <div v-if="festivalStatus !== 'insufficient' && festivalStatus !== 'success'" class="nfc-scan-screen">
+        <div v-if="festivalStatus !== 'insufficient'" class="nfc-scan-screen">
           <q-icon
             :name="['scanning', 'verifying', 'charging'].includes(festivalStatus) ? 'wifi_tethering' : 'nfc'"
             size="96px"
@@ -188,20 +188,11 @@
           </button>
         </div>
 
-        <div v-else-if="festivalStatus === 'insufficient'" class="festival-result festival-result--error">
+        <div v-else class="festival-result festival-result--error">
           <q-icon name="cancel" size="64px" />
           <p class="festival-result-title">Insufficient credit</p>
           <p class="festival-result-desc">This card doesn't have enough balance for <span v-html="formatPrice(cartTotal, true)" />.</p>
           <button class="nfc-scan-btn" @click="resetFestivalScan">Try another card</button>
-        </div>
-
-        <div v-else class="festival-result festival-result--success">
-          <q-icon name="check_circle" size="64px" />
-          <p class="festival-result-title">Payment confirmed</p>
-          <p class="festival-result-desc"><span v-html="formatPrice(cartTotal, true)" /> charged successfully.</p>
-          <p v-if="festivalCardData?.balance !== undefined" class="festival-result-balance">
-            Remaining balance: <span v-html="formatPrice(Number(festivalCardData.balance) / 100, true)" />
-          </p>
         </div>
       </q-card>
     </q-dialog>
@@ -211,6 +202,7 @@
 <script setup>
 import { ref, computed, watch, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
+import { Cookies } from 'quasar'
 import { useVendorStore } from 'stores/vendor.js'
 import { useDataStore } from 'stores/data.js'
 
@@ -270,7 +262,7 @@ const expandedTotal = computed(
 )
 
 function formatPrice (value, withUnit = false) {
-  return `${Math.floor(value)}<sup>00</sup>${withUnit ? ' RON' : ''}`
+  return `${Math.floor(value)}<sup>00</sup>${withUnit ? ' lei' : ''}`
 }
 
 function quickAdd (product) {
@@ -312,12 +304,6 @@ function bumpCart () {
   })
   clearTimeout(bumpTimeout)
   bumpTimeout = setTimeout(() => { cartBump.value = false }, 1200)
-}
-
-function placeOrder () {
-  const order = vendorStore.addOrder(cart.value)
-  console.log('Order placed:', order)
-  router.push({ name: 'vendor' })
 }
 
 // ----- metodă de plată -----
@@ -490,23 +476,28 @@ async function verifyFestivalCard (scannedTdid) {
   }
 }
 
+// La succes, plata se predă lui /callback: acolo se creează comanda și se
+// arată confirmarea — la fel ca la Card (Viva) și celelalte fluxuri de plată,
+// ca să existe un singur loc pentru ecranul de confirmare.
 async function chargeFestivalCard () {
   festivalStatus.value = 'charging'
 
   try {
-    const { balance } = vendorStore.debitFestivalCard(
+    vendorStore.debitFestivalCard(
       festivalCardData.value._id,
       cartTotal.value * 100,
       Number(festivalCardData.value.balance) || 0
     )
-    festivalCardData.value.balance = balance
 
-    festivalStatus.value = 'success'
+    dataStore.pendingOrder = { source: 'vendor', cart: cart.value }
+    Cookies.set('pendingOrder', dataStore.pendingOrder, { path: '/', expires: 1 })
 
-    setTimeout(() => {
-      showFestivalScan.value = false
-      placeOrder()
-    }, 1500)
+    stopNfcScan()
+    showFestivalScan.value = false
+    router.push({
+      name: 'tickets-callback',
+      query: { status: 'success', amount: String(cartTotal.value * 100), paymentMethod: 'card_festival' }
+    })
   } catch (e) {
     onFestivalNfcError(e?.response?.data?.message || 'Payment could not be confirmed')
   }
@@ -1067,14 +1058,7 @@ onBeforeUnmount(() => {
   gap: 0.75rem;
   padding: 2rem;
   text-align: center;
-
-  &--error {
-    color: #D32F2F;
-  }
-
-  &--success {
-    color: #1D9E75;
-  }
+  color: #D32F2F;
 }
 .festival-result-title {
   font-size: 20px;
@@ -1087,15 +1071,5 @@ onBeforeUnmount(() => {
   color: $grey-6;
   margin: 0;
   max-width: 280px;
-}
-.festival-result-balance {
-  font-size: 14px;
-  font-weight: 600;
-  color: $dark;
-  margin: 8px 0 0;
-
-  :deep(sup) {
-    font-size: 10px;
-  }
 }
 </style>

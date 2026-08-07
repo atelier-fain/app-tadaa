@@ -92,13 +92,11 @@ export const useDataStore = defineStore('data', {
             return
           }
 
-          if (data?.message) {
-            Notify.create({
-              type: 'positive',
-              message: data.message || 'Transaction succesfull',
-              position: 'top'
-            })
-          }
+          Notify.create({
+            type: 'positive',
+            message: data?.message || 'Transaction succesfull',
+            position: 'top'
+          })
         }
 
         if (payload.source === 'topup') {
