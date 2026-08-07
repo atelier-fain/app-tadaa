@@ -8,7 +8,6 @@
           <q-icon
             :name="isChecking ? 'wifi_tethering' : 'qr_code_scanner'"
             size="96px"
-            color="white"
             :class="isChecking ? 'scanning-icon' : 'scan-icon'"
           />
           <p class="idle-text">{{ isChecking ? 'Scanning...' : 'Scan the ticket' }}</p>
@@ -17,8 +16,6 @@
             v-if="!isChecking"
             round
             size="lg"
-            color="white"
-            text-color="dark"
             icon="photo_camera"
             class="camera-trigger-btn"
             @click="openCameraScanner"
@@ -278,14 +275,14 @@ onBeforeUnmount(() => {
 .access-page {
   position: relative;
   height: calc(100dvh - 50px);
-  background-color: #1e1e2e;
+  background-color: white;
   display: flex;
   align-items: center;
   justify-content: center;
 
   .access-inner {
     text-align: center;
-    color: white;
+    color: #1a1a1a;
     padding: 2rem;
     width: 100%;
     max-width: 480px;
@@ -296,33 +293,38 @@ onBeforeUnmount(() => {
     flex-direction: column;
     align-items: center;
     gap: 1.2rem;
-    opacity: 0.85;
 
     .scan-icon {
+      color: #2e7d1f;
       animation: pulse 2s ease-in-out infinite;
     }
 
     .scanning-icon {
+      color: #2e7d1f;
       animation: spin 1s linear infinite;
     }
 
     .idle-text {
       font-size: 1.4rem;
-      font-weight: 400;
+      font-weight: 500;
+      color: #1a1a1a;
       margin: 0;
       letter-spacing: 0.03em;
     }
 
     .camera-trigger-btn {
       margin-top: 0.8rem;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      background: white !important;
+      color: #2e7d1f !important;
+      border: 1.5px solid #2e7d1f;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
     }
 
     .camera-trigger-text {
       font-size: 0.85rem;
       font-weight: 400;
+      color: #999;
       margin: 0;
-      opacity: 0.7;
       letter-spacing: 0.02em;
     }
   }
@@ -337,17 +339,20 @@ onBeforeUnmount(() => {
   gap: 1rem;
   padding: 2rem 2rem;
   border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
   &--success {
-    background-color: #4fb907;
-    .success-icon { color: white; }
+    background: #F0FAF5;
+    border: 1.5px solid #1D9E75;
+    .success-icon { color: #1D9E75; }
   }
 
   &--error {
-    background-color: #ce0b0b;
+    background: #FDECEA;
+    border: 1.5px solid #D32F2F;
     .error-icon {
-      color: white;
+      color: #D32F2F;
       animation: shake 0.4s ease;
     }
   }
@@ -357,7 +362,7 @@ onBeforeUnmount(() => {
     line-height: 135%;
     font-weight: 500;
     margin: 0;
-    color: white;
+    color: #1a1a1a;
   }
 
   .ticket-code-badge {
@@ -366,7 +371,7 @@ onBeforeUnmount(() => {
     right: 0.8rem;
     font-size: 0.7rem;
     font-family: monospace;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(0, 0, 0, 0.35);
     letter-spacing: 0.05em;
   }
 }

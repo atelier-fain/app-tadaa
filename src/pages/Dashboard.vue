@@ -2,7 +2,7 @@
   <div class="dashboard">
     <div class="main-container">
       <q-btn
-        v-for="{id} in categories"
+        v-for="{id} in listCategories"
         type="a"
         v-ripple="false"
         flat
@@ -12,18 +12,19 @@
         <q-img
           :src="$img(`icon_${id}.png`)"
           no-spinner
+          no-transition
           :alt="`icon_${id}.png`"
         />
       </q-btn>
 
-      <pre v-if="loaded && !listCategories.length" class="debug-panel">{{ debugInfo }}</pre>
+      <pre v-if="!listCategories.length" class="debug-panel">{{ debugInfo }}</pre>
     </div>
   </div>
 </template>
 
 <script setup>
 
-import {ref, onMounted} from "vue";
+import {computed, ref, onMounted} from "vue";
 import {useRouter} from "vue-router";
 import {useDataStore} from "stores/data.js";
 import {useQuasar} from "quasar";
@@ -40,22 +41,22 @@ const categories = [
   {id: 'vendor', permission: 'app_vendor'},
 ]
 
-const listCategories = ref([])
-const loaded = ref(false)
+// store.user is hydrated synchronously from the 'user' cookie (see stores/data.js),
+// so buttons render immediately from the cached value. check_token() below only
+// refreshes that cache in the background — it never gates the initial render.
+const listCategories = computed(() => categories.filter(({ permission }) => store.user?.[permission]))
 const debugInfo = ref('')
 
-onMounted(async () => {
-  try {
-    const user = await store.check_token()
-    listCategories.value = categories.filter(({ permission }) => user?.[permission])
-    debugInfo.value = JSON.stringify({ user }, null, 2)
-  } catch (e) {
-    debugInfo.value = JSON.stringify({ error: e?.message || String(e) }, null, 2)
-    $q.notify({ type: 'negative', message: 'Sesiune expirată, te rugăm să te autentifici din nou', position: 'top' })
-    await router.push({name: 'login'})
-  } finally {
-    loaded.value = true
-  }
+onMounted(() => {
+  store.check_token()
+    .then((user) => {
+      debugInfo.value = JSON.stringify({ user }, null, 2)
+    })
+    .catch((e) => {
+      debugInfo.value = JSON.stringify({ error: e?.message || String(e) }, null, 2)
+      $q.notify({ type: 'negative', message: 'Session expired, please log in again', position: 'top' })
+      router.push({name: 'login'})
+    })
 })
 
 function handleButton (id) {

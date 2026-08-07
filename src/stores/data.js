@@ -156,7 +156,8 @@ export const useDataStore = defineStore('data', {
           this.pendingOrder = {
             source: payload.source,
             tickets: payload.tickets || [],
-            cardId: payload.cardId || null
+            cardId: payload.cardId || null,
+            cart: payload.cart || null
           }
           Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
         }

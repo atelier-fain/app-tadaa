@@ -9,7 +9,8 @@ const routes = [
       { path: '/callback', name: 'tickets-callback', component: () => import('pages/modules/Callback.vue') },
       { path: '/modules/top_up', name: 'top_up', component: () => import('pages/modules/TopUpPage.vue'), meta: { permission: 'app_topup' } },
       { path: '/modules/vendor', name: 'vendor', component: () => import('pages/modules/VendorPage.vue'), meta: { permission: 'app_vendor' } },
-      { path: '/modules/vendor/settings', name: 'vendor-settings', component: () => import('pages/modules/VendorSettings.vue'), meta: { permission: 'app_vendor' } }
+      { path: '/modules/vendor/settings', name: 'vendor-settings', component: () => import('pages/modules/VendorSettings.vue'), meta: { permission: 'app_vendor' } },
+      { path: '/modules/vendor/new-order', name: 'vendor-new-order', component: () => import('pages/modules/VendorNewOrder.vue'), meta: { permission: 'app_vendor' } }
     ]
   },
   {

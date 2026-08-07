@@ -38,6 +38,12 @@ export default defineRouter(function ({ store }) {
   // query params over to the 'tickets-callback' route.
   let handledExternalCallback = false
 
+  // Once check_token confirms the user holds a given permission, skip
+  // re-checking it on subsequent navigations within the same permission
+  // group (e.g. vendor -> vendor-new-order -> vendor) — it was already
+  // verified this session and re-hitting the endpoint on every hop is wasteful.
+  let verifiedPermission = null
+
   Router.beforeEach((to) => {
     if (!handledExternalCallback) {
       handledExternalCallback = true
@@ -52,15 +58,19 @@ export default defineRouter(function ({ store }) {
     const token = Cookies.get('token')
 
     if (!token) {
+      verifiedPermission = null
       if (to.name !== 'login') return { name: 'login' }
       return
     }
 
     if (to.name === 'login') return
 
-    if (to.meta.permission) {
+    if (to.meta.permission && to.meta.permission !== verifiedPermission) {
       const dataStore = useDataStore(store)
 
+      // Intentionally not returned/awaited: navigation must not wait on this
+      // response, it runs in the background and only redirects afterwards
+      // if the permission check fails.
       dataStore.check_token()
         .then((user) => {
           if (Router.currentRoute.value.name !== to.name) return
@@ -72,7 +82,10 @@ export default defineRouter(function ({ store }) {
               position: 'top',
             })
             Router.replace({ name: 'dashboard' })
+            return
           }
+
+          verifiedPermission = to.meta.permission
         })
         .catch(() => {
           if (Router.currentRoute.value.name !== to.name) return

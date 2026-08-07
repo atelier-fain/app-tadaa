@@ -6,17 +6,21 @@
         :name="nfcStatus === 'scanning' || nfcStatus === 'verifying' ? 'wifi_tethering' : 'nfc'"
         size="96px"
         class="nfc-icon"
-        :class="{ 'nfc-icon--scanning': nfcStatus === 'scanning' || nfcStatus === 'verifying' }"
+        :class="{
+          'nfc-icon--scanning': nfcStatus === 'scanning' || nfcStatus === 'verifying',
+          'nfc-icon--retry': nfcStatus === 'error' || nfcStatus === 'unsupported'
+        }"
+        @click="(nfcStatus === 'error' || nfcStatus === 'unsupported') && onScanClick()"
       />
       <p class="nfc-text">{{ nfcStatusText }}</p>
+      <p v-if="nfcError" class="nfc-error-text">{{ nfcError }}</p>
       <button
-        v-if="nfcStatus !== 'scanning' && nfcStatus !== 'verifying'"
+        v-if="nfcStatus === 'error' || nfcStatus === 'unsupported'"
         class="nfc-scan-btn"
         @click="onScanClick"
       >
-        {{ nfcStatus === 'error' || nfcStatus === 'unsupported' ? 'Try again' : 'Scan card' }}
+        Try again
       </button>
-      <p v-if="nfcError" class="nfc-error-text">{{ nfcError }}</p>
     </div>
 
     <div v-else class="topup-inner">
@@ -369,11 +373,15 @@ function resetCard () {
   nfcStatus.value = 'idle'
   nfcError.value = ''
   Cookies.remove('scannedCard', { path: '/' })
+  onScanClick()
 }
 
 onMounted(() => {
   const saved = Cookies.get('scannedCard')
-  if (!saved?.tdid) return
+  if (!saved?.tdid) {
+    onScanClick()
+    return
+  }
 
   tdid.value = saved.tdid
   cardData.value = saved
@@ -528,6 +536,11 @@ const onConfirmCashOut = async () => {
 
   &--scanning {
     animation: nfc-spin 1s linear infinite;
+  }
+
+  &--retry {
+    color: $negative;
+    cursor: pointer;
   }
 }
 

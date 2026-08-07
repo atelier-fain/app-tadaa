@@ -36,7 +36,8 @@ watch(() => props.trigger, (val) => {
 
   $q.notify({
     position: 'top',
-    timeout: 5000,
+    timeout: 7000,
+    progress: true,
     color: 'dark',
     icon: props.notification.icon ?? 'receipt_long',
     message: props.notification.message ?? 'Notificare nouă',

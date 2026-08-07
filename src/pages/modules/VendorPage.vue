@@ -72,7 +72,7 @@
 
                 <div class="card-items">
                   <div
-                    v-for="(item, i) in order.items"
+                    v-for="(item, i) in visibleItems(order)"
                     :key="i"
                     class="card-item"
                   >
@@ -81,6 +81,14 @@
                   </div>
                   <div v-if="order.extra" class="extra">
                     + {{ order.extra }}
+                  </div>
+                  <div
+                    v-if="order.items.length > 1"
+                    class="expand-toggle"
+                    @click="toggleOrderExpand(order.id)"
+                  >
+                    <q-icon :name="isExpanded(order.id) ? 'expand_less' : 'expand_more'" size="20px" />
+                    <span>{{ isExpanded(order.id) ? 'See less' : 'See more' }}</span>
                   </div>
                 </div>
 
@@ -159,8 +167,10 @@
 import { ref, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import NotificationsBell from 'components/NotificationsBell.vue'
+import { useVendorStore } from 'stores/vendor.js'
 
 const router = useRouter()
+const vendorStore = useVendorStore()
 
 const notifTrigger = ref(0)
 const notifData = ref({})
@@ -199,58 +209,8 @@ function simulateNewOrder() {
   notifTrigger.value++
 }
 
-// ----- date mock -----
-const orders = ref([
-  {
-    id: '#ita0406',
-    status: 'lucru',
-    items: [{ qty: 1, name: 'Pizza Quattro Formagi' }],
-    extra: null,
-    total: 45,
-  },
-  {
-    id: '#ita0405',
-    status: 'lucru',
-    items: [{ qty: 1, name: 'Pizza Prosciutto Funghi' }],
-    extra: 'Dulce (5 RON)',
-    total: 48,
-  },
-  {
-    id: '#ita0404',
-    status: 'lucru',
-    items: [{ qty: 1, name: 'Pizza Margherita' }],
-    extra: null,
-    total: 39,
-  },
-  {
-    id: '#ita0403',
-    status: 'lucru',
-    items: [{ qty: 1, name: 'Pizza Quattro Formagi' }],
-    extra: null,
-    total: 45,
-  },
-  {
-    id: '#ita0402',
-    status: 'lucru',
-    items: [{ qty: 2, name: 'Pizza Diavola' }],
-    extra: null,
-    total: 80,
-  },
-  {
-    id: '#ita0401',
-    status: 'lucru',
-    items: [{ qty: 1, name: 'Pizza Capricciosa' }, { qty: 1, name: 'Tiramisu' }],
-    extra: null,
-    total: 62,
-  },
-  {
-    id: '#ita0400',
-    status: 'lucru',
-    items: [{ qty: 3, name: 'Pizza Margherita' }],
-    extra: 'Fara gluten',
-    total: 117,
-  },
-])
+// orders trăiesc în store-ul vendor ca să fie vizibile și din pagina new-order
+const orders = computed(() => vendorStore.orders)
 
 // ----- tabs -----
 const tabs = [
@@ -270,6 +230,22 @@ const totalToday = computed(
 
 const filteredOrders = (status) =>
   orders.value.filter(o => o.status === status)
+
+// ----- expand comenzi cu mai multe produse -----
+const expandedOrders = ref(new Set())
+
+const isExpanded = (id) => expandedOrders.value.has(id)
+
+const toggleOrderExpand = (id) => {
+  if (expandedOrders.value.has(id)) {
+    expandedOrders.value.delete(id)
+  } else {
+    expandedOrders.value.add(id)
+  }
+}
+
+const visibleItems = (order) =>
+  order.items.length <= 1 || isExpanded(order.id) ? order.items : order.items.slice(0, 1)
 
 // ----- helpers -----
 const statusLabel = (status) => ({
@@ -318,8 +294,7 @@ const confirmClose = () => {
 }
 
 const addOrder = () => {
-  // TODO: deschide dialog/formular comandă nouă
-  console.log('Adaugă comandă nouă')
+  router.push({ name: 'vendor-new-order' })
 }
 </script>
 
@@ -369,13 +344,13 @@ const addOrder = () => {
   }
 }
 .orders-tab {
-  border-radius: 20px;
-  padding: 4px 14px;
-  font-size: 13px;
+  border-radius: 22px;
+  padding: 8px 18px;
+  font-size: 14px;
   border: 1px solid rgba(0, 0, 0, 0.15);
   background: white;
   color: $grey-7;
-  min-height: 32px;
+  min-height: 44px;
   transition: background 0.15s, color 0.15s;
 
   &.tab-active {
@@ -385,8 +360,8 @@ const addOrder = () => {
   }
 
   :deep(.q-tab__label) {
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
   }
 }
 
@@ -518,6 +493,19 @@ const addOrder = () => {
   color: $grey-6;
   margin-left: 26px;
 }
+.expand-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: $primary;
+  margin-left: -6px;
+  padding: 0 8px 6px;
+  min-height: 30px;
+  cursor: pointer;
+  width: fit-content;
+}
 
 /* Card footer */
 .card-footer {
@@ -543,16 +531,20 @@ const addOrder = () => {
 .btn-finalize {
   background: $dark !important;
   color: white !important;
-  border-radius: 6px;
-  font-size: 13px;
-  padding: 4px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 18px;
+  min-height: 44px;
 }
 .btn-close {
   background: $grey-2 !important;
   color: $grey-8 !important;
-  border-radius: 6px;
-  font-size: 13px;
-  padding: 4px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 18px;
+  min-height: 44px;
 }
 .status-done {
   font-size: 12px;

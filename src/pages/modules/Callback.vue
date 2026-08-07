@@ -39,11 +39,13 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Cookies } from 'quasar'
 import { useDataStore } from 'stores/data.js'
+import { useVendorStore } from 'stores/vendor.js'
 import _formattedPrice from '../../mixins/formattedPrice.js'
 
 const route = useRoute()
 const router = useRouter()
 const store = useDataStore()
+const vendorStore = useVendorStore()
 
 const hasError = ref(false)
 const errorMessage = ref('')
@@ -56,6 +58,11 @@ const message = computed(() => errorMessage.value || route.query.message || '')
 const transactionId = computed(() => route.query.transactionId || '')
 const shortOrderCode = computed(() => route.query.shortOrderCode || '')
 const newOrderLabel = computed(() => orderSource.value === 'topup' ? 'Top up again' : 'New order')
+const destinationRoute = computed(() => {
+  if (orderSource.value === 'topup') return 'top_up'
+  if (orderSource.value === 'vendor') return 'vendor'
+  return 'tickets'
+})
 
 onMounted(() => {
   const pendingOrder = Cookies.get('pendingOrder')
@@ -93,10 +100,15 @@ onMounted(() => {
       errorMessage.value = 'Could not complete the top up'
     })
   }
+
+  if (isSuccess.value && pendingOrder?.source === 'vendor') {
+    const order = vendorStore.addOrder(pendingOrder.cart || [])
+    vendorStore.reportOrderPayment(order, 'card')
+  }
 })
 
 function onNewOrder () {
-  router.push({ name: orderSource.value === 'topup' ? 'top_up' : 'tickets' })
+  router.push({ name: destinationRoute.value })
 }
 
 function onRetry () {
@@ -104,7 +116,7 @@ function onRetry () {
 }
 
 function onCancel () {
-  router.push({ name: orderSource.value === 'topup' ? 'top_up' : 'tickets' })
+  router.push({ name: destinationRoute.value })
 }
 </script>
 
