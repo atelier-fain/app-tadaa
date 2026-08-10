@@ -192,7 +192,7 @@
       </q-card>
     </q-dialog>
 
-    <VendorPaymentModal ref="paymentModalRef" :cart="customCart" :cart-total="customCartTotal" />
+    <VendorPaymentModal v-model="showPayment" :cart="customCart" :cart-total="customCartTotal" />
 
     <!-- FAB adaugă comandă -->
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
@@ -330,7 +330,7 @@ const onCustomValueCancel = () => {
 // La confirmare, se deschide direct VendorPaymentModal (Card Festival/Card)
 // peste pagina curentă, fără nicio navigare — coșul e un singur produs
 // (suma custom introdusă).
-const paymentModalRef = ref(null)
+const showPayment = ref(false)
 const customCart = ref([])
 const customCartTotal = computed(() => customCart.value.reduce((sum, item) => sum + item.lineTotal, 0))
 
@@ -339,7 +339,7 @@ const onCustomValueOk = () => {
 
   customCart.value = [{ name: 'Custom amount', qty: 1, extras: [], lineTotal: Number(tempCustomValue.value) }]
   showCustomValueModal.value = false
-  nextTick(() => paymentModalRef.value?.open())
+  showPayment.value = true
 }
 </script>
 

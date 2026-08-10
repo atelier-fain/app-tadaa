@@ -8,7 +8,7 @@ export const useVendorStore = defineStore('vendor', {
     // value_only: true = vendor fără meniu/produse, ia doar plăți cu sumă
     // custom (fără tab-uri In progress/Completed/Closed).
     // online_orders: true = butonul de Settings apare pe /vendor.
-    vendor: { value_only: true, online_orders: true },
+    vendor: { value_only: false, online_orders: true },
     products: [
       {
         id: 'p1', name: 'Pizza Margherita', category: 'Pizza', price: 39,

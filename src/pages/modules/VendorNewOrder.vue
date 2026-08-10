@@ -91,7 +91,7 @@
     <q-page-sticky v-if="cart.length" position="bottom-right" :offset="[18, 18]">
       <div class="cart-sticky-group" :class="{ 'cart-pulse': cartBump }">
         <q-btn flat icon="info" class="cart-info-btn" @click="cartDialogOpen = true" />
-        <q-btn no-caps unelevated class="cart-btn" @click="paymentModalRef?.open()">
+        <q-btn no-caps unelevated class="cart-btn" @click="showPayment = true">
           <span class="cart-count">{{ cartQty }}</span>
           <span class="cart-label">Place order</span>
           <span class="cart-total">{{ cartTotal }} lei</span>
@@ -128,7 +128,7 @@
       </q-card>
     </q-dialog>
 
-    <VendorPaymentModal ref="paymentModalRef" :cart="cart" :cart-total="cartTotal" />
+    <VendorPaymentModal v-model="showPayment" :cart="cart" :cart-total="cartTotal" />
   </q-page>
 </template>
 
@@ -142,7 +142,7 @@ import VendorPaymentModal from 'components/VendorPaymentModal.vue'
 const route = useRoute()
 const router = useRouter()
 const vendorStore = useVendorStore()
-const paymentModalRef = ref(null)
+const showPayment = ref(false)
 
 const activeCategory = ref(vendorStore.categories[0])
 const productsInCategory = computed(
@@ -244,7 +244,7 @@ onMounted(() => {
   const pendingOrder = Cookies.get('pendingOrder')
   if (pendingOrder?.cart?.length) cart.value = pendingOrder.cart
 
-  paymentModalRef.value?.open()
+  showPayment.value = true
   router.replace({ name: 'vendor-new-order' })
 })
 </script>

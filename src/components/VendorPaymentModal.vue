@@ -79,8 +79,10 @@ import _formattedPrice from '../mixins/formattedPrice.js'
 
 const props = defineProps({
   cart: { type: Array, required: true },
-  cartTotal: { type: Number, required: true }
+  cartTotal: { type: Number, required: true },
+  modelValue: { type: Boolean, default: false }
 })
+const emit = defineEmits(['update:modelValue'])
 
 const router = useRouter()
 const dataStore = useDataStore()
@@ -93,10 +95,13 @@ function formatPrice (value, withUnit = false) {
 }
 
 // ----- metodă de plată -----
-const showPaymentModal = ref(false)
-
-defineExpose({
-  open: () => { showPaymentModal.value = true }
+// v-model pe modelValue (nu ref+defineExpose): starea se controlează din
+// părinte printr-un simplu boolean reactiv, care ajunge la copil prin props
+// indiferent de momentul în care se montează — fără nicio dependență de
+// timing-ul de mount al componentei/ref-ului.
+const showPaymentModal = computed({
+  get: () => props.modelValue,
+  set: (val) => emit('update:modelValue', val)
 })
 
 function onCardClick () {
