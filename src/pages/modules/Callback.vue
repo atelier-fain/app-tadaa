@@ -42,6 +42,13 @@
         </div>
       </template>
     </div>
+
+    <VendorPaymentModal
+      v-if="orderSource === 'vendor'"
+      v-model="showPayment"
+      :cart="retryCart"
+      :cart-total="retryCartTotal"
+    />
   </q-page>
 </template>
 
@@ -51,6 +58,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Cookies } from 'quasar'
 import { useDataStore } from 'stores/data.js'
 import { useVendorStore } from 'stores/vendor.js'
+import VendorPaymentModal from 'components/VendorPaymentModal.vue'
 import _formattedPrice from '../../mixins/formattedPrice.js'
 
 const route = useRoute()
@@ -61,6 +69,10 @@ const vendorStore = useVendorStore()
 const hasError = ref(false)
 const errorMessage = ref('')
 const orderSource = ref(null)
+const pendingOrder = ref(null)
+const showPayment = ref(false)
+const retryCart = computed(() => pendingOrder.value?.cart || [])
+const retryCartTotal = computed(() => retryCart.value.reduce((sum, item) => sum + item.lineTotal, 0))
 
 const status = computed(() => route.query.status)
 const isSuccess = computed(() => status.value === 'success' && !hasError.value)
@@ -77,18 +89,18 @@ const destinationRoute = computed(() => {
 })
 
 onMounted(() => {
-  const pendingOrder = Cookies.get('pendingOrder')
+  pendingOrder.value = Cookies.get('pendingOrder')
 
-  if (!pendingOrder) {
+  if (!pendingOrder.value) {
     router.replace({ name: 'dashboard' })
     return
   }
 
-  orderSource.value = pendingOrder.source
+  orderSource.value = pendingOrder.value.source
 
-  if (isSuccess.value && pendingOrder?.source === 'tickets') {
+  if (isSuccess.value && pendingOrder.value.source === 'tickets') {
     store.buy_tickets({
-      tickets: pendingOrder.tickets,
+      tickets: pendingOrder.value.tickets,
       method: 'card',
       transactionId: transactionId.value,
       shortOrderCode: shortOrderCode.value
@@ -99,9 +111,9 @@ onMounted(() => {
     })
   }
 
-  if (isSuccess.value && pendingOrder?.source === 'topup') {
+  if (isSuccess.value && pendingOrder.value.source === 'topup') {
     store.charge_prepaid_card({
-      _id: pendingOrder.cardId,
+      _id: pendingOrder.value.cardId,
       amount: amount.value,
       method: 'card',
       transactionId: transactionId.value,
@@ -113,8 +125,8 @@ onMounted(() => {
     })
   }
 
-  if (isSuccess.value && pendingOrder?.source === 'vendor') {
-    const order = vendorStore.addOrder(pendingOrder.cart || [])
+  if (isSuccess.value && pendingOrder.value.source === 'vendor') {
+    const order = vendorStore.addOrder(pendingOrder.value.cart || [])
     vendorStore.reportOrderPayment(order, route.query.paymentMethod || 'card')
   }
 })
@@ -127,8 +139,13 @@ function onRetry () {
   store.pay_card({ amount: 1, totalPrice: amount.value, user: store.user?.user })
 }
 
+// Deschide direct modalul de plată (Card Festival/Card) peste ecranul de
+// eșec, fără nicio navigare — evită complet round-trip-ul prin router (care
+// depindea de query param + onMounted pe alta pagină și se putea pierde din
+// cauza guard-ului de permisiuni async care rulează la fiecare reload venit
+// de la Viva).
 function onTryAnotherPaymentMethod () {
-  router.push({ name: 'vendor-new-order', query: { reopenPayment: '1' } })
+  showPayment.value = true
 }
 
 function onCancel () {

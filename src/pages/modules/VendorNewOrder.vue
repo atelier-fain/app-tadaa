@@ -133,13 +133,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { Cookies } from 'quasar'
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useVendorStore } from 'stores/vendor.js'
 import VendorPaymentModal from 'components/VendorPaymentModal.vue'
 
-const route = useRoute()
 const router = useRouter()
 const vendorStore = useVendorStore()
 const showPayment = ref(false)
@@ -235,18 +233,6 @@ function bumpCart () {
   bumpTimeout = setTimeout(() => { cartBump.value = false }, 1200)
 }
 
-// La întoarcerea din /callback după o plată eșuată (Viva), coșul se
-// restaurează din cookie-ul pendingOrder și se redeschide direct modalul
-// de plată, ca userul să aleagă altă metodă fără să reia comanda de la zero.
-onMounted(() => {
-  if (!route.query.reopenPayment) return
-
-  const pendingOrder = Cookies.get('pendingOrder')
-  if (pendingOrder?.cart?.length) cart.value = pendingOrder.cart
-
-  showPayment.value = true
-  router.replace({ name: 'vendor-new-order' })
-})
 </script>
 
 <style scoped lang="scss">
