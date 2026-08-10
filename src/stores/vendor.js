@@ -1,14 +1,17 @@
 import { defineStore } from 'pinia'
+import { api } from 'boot/axios.js'
+import { ep } from 'stores/ep.js'
+import { useDataStore } from 'stores/data.js'
 
 export const useVendorStore = defineStore('vendor', {
   state: () => ({
     // ----- date mock -----
-    // profil vendor — mock, va fi populat de la EP-ul de profil vendor la
-    // intrarea pe VendorPage (vezi docs/vendor-api-requirements.md #1).
+    // profil vendor — populat de fetchVendor() la intrarea pe VendorPage
+    // (POST /v2/app/vendor/get/, vezi docs/vendor-api-requirements.md #1).
     // value_only: true = vendor fără meniu/produse, ia doar plăți cu sumă
     // custom (fără tab-uri In progress/Completed/Closed).
     // online_orders: true = butonul de Settings apare pe /vendor.
-    vendor: { value_only: false, online_orders: true },
+    vendor: null,
     products: [
       {
         id: 'p1', name: 'Pizza Margherita', category: 'Pizza', price: 39,
@@ -93,6 +96,14 @@ export const useVendorStore = defineStore('vendor', {
     // Wire this up to a real POST (e.g. ep.reportOrderPayment) once it's available.
     reportOrderPayment (order, paymentMethod) {
       console.log('Order payment confirmed (backend call pending):', { order, paymentMethod })
+    },
+
+    // POST /v2/app/vendor/get/ — profil vendor curent (identificat din token).
+    async fetchVendor () {
+      const dataStore = useDataStore()
+      const { data } = await api.post(ep.vendorGet, { token: dataStore.token })
+      this.vendor = data
+      return data
     }
   }
 })

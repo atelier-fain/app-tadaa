@@ -14,63 +14,46 @@ documentat separat la fiecare EP de mai jos.
 
 ---
 
-## 1. Date vendor (profil) la intrarea pe VendorPage
+## 1. Date vendor (profil) la intrarea pe VendorPage — ✅ implementat
 
-**De ce**: `VendorPage.vue` momentan nu are niciun concept de "profil vendor"
-(nume, logo, status deschis/închis etc.) — afișează direct comenzile din
-`vendorStore.orders`. La intrarea pe pagină ar trebui totuși cerut și
-profilul vendor-ului curent, ca să putem afișa nume/logo/status în header.
+**Endpoint confirmat**: `POST /v2/app/vendor/get/`
 
-**Sugestie**: `GET /v2/app/vendor/` (sau echivalent — de confirmat cu
-backend; posibil identificat implicit din token, fără parametru de id)
+**Body trimis**: `{ "token": "<auth token, injectat automat prin dataStore.token> }`
 
 **Response confirmat** (exemplu real trimis de backend):
 ```json
 {
-  "_id": "62ac6bfd3735659d8d00038c",
   "name": "The italian job",
+  "_mby": "913b1904636133802e00013d",
+  "_by": "f9ddcbd164376245980001f9",
+  "_modified": 1756546299,
+  "_created": 1755089183,
+  "_id": "62ac6bfd3735659d8d00038c",
   "description": "Fresh & hot pizza",
   "prefix": "ita",
-  "logo": {
-    "path": "/2025/08/18/thumbnail_1000063250_uid_6668252ea49211_uid_68a31eb95c7bf.jpg",
-    "width": 500,
-    "height": 500
-  },
-  "thumbnail": {
-    "path": "/2025/08/13/Margherita_uid_6668252e160f11_uid_689c91af67ec7.jpg",
-    "width": 1600,
-    "height": 1024
-  },
   "username": "alexandru.boeru@atelierfain.ro",
   "password": "$2y$10$...",
   "opened": true,
   "online_orders": true,
-  "value_only": false,
-  "_by": "f9ddcbd164376245980001f9",
-  "_mby": "913b1904636133802e00013d",
-  "_created": 1755089183,
-  "_modified": 1756546299
+  "value_only": false
 }
 ```
-- Câmpuri relevante pentru UI: `name`, `description`, `logo`/`thumbnail`
-  (probabil `logo.path` prefixat cu CDN-ul de imagini, la fel ca restul
-  aplicației), `opened` (afișare status deschis/închis), `online_orders`
-  (dacă vendor-ul acceptă comenzi online), `prefix` (folosit deja ca prefix
-  pentru id-uri de comandă mock, gen `#ita0401` — de văzut dacă id-urile
-  reale de comandă vin deja cu el sau trebuie compus în frontend).
-- `username`/`password` — **nu ar trebui trimise către frontend**; sunt
-  credențiale de login ale contului de vendor, nu au ce căuta în răspunsul
-  citit de o pagină autentificată deja prin token. De semnalat la backend.
+- Nu conține `logo`/`thumbnail` (exemplul vechi de mai jos era speculativ —
+  de confirmat cu backend dacă/cum vine imaginea vendor-ului).
+- Câmpuri relevante pentru UI: `name`, `description`, `opened` (afișare
+  status deschis/închis — încă neafișat în UI), `online_orders` (dacă
+  vendor-ul acceptă comenzi online), `value_only` (ascunde tab-urile de
+  status și meniul de produse), `prefix` (folosit deja ca prefix pentru
+  id-uri de comandă mock, gen `#ita0401`).
+- `username`/`password` — trimise de backend și ajung în `vendorStore.vendor`
+  ca atare (nefolosite de UI momentan).
 - `_by`/`_mby`/`_created`/`_modified` — metadate interne, fără folosință în
   UI momentan.
-- `value_only` — semnificație neclară, de confirmat cu backend înainte de
-  conectare.
 
-**Unde se conectează**: momentan nicăieri — necesită state nou (ex.
-`vendor: null` în `src/stores/vendor.js`) și o acțiune `fetch_vendor()`
-apelată la mount pe `VendorPage.vue`, plus afișare efectivă în header-ul
-paginii (nume/logo/status). Nu există cod existent de înlocuit, e
-funcționalitate nouă.
+**Unde e conectat**: `ep.js` (`vendorGet`), `src/stores/vendor.js`
+(`fetchVendor()`, populează `vendor: null` → obiectul primit), apelat din
+`VendorPage.vue` (`onMounted`). Afișare efectivă în header (nume/status) tot
+lipsește — momentan doar `value_only`/`online_orders` sunt consumate în UI.
 
 ---
 

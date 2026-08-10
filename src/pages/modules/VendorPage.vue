@@ -208,13 +208,17 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import VendorPaymentModal from 'components/VendorPaymentModal.vue'
 import { useVendorStore } from 'stores/vendor.js'
 
 const router = useRouter()
 const vendorStore = useVendorStore()
+
+onMounted(() => {
+  vendorStore.fetchVendor().catch((e) => console.error('[vendor/get] error:', e?.response?.data || e))
+})
 
 const highlightedOrderId = ref(null)
 
@@ -372,7 +376,7 @@ const onCustomValueOk = () => {
 .orders-tab {
   border-radius: 22px;
   padding: 8px 18px;
-  font-size: 14px;
+  font-size: 13px;
   border: 1px solid rgba(0, 0, 0, 0.15);
   background: white;
   color: $grey-7;
