@@ -23,6 +23,14 @@
         <p v-if="message" class="callback-subtitle">Reason: <strong>{{ message }}</strong></p>
         <div class="callback-actions">
           <q-btn
+            v-if="orderSource === 'vendor'"
+            no-caps
+            label="Try another payment method"
+            class="callback-btn callback-btn--primary"
+            @click="onTryAnotherPaymentMethod"
+          />
+          <q-btn
+            v-else
             no-caps
             label="Retry payment"
             class="callback-btn callback-btn--primary"
@@ -117,6 +125,10 @@ function onNewOrder () {
 
 function onRetry () {
   store.pay_card({ amount: 1, totalPrice: amount.value, user: store.user?.user })
+}
+
+function onTryAnotherPaymentMethod () {
+  router.push({ name: 'vendor-new-order', query: { reopenPayment: '1' } })
 }
 
 function onCancel () {

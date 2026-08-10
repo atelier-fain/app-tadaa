@@ -3,6 +3,12 @@ import { defineStore } from 'pinia'
 export const useVendorStore = defineStore('vendor', {
   state: () => ({
     // ----- date mock -----
+    // profil vendor — mock, va fi populat de la EP-ul de profil vendor la
+    // intrarea pe VendorPage (vezi docs/vendor-api-requirements.md #1).
+    // value_only: true = vendor fără meniu/produse, ia doar plăți cu sumă
+    // custom (fără tab-uri In progress/Completed/Closed).
+    // online_orders: true = butonul de Settings apare pe /vendor.
+    vendor: { value_only: true, online_orders: true },
     products: [
       {
         id: 'p1', name: 'Pizza Margherita', category: 'Pizza', price: 39,

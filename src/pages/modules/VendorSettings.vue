@@ -3,6 +3,7 @@
 
     <div class="page-header">
       <span class="page-title">Settings</span>
+      <NotificationsBell />
     </div>
 
     <div class="products-grid">
@@ -85,6 +86,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import NotificationsBell from 'components/NotificationsBell.vue'
 
 const router = useRouter()
 
@@ -123,6 +125,9 @@ function stopHold() {
 }
 
 .page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 1rem 1rem 0.75rem;
 }
 .page-title {

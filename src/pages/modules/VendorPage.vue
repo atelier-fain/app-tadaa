@@ -1,19 +1,9 @@
 <template>
   <q-page class="orders-page">
-    <div class="summary-bar">
-      <div class="summary-chip">
-        <span class="chip-label">Active orders</span>
-        <span class="chip-val">{{ activeCount }}</span>
-      </div>
-      <div class="summary-chip">
-        <span class="chip-label">Today's total</span>
-        <span class="chip-val">{{ totalToday }} lei</span>
-      </div>
-      <div class="summary-actions">
-        <NotificationsBell :trigger="notifTrigger" :notification="notifData" />
-        <q-btn flat round dense icon="settings" @click="router.push({ name: 'vendor-settings' })" />
-      </div>
+    <div class="page-header">
+      <span class="page-title">Orders</span>
     </div>
+    <template v-if="!valueOnly">
     <q-tabs
       v-model="activeTab"
       dense
@@ -27,10 +17,14 @@
         v-for="tab in tabs"
         :key="tab.name"
         :name="tab.name"
-        :label="tab.label"
         class="orders-tab"
         :class="{ 'tab-active': activeTab === tab.name }"
-      />
+      >
+        <div class="orders-tab-label">
+          {{ tab.label }}
+          <span v-if="tab.name === 'lucru'" class="orders-tab-badge">{{ activeCount }}</span>
+        </div>
+      </q-tab>
     </q-tabs>
 
     <!-- Tab panels cu animatie -->
@@ -83,7 +77,7 @@
                     + {{ order.extra }}
                   </div>
                   <div
-                    v-if="order.items.length > 1"
+                    v-if="order.items.length > 1 && order.status !== 'lucru'"
                     class="expand-toggle"
                     @click="toggleOrderExpand(order.id)"
                   >
@@ -123,6 +117,22 @@
         </div>
       </q-tab-panel>
     </q-tab-panels>
+    </template>
+
+    <!-- Comenzi vendor value_only: listă plată, fără status/tab-uri -->
+    <div v-else class="value-only-panel">
+      <div v-if="orders.length === 0" class="empty-state">
+        <q-icon name="receipt_long" size="40px" color="grey-5" />
+        <p>No orders</p>
+      </div>
+
+      <div v-else class="value-only-grid">
+        <div v-for="order in orders" :key="order.id" class="value-only-card">
+          <span class="vo-order-id">{{ order.id }}</span>
+          <span class="vo-order-total">{{ order.total }} lei</span>
+        </div>
+      </div>
+    </div>
 
     <!-- Dialog confirmare finalizare -->
     <q-dialog v-model="confirmDialog" persistent>
@@ -150,14 +160,48 @@
       </q-card>
     </q-dialog>
 
+    <!-- Dialog sumă custom (vendor value_only, fără meniu de produse) -->
+    <q-dialog v-model="showCustomValueModal" @show="onCustomValueDialogShow">
+      <q-card class="custom-value-dialog">
+        <div class="cv-dialog-body">
+          <p class="cv-dialog-label">Custom amount</p>
+          <div class="cv-dialog-input-row">
+            <input
+              ref="customValueInputRef"
+              v-model="tempCustomValue"
+              type="number"
+              inputmode="numeric"
+              placeholder="0"
+              class="cv-dialog-number-input"
+              @wheel.prevent
+              @keyup.enter="onCustomValueOk"
+            />
+            <span class="cv-dialog-currency">lei</span>
+          </div>
+        </div>
+        <div class="cv-dialog-actions">
+          <button class="cv-dialog-btn cv-btn-cancel" @click="onCustomValueCancel">Cancel</button>
+          <button
+            class="cv-dialog-btn cv-btn-ok"
+            :disabled="!(Number(tempCustomValue) > 0)"
+            @click="onCustomValueOk"
+          >
+            OK
+          </button>
+        </div>
+      </q-card>
+    </q-dialog>
+
+    <VendorPaymentModal ref="paymentModalRef" :cart="customCart" :cart-total="customCartTotal" />
+
     <!-- FAB adaugă comandă -->
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn fab icon="add" color="dark" @click="addOrder" />
     </q-page-sticky>
 
-    <!-- FAB test notificare (mockup) -->
-    <q-page-sticky position="bottom-left" :offset="[18, 18]">
-      <q-btn fab icon="notifications" color="grey-7" @click="simulateNewOrder" />
+    <!-- FAB settings (doar dacă vendor-ul acceptă comenzi online) -->
+    <q-page-sticky v-if="vendorStore.vendor?.online_orders" position="bottom-left" :offset="[18, 18]">
+      <q-btn fab icon="settings" color="grey-7" @click="router.push({ name: 'vendor-settings' })" />
     </q-page-sticky>
 
   </q-page>
@@ -166,48 +210,17 @@
 <script setup>
 import { ref, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import NotificationsBell from 'components/NotificationsBell.vue'
+import VendorPaymentModal from 'components/VendorPaymentModal.vue'
 import { useVendorStore } from 'stores/vendor.js'
 
 const router = useRouter()
 const vendorStore = useVendorStore()
 
-const notifTrigger = ref(0)
-const notifData = ref({})
 const highlightedOrderId = ref(null)
 
-function scrollToOrder(orderId) {
-  const alreadyOnTab = activeTab.value === 'lucru'
-  activeTab.value = 'lucru'
-
-  const doScroll = () => {
-    const el = document.getElementById(`order-${orderId.replace('#', '')}`)
-    if (!el) return
-    const top = el.getBoundingClientRect().top + window.scrollY - 80
-    window.scrollTo({ top, behavior: 'smooth' })
-    setTimeout(() => {
-      highlightedOrderId.value = orderId
-      setTimeout(() => { highlightedOrderId.value = null }, 2600)
-    }, 350)
-  }
-
-  if (alreadyOnTab) {
-    nextTick(doScroll)
-  } else {
-    setTimeout(doScroll, 350)
-  }
-}
-
-function simulateNewOrder() {
-  const orderId = '#ita0403'
-  notifData.value = {
-    icon: 'notifications_active',
-    message: `New order ${orderId}`,
-    caption: '1× Pizza Quattro Formagi · 45 lei',
-    actions: [{ label: 'View', color: 'white', noCaps: true, handler: () => scrollToOrder(orderId) }]
-  }
-  notifTrigger.value++
-}
+// vendor fără meniu de produse — ia doar plăți cu sumă custom, fără
+// tab-urile In progress/Completed/Closed (vezi docs/vendor-api-requirements.md #1)
+const valueOnly = computed(() => vendorStore.vendor?.value_only)
 
 // orders trăiesc în store-ul vendor ca să fie vizibile și din pagina new-order
 const orders = computed(() => vendorStore.orders)
@@ -224,10 +237,6 @@ const activeTab = ref('lucru')
 const activeCount = computed(
   () => orders.value.filter(o => o.status === 'lucru').length
 )
-const totalToday = computed(
-  () => orders.value.reduce((sum, o) => sum + o.total, 0)
-)
-
 const filteredOrders = (status) =>
   orders.value.filter(o => o.status === status)
 
@@ -245,7 +254,9 @@ const toggleOrderExpand = (id) => {
 }
 
 const visibleItems = (order) =>
-  order.items.length <= 1 || isExpanded(order.id) ? order.items : order.items.slice(0, 1)
+  order.items.length <= 1 || order.status === 'lucru' || isExpanded(order.id)
+    ? order.items
+    : order.items.slice(0, 1)
 
 // ----- helpers -----
 const statusLabel = (status) => ({
@@ -294,7 +305,41 @@ const confirmClose = () => {
 }
 
 const addOrder = () => {
+  if (valueOnly.value) {
+    tempCustomValue.value = ''
+    showCustomValueModal.value = true
+    return
+  }
   router.push({ name: 'vendor-new-order' })
+}
+
+// ----- sumă custom (vendor value_only) -----
+const showCustomValueModal = ref(false)
+const tempCustomValue = ref('')
+const customValueInputRef = ref(null)
+
+const onCustomValueDialogShow = async () => {
+  await nextTick()
+  customValueInputRef.value?.focus()
+}
+
+const onCustomValueCancel = () => {
+  showCustomValueModal.value = false
+}
+
+// La confirmare, se deschide direct VendorPaymentModal (Card Festival/Card)
+// peste pagina curentă, fără nicio navigare — coșul e un singur produs
+// (suma custom introdusă).
+const paymentModalRef = ref(null)
+const customCart = ref([])
+const customCartTotal = computed(() => customCart.value.reduce((sum, item) => sum + item.lineTotal, 0))
+
+const onCustomValueOk = () => {
+  if (!(Number(tempCustomValue.value) > 0)) return
+
+  customCart.value = [{ name: 'Custom amount', qty: 1, extras: [], lineTotal: Number(tempCustomValue.value) }]
+  showCustomValueModal.value = false
+  nextTick(() => paymentModalRef.value?.open())
 }
 </script>
 
@@ -304,34 +349,15 @@ const addOrder = () => {
   min-height: 100vh;
 }
 
-/* Summary bar */
-.summary-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* Page header */
+.page-header {
   padding: 1rem 1rem 0.75rem;
 }
-.summary-actions {
-  display: flex;
-  flex-direction: column;
-}
-.summary-chip {
-  flex: 1;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.07);
-}
-.chip-label {
-  font-size: 11px;
-  color: $grey-6;
-  display: block;
-  margin-bottom: 2px;
-}
-.chip-val {
-  font-size: 20px;
+.page-title {
+  font-size: 22px;
   font-weight: 600;
   color: $dark;
+  letter-spacing: -0.3px;
 }
 
 /* Tabs */
@@ -364,6 +390,29 @@ const addOrder = () => {
     font-weight: 600;
   }
 }
+.orders-tab-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.orders-tab-badge {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: $dark;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .tab-active & {
+    background: white;
+    color: $dark;
+  }
+}
 
 /* Tab panels */
 .tab-panels {
@@ -390,6 +439,37 @@ const addOrder = () => {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+/* Listă comenzi vendor value_only (doar id + valoare) */
+.value-only-panel {
+  padding: 0.5rem 1rem 5rem;
+}
+.value-only-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.value-only-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.vo-order-id {
+  font-size: 13px;
+  font-weight: 600;
+  color: $grey-7;
+  letter-spacing: 0.5px;
+  font-family: monospace;
+}
+.vo-order-total {
+  font-size: 16px;
+  font-weight: 700;
+  color: $dark;
 }
 
 /* Order card */
@@ -552,5 +632,75 @@ const addOrder = () => {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+/* Dialog sumă custom (vendor value_only) */
+.custom-value-dialog {
+  width: 300px;
+  border-radius: 14px !important;
+  overflow: hidden;
+}
+.cv-dialog-body {
+  padding: 28px 24px 20px;
+}
+.cv-dialog-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 0 0 12px;
+}
+.cv-dialog-input-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  border-bottom: 2px solid $dark;
+  padding-bottom: 6px;
+}
+.cv-dialog-number-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  width: 100%;
+
+  &::placeholder { color: #ddd; }
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button { -webkit-appearance: none; }
+  &[type='number'] { -moz-appearance: textfield; }
+}
+.cv-dialog-currency {
+  font-size: 18px;
+  font-weight: 600;
+  color: $dark;
+  flex-shrink: 0;
+}
+.cv-dialog-actions {
+  display: flex;
+  border-top: 1px solid #f0f0f0;
+}
+.cv-dialog-btn {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:active { background: #f5f5f5; }
+  &:disabled { opacity: 0.35; cursor: not-allowed; }
+}
+.cv-btn-cancel {
+  color: #999;
+  border-right: 1px solid #f0f0f0;
+}
+.cv-btn-ok {
+  color: $dark;
 }
 </style>
