@@ -83,18 +83,6 @@ export const useVendorStore = defineStore('vendor', {
       return order
     },
 
-    // TODO: no backend endpoint exists yet for debiting a prepaid Card Festival balance
-    // for a purchase. ep.chargePrepaidCard (/v2/app/prepaid/charge/) is the TopUp endpoint
-    // — it CREDITS the card, it must not be reused here to pay for an order. Wire this up
-    // to a real debit endpoint once it's available; per the backend team, that call is
-    // expected to respond with the card's new balance, same as charge_prepaid_card does —
-    // this stub already mirrors that response shape so the swap-in is a one-line change.
-    debitFestivalCard (cardId, amount, currentBalance) {
-      const balance = currentBalance - amount
-      console.log('Festival card debit confirmed (backend call pending):', { cardId, amount, balance })
-      return { balance }
-    },
-
     // TODO: no backend endpoint exists yet for reporting a completed vendor order payment.
     // Wire this up to a real POST (e.g. ep.reportOrderPayment) once it's available.
     reportOrderPayment (order, paymentMethod) {

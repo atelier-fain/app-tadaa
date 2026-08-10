@@ -9,6 +9,9 @@
         <p class="callback-subtitle">
           Your payment of <strong v-html="_formattedPrice(amount)" /> was successful.
         </p>
+        <p v-if="balance !== null" class="callback-subtitle">
+          Your Balance is: <strong v-html="_formattedPrice(balance)" />
+        </p>
         <q-btn no-caps :label="newOrderLabel" class="callback-btn callback-btn--primary" @click="onNewOrder" />
       </template>
 
@@ -54,6 +57,7 @@ const orderSource = ref(null)
 const status = computed(() => route.query.status)
 const isSuccess = computed(() => status.value === 'success' && !hasError.value)
 const amount = computed(() => Number(route.query.amount) || 0)
+const balance = computed(() => route.query.balance !== undefined ? Number(route.query.balance) || 0 : null)
 const message = computed(() => errorMessage.value || route.query.message || '')
 const transactionId = computed(() => route.query.transactionId || '')
 const shortOrderCode = computed(() => route.query.shortOrderCode || '')

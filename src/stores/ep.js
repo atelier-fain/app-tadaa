@@ -6,6 +6,7 @@ export const ep = {
   buyTickets: '/v2/app/tickets/buy/',
   checkPrepaidCard: '/v2/app/prepaid/check/',
   chargePrepaidCard: '/v2/app/prepaid/charge/',
-  cashOutPrepaidCard: '/v2/app/prepaid/cash_out/'
+  cashOutPrepaidCard: '/v2/app/prepaid/cash_out/',
+  purchasePrepaidCard: '/v2/app/prepaid/purchase/'
 }
 

@@ -14,7 +14,67 @@ documentat separat la fiecare EP de mai jos.
 
 ---
 
-## 1. Listă produse / meniu vendor
+## 1. Date vendor (profil) la intrarea pe VendorPage
+
+**De ce**: `VendorPage.vue` momentan nu are niciun concept de "profil vendor"
+(nume, logo, status deschis/închis etc.) — afișează direct comenzile din
+`vendorStore.orders`. La intrarea pe pagină ar trebui totuși cerut și
+profilul vendor-ului curent, ca să putem afișa nume/logo/status în header.
+
+**Sugestie**: `GET /v2/app/vendor/` (sau echivalent — de confirmat cu
+backend; posibil identificat implicit din token, fără parametru de id)
+
+**Response confirmat** (exemplu real trimis de backend):
+```json
+{
+  "_id": "62ac6bfd3735659d8d00038c",
+  "name": "The italian job",
+  "description": "Fresh & hot pizza",
+  "prefix": "ita",
+  "logo": {
+    "path": "/2025/08/18/thumbnail_1000063250_uid_6668252ea49211_uid_68a31eb95c7bf.jpg",
+    "width": 500,
+    "height": 500
+  },
+  "thumbnail": {
+    "path": "/2025/08/13/Margherita_uid_6668252e160f11_uid_689c91af67ec7.jpg",
+    "width": 1600,
+    "height": 1024
+  },
+  "username": "alexandru.boeru@atelierfain.ro",
+  "password": "$2y$10$...",
+  "opened": true,
+  "online_orders": true,
+  "value_only": false,
+  "_by": "f9ddcbd164376245980001f9",
+  "_mby": "913b1904636133802e00013d",
+  "_created": 1755089183,
+  "_modified": 1756546299
+}
+```
+- Câmpuri relevante pentru UI: `name`, `description`, `logo`/`thumbnail`
+  (probabil `logo.path` prefixat cu CDN-ul de imagini, la fel ca restul
+  aplicației), `opened` (afișare status deschis/închis), `online_orders`
+  (dacă vendor-ul acceptă comenzi online), `prefix` (folosit deja ca prefix
+  pentru id-uri de comandă mock, gen `#ita0401` — de văzut dacă id-urile
+  reale de comandă vin deja cu el sau trebuie compus în frontend).
+- `username`/`password` — **nu ar trebui trimise către frontend**; sunt
+  credențiale de login ale contului de vendor, nu au ce căuta în răspunsul
+  citit de o pagină autentificată deja prin token. De semnalat la backend.
+- `_by`/`_mby`/`_created`/`_modified` — metadate interne, fără folosință în
+  UI momentan.
+- `value_only` — semnificație neclară, de confirmat cu backend înainte de
+  conectare.
+
+**Unde se conectează**: momentan nicăieri — necesită state nou (ex.
+`vendor: null` în `src/stores/vendor.js`) și o acțiune `fetch_vendor()`
+apelată la mount pe `VendorPage.vue`, plus afișare efectivă în header-ul
+paginii (nume/logo/status). Nu există cod existent de înlocuit, e
+funcționalitate nouă.
+
+---
+
+## 2. Listă produse / meniu vendor
 
 **De ce**: `src/stores/vendor.js:6-58` — `products` e hardcodat (categorii,
 produse, grupuri de extra-uri). Fiecare vendor ar trebui să-și vadă propriul
@@ -57,7 +117,7 @@ acțiune `fetch_products()` apelată la intrarea pe `VendorNewOrder.vue`).
 
 ---
 
-## 2. Creare comandă vendor
+## 3. Creare comandă vendor
 
 **De ce**: `src/stores/vendor.js:69-84` — `addOrder()` doar împinge comanda
 într-un array local (`this.orders.unshift(order)`), nimic nu ajunge în baza
@@ -85,7 +145,7 @@ cu ce dă backend-ul).
 
 ---
 
-## 3. Listă comenzi vendor + actualizare status
+## 4. Listă comenzi vendor + actualizare status
 
 **De ce**: `VendorPage.vue` ține toate comenzile („In progress" / „Completed"
 / „Closed") doar în `vendorStore.orders` (memorie), și `confirmFinalize`/
@@ -105,41 +165,46 @@ din `GET`, plus acțiuni noi `finalizeOrder(id)`/`closeOrder(id)` care fac
 
 ---
 
-## 4. Debitare Card Festival (plată comandă cu cardul de festival)
+## 5. Debitare Card Festival (plată comandă cu cardul de festival) — ✅ implementat
 
-**De ce**: `src/stores/vendor.js:86-96` — `debitFestivalCard()` e un stub
-care doar loghează în consolă și calculează local `balance - amount`. **Nu
-există încă un endpoint de debitare** — `ep.chargePrepaidCard`
-(`/v2/app/prepaid/charge/`) NU trebuie refolosit aici, pentru că e endpoint-ul
-de TopUp (adaugă bani pe card), nu de plată (scade bani).
-
-**Sugestie**: `POST /v2/app/prepaid/pay/` (sau denumire echivalentă, cât
-timp e clar semantic diferită de `charge`)
+**Endpoint confirmat**: `POST /v2/app/prepaid/purchase/`
 
 **Body trimis**:
 ```json
-{ "_id": "<cardId>", "amount": 3900 }
+{ "_id": "<TDID scanat de pe card>", "amount": 2000, "token": "<auth token, injectat automat de _post>" }
 ```
-(`amount` în bani/cenți, la fel ca `charge_prepaid_card` — vezi
-`src/stores/data.js:45-58`)
+(`amount` în bani/cenți; `token` e adăugat automat de `_post`, la fel ca la
+toate celelalte apeluri — nu e nevoie să fie pasat explicit)
 
-**Response așteptat**: conform ce ai confirmat deja — noul sold al cardului:
+**Response confirmat**:
 ```json
-{ "balance": 108900 }
+{ "error": false, "balance": "108900" }
 ```
+(`error: true` + `balance` = soldul curent, când soldul e insuficient pentru
+`amount`)
 
-**Unde se conectează**: `src/stores/vendor.js:92` (`debitFestivalCard`),
-apelat din `VendorNewOrder.vue` (`chargeFestivalCard`) după ce
-`check_prepaid_card` confirmă sold suficient.
+**Comportament nou — nu se mai trece prin Check**: spre deosebire de restul
+fluxurilor cu card prepaid, la Card Festival în `VendorNewOrder.vue` cardul
+scanat (TDID) se trimite **direct** la acest endpoint, fără niciun apel către
+`check_prepaid_card` în prealabil — verificarea de sold și debitarea se fac
+într-un singur pas pe backend. Dacă `error` e `true`, UI arată ecranul
+"Insufficient credit"; altfel comanda continuă spre `/callback` ca și restul
+metodelor de plată.
+
+**Unde e conectat**: `ep.js` (`purchasePrepaidCard`), `src/stores/data.js`
+(`purchase_prepaid_card`), apelat din `VendorNewOrder.vue`
+(`chargeFestivalCard`, declanșată direct din `ndef.onreading`/
+`simulateFestivalScan`). Stub-ul vechi `debitFestivalCard` din
+`src/stores/vendor.js` a fost eliminat.
 
 ---
 
-## 5. Raportare comandă vendor plătită (Card / Card Festival)
+## 6. Raportare comandă vendor plătită (Card / Card Festival)
 
 **De ce**: `src/stores/vendor.js:98-102` — `reportOrderPayment()` e stub,
 doar loghează `{ order, paymentMethod }` în consolă.
 
-**Sugestie**: se poate suprapune cu #2 (creare comandă) dacă backend-ul
+**Sugestie**: se poate suprapune cu #3 (creare comandă) dacă backend-ul
 preferă un singur apel „creează + marchează plătită", sau rămâne separat:
 `POST /v2/app/vendor/orders/{id}/payment/`
 
@@ -156,7 +221,7 @@ apelat din `Callback.vue:106` după succesul plății.
 
 ---
 
-## 6. Setări produse vendor (activare/dezactivare, timp de preparare)
+## 7. Setări produse vendor (activare/dezactivare, timp de preparare)
 
 **De ce**: `VendorSettings.vue:91-96` — `products` e hardcodat cu doar 4
 pizza, fără niciun apel de citire sau salvare. Toggle-ul On/Off și
@@ -164,7 +229,7 @@ stepper-ul de „Prep time" (`adjustTime`, `VendorSettings.vue:98-101`)
 modifică doar starea locală — dispare la refresh.
 
 **Sugestie**:
-- `GET /v2/app/vendor/products/` (poate fi **același** endpoint de la #1,
+- `GET /v2/app/vendor/products/` (poate fi **același** endpoint de la #2,
   dacă backend-ul întoarce și `enabled`/`prepTime` alături de `price`/
   `extraGroups` — de clarificat dacă „meniul" și „setările vendor-ului"
   sunt aceeași resursă sau două separate)

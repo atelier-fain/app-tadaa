@@ -37,6 +37,15 @@ export const useDataStore = defineStore('data', {
       return data
     },
 
+    // Plată directă cu Card Festival: scanarea NFC dă TDID-ul cardului, care
+    // se trimite direct aici (fără check_prepaid_card în prealabil) —
+    // backend-ul face verificarea de sold și debitarea într-un singur pas,
+    // răspunzând cu { error: true, balance } dacă soldul e insuficient.
+    async purchase_prepaid_card (_id, amount) {
+      const { data } = await this._post(ep.purchasePrepaidCard, { _id, amount })
+      return data
+    },
+
     async cash_out_prepaid_card (_id) {
       const { data } = await this._post(ep.cashOutPrepaidCard, { _id })
       return data

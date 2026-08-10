@@ -62,7 +62,7 @@
             class="extras-group"
           >
             <div class="group-title">
-              {{ group.title }} <span class="group-max">(max {{ group.max }} selections)</span>
+              {{ group.title }} <span v-if="group.options.length > 3" class="group-max">(max {{ group.max }} selections)</span>
             </div>
             <div
               v-for="opt in group.options"
@@ -167,11 +167,11 @@
 
         <div v-if="festivalStatus !== 'insufficient'" class="nfc-scan-screen">
           <q-icon
-            :name="['scanning', 'verifying', 'charging'].includes(festivalStatus) ? 'wifi_tethering' : 'nfc'"
+            :name="['scanning', 'charging'].includes(festivalStatus) ? 'wifi_tethering' : 'nfc'"
             size="96px"
             class="nfc-icon"
             :class="{
-              'nfc-icon--scanning': ['scanning', 'verifying', 'charging'].includes(festivalStatus),
+              'nfc-icon--scanning': ['scanning', 'charging'].includes(festivalStatus),
               'nfc-icon--retry': ['error', 'unsupported'].includes(festivalStatus)
             }"
             @click="['error', 'unsupported'].includes(festivalStatus) && onFestivalScanClick()"
@@ -192,6 +192,7 @@
           <q-icon name="cancel" size="64px" />
           <p class="festival-result-title">Insufficient credit</p>
           <p class="festival-result-desc">This card doesn't have enough balance for <span v-html="formatPrice(cartTotal, true)" />.</p>
+          <p class="festival-result-desc">Your Balance is: <strong v-html="_formattedPrice(Number(festivalCardData?.balance) || 0)" /></p>
           <button class="nfc-scan-btn" @click="resetFestivalScan">Try another card</button>
         </div>
       </q-card>
@@ -205,6 +206,7 @@ import { useRouter } from 'vue-router'
 import { Cookies } from 'quasar'
 import { useVendorStore } from 'stores/vendor.js'
 import { useDataStore } from 'stores/data.js'
+import _formattedPrice from '../../mixins/formattedPrice.js'
 
 const router = useRouter()
 const vendorStore = useVendorStore()
@@ -322,7 +324,7 @@ function onCardClick () {
 
 // ----- Card Festival (scanare NFC + debitare sold) -----
 const showFestivalScan = ref(false)
-const festivalStatus = ref('idle') // idle | scanning | verifying | insufficient | charging | success | error | unsupported
+const festivalStatus = ref('idle') // idle | scanning | insufficient | charging | error | unsupported
 const festivalError = ref('')
 const festivalTdid = ref(null)
 const festivalCardData = ref(null)
@@ -331,7 +333,6 @@ let nfcReader = null
 
 const festivalStatusText = computed(() => {
   if (festivalStatus.value === 'scanning') return 'Hold the card near the back of your phone...'
-  if (festivalStatus.value === 'verifying') return 'Verifying card...'
   if (festivalStatus.value === 'charging') return 'Charging card...'
   if (festivalStatus.value === 'unsupported') return 'NFC is not supported on this device'
   if (festivalStatus.value === 'error') return 'Could not read the card'
@@ -397,7 +398,7 @@ async function startFestivalNfcScan () {
       }
 
       festivalTdid.value = scannedTdid
-      verifyFestivalCard(scannedTdid)
+      chargeFestivalCard(scannedTdid)
     }
 
     ndef.onreadingerror = () => {
@@ -450,7 +451,7 @@ function extractTdid (records) {
 function simulateFestivalScan () {
   festivalError.value = ''
   festivalTdid.value = '5cf92e5a323132060400025b'
-  verifyFestivalCard(festivalTdid.value)
+  chargeFestivalCard(festivalTdid.value)
 }
 
 function onFestivalNfcError (message) {
@@ -458,36 +459,22 @@ function onFestivalNfcError (message) {
   festivalError.value = message
 }
 
-async function verifyFestivalCard (scannedTdid) {
-  festivalStatus.value = 'verifying'
-
-  try {
-    const data = await dataStore.check_prepaid_card(scannedTdid)
-    festivalCardData.value = data
-
-    if ((Number(data.balance) || 0) < cartTotal.value * 100) {
-      festivalStatus.value = 'insufficient'
-      return
-    }
-
-    await chargeFestivalCard()
-  } catch (e) {
-    onFestivalNfcError(e?.response?.data?.message || 'Card verification failed')
-  }
-}
-
-// La succes, plata se predă lui /callback: acolo se creează comanda și se
-// arată confirmarea — la fel ca la Card (Viva) și celelalte fluxuri de plată,
-// ca să existe un singur loc pentru ecranul de confirmare.
-async function chargeFestivalCard () {
+// Plată directă: cardul scanat (TDID) se trimite direct la purchase_prepaid_card,
+// fără pasul de check_prepaid_card în prealabil — backend-ul face verificarea de
+// sold și debitarea într-un singur apel. La succes, plata se predă lui /callback:
+// acolo se creează comanda și se arată confirmarea — la fel ca la Card (Viva) și
+// celelalte fluxuri de plată, ca să existe un singur loc pentru ecranul de confirmare.
+async function chargeFestivalCard (scannedTdid) {
   festivalStatus.value = 'charging'
 
   try {
-    vendorStore.debitFestivalCard(
-      festivalCardData.value._id,
-      cartTotal.value * 100,
-      Number(festivalCardData.value.balance) || 0
-    )
+    const data = await dataStore.purchase_prepaid_card(scannedTdid, cartTotal.value * 100)
+    festivalCardData.value = data
+
+    if (data.error) {
+      festivalStatus.value = 'insufficient'
+      return
+    }
 
     dataStore.pendingOrder = { source: 'vendor', cart: cart.value }
     Cookies.set('pendingOrder', dataStore.pendingOrder, { path: '/', expires: 1 })
@@ -496,7 +483,12 @@ async function chargeFestivalCard () {
     showFestivalScan.value = false
     router.push({
       name: 'tickets-callback',
-      query: { status: 'success', amount: String(cartTotal.value * 100), paymentMethod: 'card_festival' }
+      query: {
+        status: 'success',
+        amount: String(cartTotal.value * 100),
+        paymentMethod: 'card_festival',
+        balance: String(data.balance)
+      }
     })
   } catch (e) {
     onFestivalNfcError(e?.response?.data?.message || 'Payment could not be confirmed')
