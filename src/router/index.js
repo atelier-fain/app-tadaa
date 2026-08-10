@@ -4,6 +4,11 @@ import { Cookies, Notify } from 'quasar'
 import routes from './routes'
 import {pageTransition} from "src/mixins/promiseTransitions.js";
 import { useDataStore } from 'stores/data.js'
+import { useVendorStore } from 'stores/vendor.js'
+
+// rutele modulului Vendor — navigarea între ele nu trebuie să re-declanșeze
+// fetchVendor() (vezi guard-ul de mai jos)
+const vendorModuleRoutes = ['vendor', 'vendor-settings', 'vendor-new-order']
 
 /*
  * If not building with SSR mode, you can
@@ -44,7 +49,7 @@ export default defineRouter(function ({ store }) {
   // verified this session and re-hitting the endpoint on every hop is wasteful.
   let verifiedPermission = null
 
-  Router.beforeEach((to) => {
+  Router.beforeEach((to, from) => {
     if (!handledExternalCallback) {
       handledExternalCallback = true
       if (!process.env.SERVER && window.location.pathname.includes('/callback')) {
@@ -64,13 +69,17 @@ export default defineRouter(function ({ store }) {
     }
 
     if (to.name === 'login') return
+  })
 
+  // Efecte secundare (verificare permisiune + fetch de date) puse în
+  // afterEach, nu beforeEach — navigarea rămâne instantă, pagina se
+  // afișează imediat (cu loading state-ul ei propriu) fără să aștepte
+  // niciun răspuns de la server; redirect-urile de mai jos (dashboard/login)
+  // se întâmplă oricum async, la fel ca înainte.
+  Router.afterEach((to, from) => {
     if (to.meta.permission && to.meta.permission !== verifiedPermission) {
       const dataStore = useDataStore(store)
 
-      // Intentionally not returned/awaited: navigation must not wait on this
-      // response, it runs in the background and only redirects afterwards
-      // if the permission check fails.
       dataStore.check_token()
         .then((user) => {
           if (Router.currentRoute.value.name !== to.name) return
@@ -92,6 +101,14 @@ export default defineRouter(function ({ store }) {
 
           Router.replace({ name: 'login' })
         })
+    }
+
+    // fetchVendor() doar la intrarea pe VendorPage din afara modulului Vendor
+    // (alt modul sau navigare externă) — trecerea între vendor/vendor-new-order/
+    // vendor-settings nu trebuie să reia apelul (vezi VendorPage.vue).
+    if (to.name === 'vendor' && !vendorModuleRoutes.includes(from.name)) {
+      useVendorStore(store).fetchVendor()
+        .catch((e) => console.error('[vendor/get] error:', e?.response?.data || e))
     }
   })
 

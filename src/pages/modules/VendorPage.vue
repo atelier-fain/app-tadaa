@@ -3,7 +3,37 @@
     <div class="page-header">
       <span class="page-title">Orders</span>
     </div>
-    <template v-if="!valueOnly">
+    <!-- Loading: skeleton cu forma cardurilor reale, cât timp vendor/get e în zbor -->
+    <div v-if="vendorLoading" class="value-only-panel">
+      <div class="orders-grid">
+        <div v-for="n in 3" :key="n" class="order-card">
+          <div class="card-top">
+            <div class="status-stripe skeleton-stripe" />
+            <div class="card-body">
+              <div class="card-header">
+                <q-skeleton type="text" width="72px" height="14px" />
+                <q-skeleton type="QBadge" width="70px" />
+              </div>
+
+              <div class="card-items">
+                <q-skeleton type="text" width="65%" />
+                <q-skeleton type="text" width="45%" />
+              </div>
+
+              <div class="card-footer">
+                <div>
+                  <q-skeleton type="text" width="34px" height="11px" />
+                  <q-skeleton type="text" width="64px" height="16px" class="q-mt-xs" />
+                </div>
+                <q-skeleton type="QBtn" width="96px" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <template v-else-if="showTabs">
     <q-tabs
       v-model="activeTab"
       dense
@@ -119,8 +149,8 @@
     </q-tab-panels>
     </template>
 
-    <!-- Comenzi vendor value_only: listă plată, fără status/tab-uri -->
-    <div v-else class="value-only-panel">
+    <!-- value_only: true — comenzi cu sumă custom, carduri minimale (doar id + total) -->
+    <div v-else-if="valueOnly" class="value-only-panel">
       <div v-if="orders.length === 0" class="empty-state">
         <q-icon name="receipt_long" size="40px" color="grey-5" />
         <p>No orders</p>
@@ -130,6 +160,51 @@
         <div v-for="order in orders" :key="order.id" class="value-only-card">
           <span class="vo-order-id">{{ order.id }}</span>
           <span class="vo-order-total">{{ order.total }} lei</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- value_only: false + online_orders: false — fără tab-uri de status; carduri ca la
+         Completed (produse), dar fără stripe/badge/buton Close și fără "See more" —
+         toate produsele apar direct -->
+    <div v-else class="value-only-panel">
+      <div v-if="orders.length === 0" class="empty-state">
+        <q-icon name="receipt_long" size="40px" color="grey-5" />
+        <p>No orders</p>
+      </div>
+
+      <div v-else class="orders-grid">
+        <div
+          v-for="order in orders"
+          :key="order.id"
+          :id="`order-${order.id.replace('#', '')}`"
+          class="order-card"
+          :class="{ 'order-card--highlight': highlightedOrderId === order.id }"
+        >
+          <div class="card-top">
+            <div class="card-body">
+              <div class="card-header">
+                <span class="order-id">{{ order.id }}</span>
+              </div>
+
+              <div class="card-items">
+                <div v-for="(item, i) in order.items" :key="i" class="card-item">
+                  <span class="item-qty">{{ item.qty }}×</span>
+                  <span class="item-name">{{ item.name }}</span>
+                </div>
+                <div v-if="order.extra" class="extra">
+                  + {{ order.extra }}
+                </div>
+              </div>
+
+              <div class="card-footer">
+                <div>
+                  <span class="total-label">Total</span>
+                  <span class="order-total">{{ order.total }} lei</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -208,7 +283,7 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick, onMounted } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import VendorPaymentModal from 'components/VendorPaymentModal.vue'
 import { useVendorStore } from 'stores/vendor.js'
@@ -216,15 +291,22 @@ import { useVendorStore } from 'stores/vendor.js'
 const router = useRouter()
 const vendorStore = useVendorStore()
 
-onMounted(() => {
-  vendorStore.fetchVendor().catch((e) => console.error('[vendor/get] error:', e?.response?.data || e))
-})
-
 const highlightedOrderId = ref(null)
+
+// vendor/get e în zbor (declanșat din router/index.js la intrarea pe modul) —
+// nu știm încă value_only/online_orders, deci arătăm un skeleton generic
+// în loc să ghicim ce variantă de layout se potrivește
+const vendorLoading = computed(() => vendorStore.vendor === null)
 
 // vendor fără meniu de produse — ia doar plăți cu sumă custom, fără
 // tab-urile In progress/Completed/Closed (vezi docs/vendor-api-requirements.md #1)
 const valueOnly = computed(() => vendorStore.vendor?.value_only)
+
+// tab-urile de status (In progress/Completed/Closed) au sens doar dacă
+// vendor-ul are meniu de produse (!valueOnly) și acceptă comenzi online —
+// altfel (online_orders: false) nu există flux de status gestionat de
+// vendor, deci comenzile apar într-o listă plată (fără tab-uri).
+const showTabs = computed(() => !valueOnly.value && vendorStore.vendor?.online_orders !== false)
 
 // orders trăiesc în store-ul vendor ca să fie vizibile și din pagina new-order
 const orders = computed(() => vendorStore.orders)
@@ -375,7 +457,7 @@ const onCustomValueOk = () => {
 }
 .orders-tab {
   border-radius: 22px;
-  padding: 8px 18px;
+  padding: 8px 16px;
   font-size: 13px;
   border: 1px solid rgba(0, 0, 0, 0.15);
   background: white;
@@ -445,7 +527,8 @@ const onCustomValueOk = () => {
   gap: 10px;
 }
 
-/* Listă comenzi vendor value_only (doar id + valoare) */
+/* Listă plată (fără tab-uri): value_only (carduri minimale) sau
+   online_orders: false (reutilizează .order-card, vezi mai jos) */
 .value-only-panel {
   padding: 0.5rem 1rem 5rem;
 }
@@ -522,6 +605,7 @@ const onCustomValueOk = () => {
 .stripe-lucru    { background: #EF9F27; }
 .stripe-finalizat { background: #1D9E75; }
 .stripe-inchis   { background: #B4B2A9; }
+.skeleton-stripe { background: $grey-3; }
 
 .card-body {
   flex: 1;

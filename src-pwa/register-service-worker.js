@@ -33,6 +33,14 @@ register(process.env.SERVICE_WORKER_FILE, {
     setInterval(() => {
       registration.update()
     }, 5 * 60 * 1000)
+
+    // Background/inactive tabs get their timers throttled by the browser,
+    // so a user who leaves the tab open for a while and comes back could
+    // still be on the stale interval. Force a check the moment the tab
+    // becomes visible again.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') registration.update()
+    })
   },
 
   registered (/* registration */) {

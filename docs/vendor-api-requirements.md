@@ -49,11 +49,14 @@ documentat separat la fiecare EP de mai jos.
   ca atare (nefolosite de UI momentan).
 - `_by`/`_mby`/`_created`/`_modified` — metadate interne, fără folosință în
   UI momentan.
+- `orders` — răspunsul conține și array-ul de comenzi al vendor-ului (vezi
+  #4, nu mai e nevoie de un `GET` separat de listare).
 
 **Unde e conectat**: `ep.js` (`vendorGet`), `src/stores/vendor.js`
-(`fetchVendor()`, populează `vendor: null` → obiectul primit), apelat din
-`VendorPage.vue` (`onMounted`). Afișare efectivă în header (nume/status) tot
-lipsește — momentan doar `value_only`/`online_orders` sunt consumate în UI.
+(`fetchVendor()`, populează `vendor: null` → obiectul primit, plus
+`orders` din `data.orders` dacă există), apelat din `VendorPage.vue`
+(`onMounted`). Afișare efectivă în header (nume/status) tot lipsește —
+momentan doar `value_only`/`online_orders` sunt consumate în UI.
 
 ---
 
@@ -100,51 +103,96 @@ acțiune `fetch_products()` apelată la intrarea pe `VendorNewOrder.vue`).
 
 ---
 
-## 3. Creare comandă vendor
+## 3. Creare comandă vendor — 🔶 conectat, răspuns neconfirmat
 
-**De ce**: `src/stores/vendor.js:69-84` — `addOrder()` doar împinge comanda
-într-un array local (`this.orders.unshift(order)`), nimic nu ajunge în baza
-de date. La reload, comenzile dispar.
+**De ce**: `addOrder()` doar împingea comanda într-un array local
+(`this.orders.unshift(order)`), nimic nu ajungea în baza de date. La reload,
+comenzile dispăreau.
 
-**Sugestie**: `POST /v2/app/vendor/orders/`
+**Endpoint apelat** (neconfirmat încă de backend, spre deosebire de #1/#5 —
+de verificat dacă path-ul/forma răspunsului sunt corecte după primul test
+real): `POST /v2/app/vendor/orders/`
 
-**Body trimis** (forma actuală a `cartItems`, vezi `VendorNewOrder.vue:189-207`):
+**Body trimis** (payload logat în consolă la fiecare apel, vezi
+`fetchVendor`/`saveOrder` — `[vendor/orders] payload:`):
 ```json
 {
+  "id": "#ita0401",
   "items": [
     { "name": "Pizza Margherita", "qty": 1, "extras": [{ "name": "Dulce", "price": 5 }], "lineTotal": 44 }
   ],
   "total": 44,
-  "paymentMethod": "cash"
+  "paymentMethod": "card"
 }
 ```
-**Response așteptat**: obiectul comenzii creat, cu un `_id`/cod generat de
-backend (mock-ul generează local id-uri gen `#ita0401`, ar trebui înlocuit
-cu ce dă backend-ul).
+(`id` e generat local, cu prefixul din `vendorStore.vendor.prefix`, ca
+fallback până confirmă backend-ul dacă generează el id-ul; `paymentMethod`
+e `"card"` pentru Viva sau `"card_festival"` pentru Card Festival)
 
-**Unde se conectează**: `src/stores/vendor.js:69` (`addOrder`), apelat din
-`VendorNewOrder.vue` (`placeOrder`, quick-add flow) și din `Callback.vue:104-107`
-(după succes la plata cu Card/Card Festival).
+**Response**: neconfirmat — de completat aici după primul test real (vezi
+`[vendor/orders] response:` / `[vendor/orders] error:` în consolă).
+
+**Unde e conectat**: `ep.js` (`vendorOrderCreate`), `src/stores/vendor.js`
+(`saveOrder()` — înlocuiește vechile `addOrder`/`reportOrderPayment`, unifică
+crearea comenzii cu raportarea plății într-un singur apel, vezi #6),
+apelat din `Callback.vue` după succes la plata cu Card/Card Festival —
+același punct pentru `value_only: true` (cart cu un singur item "Custom
+amount") și `value_only: false` (cart cu produse din meniu), formă identică
+de `cart` în ambele cazuri.
 
 ---
 
-## 4. Listă comenzi vendor + actualizare status
+## 4. Listă comenzi vendor + actualizare status — 🔶 listare implementată, status rămas local
 
-**De ce**: `VendorPage.vue` ține toate comenzile („In progress" / „Completed"
+**De ce**: `VendorPage.vue` ținea toate comenzile („In progress" / „Completed"
 / „Closed") doar în `vendorStore.orders` (memorie), și `confirmFinalize`/
-`confirmClose` (`VendorPage.vue:279-294`) doar schimbă `order.status` local,
-fără niciun apel către server. La refresh, orice progres se pierde.
+`confirmClose` doar schimbă `order.status` local, fără niciun apel către
+server. La refresh, orice progres se pierdea.
 
-**Sugestie**:
-- `GET /v2/app/vendor/orders/` — listă comenzi pentru vendor-ul curent (poate
-  filtrată pe zi/eveniment).
-- `POST /v2/app/vendor/orders/{id}/status/` — schimbă statusul unei comenzi.
-  Body: `{ "status": "finalizat" | "inchis" }` (sau echivalentul lor în
-  engleză, de aliniat cu backend: `in_progress` / `completed` / `closed`).
+**Listare — ✅ acoperită de #1, formă confirmată**: nu mai e nevoie de un
+`GET` separat — `POST /v2/app/vendor/get/` întoarce deja `orders` alături de
+profilul vendor-ului. Forma reală per comandă e diferită de mock:
+```json
+{
+  "vendor": "62ac6bfd3735659d8d00038c",
+  "nominal_order_id": "406",
+  "subtotal": "4500",
+  "status": "opened",
+  "type": "online",
+  "paid": true,
+  "products": [
+    { "qty": "1", "price": "4500", "name": "Pizza Margherita", "extras": [{ "name": "Dulce", "price": "500" }] }
+  ]
+}
+```
+- `subtotal` — în bani/cenți, la fel ca restul aplicației (`"4500"` = 45 lei).
+- `nominal_order_id` — numărul secvențial al comenzii; combinat cu
+  `vendor.prefix` dă id-ul afișat (`#ita0406`), la fel ca id-urile generate
+  local de `saveOrder()` (#3) — le face compatibile 1:1.
+- `status` — `"opened"` / `"ready"` / `"closed"`, diferit de
+  `lucru`/`finalizat`/`inchis` din mock. Mapat: `opened → lucru`,
+  `ready → finalizat`, `closed → inchis`.
+- `products` — apare **doar** la `type: "online"` (comenzi plasate prin
+  coșul din app). Restul tipurilor (`"card"`, `"prepaid"`) sunt tranzacții
+  de POS (plată directă la terminal, fără coș din app) — nu au listă de
+  produse, doar `subtotal`.
 
-**Unde se conectează**: `src/stores/vendor.js` (`orders` ar deveni populat
-din `GET`, plus acțiuni noi `finalizeOrder(id)`/`closeOrder(id)` care fac
-`POST` în loc să mute direct starea), consumate din `VendorPage.vue:274-294`.
+**Unde e conectat**: `src/stores/vendor.js` — `mapOrder()` (helper la nivel
+de modul) transformă fiecare comandă brută în forma UI (`{ id, status,
+items, extra, total }`), apelat din `fetchVendor()` pentru `data.orders`.
+
+**Actualizare status — încă neconectat**: `confirmFinalize`/`confirmClose`
+schimbă `order.status` doar local, fără apel către server.
+
+**Sugestie**: `POST /v2/app/vendor/orders/{id}/status/` — schimbă statusul
+unei comenzi. Body: `{ "status": "finalizat" | "inchis" }` (sau
+echivalentul lor în engleză, de aliniat cu backend: `in_progress` /
+`completed` / `closed`).
+
+**Unde se conectează**: `src/stores/vendor.js` — acțiuni noi
+`finalizeOrder(id)`/`closeOrder(id)` care ar face `POST` în loc să mute
+direct starea, consumate din `VendorPage.vue` (`confirmFinalize`/
+`confirmClose`).
 
 ---
 
@@ -182,25 +230,14 @@ metodelor de plată.
 
 ---
 
-## 6. Raportare comandă vendor plătită (Card / Card Festival)
+## 6. Raportare comandă vendor plătită (Card / Card Festival) — merge cu #3
 
-**De ce**: `src/stores/vendor.js:98-102` — `reportOrderPayment()` e stub,
-doar loghează `{ order, paymentMethod }` în consolă.
+**De ce**: `reportOrderPayment()` era stub, doar loghea `{ order,
+paymentMethod }` în consolă.
 
-**Sugestie**: se poate suprapune cu #3 (creare comandă) dacă backend-ul
-preferă un singur apel „creează + marchează plătită", sau rămâne separat:
-`POST /v2/app/vendor/orders/{id}/payment/`
-
-**Body trimis**:
-```json
-{ "paymentMethod": "card" }
-```
-(`paymentMethod` e `"card"` pentru plata Viva sau `"card_festival"` pentru
-Card Festival — vezi `Callback.vue:104-107` și `VendorNewOrder.vue`
-query param-ul `paymentMethod` trimis către `/callback`)
-
-**Unde se conectează**: `src/stores/vendor.js:100` (`reportOrderPayment`),
-apelat din `Callback.vue:106` după succesul plății.
+**Decizie**: unificat cu #3 — `saveOrder()` trimite `paymentMethod` în
+același payload cu care creează comanda, într-un singur apel „creează +
+marchează plătită", în loc de două request-uri separate.
 
 ---
 

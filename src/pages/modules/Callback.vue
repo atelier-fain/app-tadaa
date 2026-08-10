@@ -126,8 +126,7 @@ onMounted(() => {
   }
 
   if (isSuccess.value && pendingOrder.value.source === 'vendor') {
-    const order = vendorStore.addOrder(pendingOrder.value.cart || [])
-    vendorStore.reportOrderPayment(order, route.query.paymentMethod || 'card')
+    vendorStore.saveOrder(pendingOrder.value.cart || [], route.query.paymentMethod || 'card')
   }
 })
 

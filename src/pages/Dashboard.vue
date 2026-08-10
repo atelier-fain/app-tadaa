@@ -1,23 +1,30 @@
 <template>
   <div class="dashboard">
     <div class="main-container">
-      <q-btn
-        v-for="{id} in listCategories"
-        type="a"
-        v-ripple="false"
-        flat
-        :href="`/modules/${id}`"
-        @click.prevent="handleButton(id)"
-        :key="id">
-        <q-img
-          :src="$img(`icon_${id}.png`)"
-          no-spinner
-          no-transition
-          :alt="`icon_${id}.png`"
-        />
-      </q-btn>
+      <template v-if="listCategories.length">
+        <q-btn
+          v-for="{id} in listCategories"
+          type="a"
+          v-ripple="false"
+          flat
+          :href="`/modules/${id}`"
+          @click.prevent="handleButton(id)"
+          :key="id">
+          <q-img
+            :src="$img(`icon_${id}.png`)"
+            no-spinner
+            no-transition
+            :alt="`icon_${id}.png`"
+          />
+        </q-btn>
+      </template>
+      <template v-else-if="checking">
+        <div v-for="n in categories.length" :key="n" class="dashboard-skeleton-tile">
+          <q-skeleton type="rect" class="dashboard-skeleton-icon" />
+        </div>
+      </template>
 
-      <pre v-if="!listCategories.length" class="debug-panel">{{ debugInfo }}</pre>
+      <pre v-else class="debug-panel">{{ debugInfo }}</pre>
     </div>
   </div>
 </template>
@@ -47,6 +54,12 @@ const categories = [
 const listCategories = computed(() => categories.filter(({ permission }) => store.user?.[permission]))
 const debugInfo = ref('')
 
+// true doar cât timp NU avem încă date de undeva (cache sau alt check_token
+// deja în zbor) — dacă listCategories are deja ceva, skeleton-ul nu apare
+// niciodată, indiferent de checking (vezi v-if="listCategories.length" din
+// template, care are prioritate).
+const checking = ref(true)
+
 onMounted(() => {
   store.check_token()
     .then((user) => {
@@ -56,6 +69,9 @@ onMounted(() => {
       debugInfo.value = JSON.stringify({ error: e?.message || String(e) }, null, 2)
       $q.notify({ type: 'negative', message: 'Session expired, please log in again', position: 'top' })
       router.push({name: 'login'})
+    })
+    .finally(() => {
+      checking.value = false
     })
 })
 
@@ -85,6 +101,16 @@ function handleButton (id) {
       width: 100%;
       padding: 0;
       max-width: 40%;
+    }
+
+    .dashboard-skeleton-tile {
+      width: 100%;
+      max-width: 40%;
+    }
+    .dashboard-skeleton-icon {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
     }
 
     .debug-panel {

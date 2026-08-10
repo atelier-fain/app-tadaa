@@ -1,7 +1,30 @@
 <template>
   <q-page class="tickets-module">
-    <div v-if="storeContent.loading" class="tickets-loading">
-      <q-spinner color="primary" size="2.5rem" />
+    <!-- Skeleton cât timp /v2/tickets/domain/get/ e în zbor — refolosește
+         chiar elementele/clasele reale din Tickets.vue (.title/.title-ticket/
+         .right/.price/.handle-qty), doar cu q-skeleton în loc de conținut,
+         ca spacing-ul și dimensiunile să fie identice cu cardul încărcat -->
+    <div v-if="storeContent.loading" class="main-container">
+      <div class="tickets">
+        <q-card>
+          <span class="title"><q-skeleton type="text" width="160px" /></span>
+          <div class="list">
+            <div class="ticket-container">
+              <div class="ticket">
+                <span class="title-ticket"><q-skeleton type="text" width="70%" /></span>
+                <div class="right">
+                  <div class="price"><q-skeleton type="text" width="70px" /></div>
+                  <div class="handle-qty">
+                    <q-skeleton type="QBtn" width="32px" height="32px" />
+                    <q-skeleton type="rect" width="50px" height="32px" />
+                    <q-skeleton type="QBtn" width="32px" height="32px" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </q-card>
+      </div>
     </div>
 
     <div v-else class="main-container">
@@ -69,12 +92,5 @@ onMounted(async () => {
 .tickets-module {
   padding-top: 20px;
   padding-bottom: 90px;
-}
-
-.tickets-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
 }
 </style>

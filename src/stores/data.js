@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import {api} from "boot/axios.js";
+import {api} from "src/services/api.js";
 import {ep} from "stores/ep.js";
 import { Cookies, Notify } from 'quasar'
 import {nextTick} from "vue";

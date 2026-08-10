@@ -13,6 +13,11 @@ export default defineConfig(() => {
       'material-icons',
     ],
     build: {
+      // fix la 'dist/spa' indiferent de mod — build-ul de producție rulează
+      // acum cu -m pwa (vezi package.json), care implicit ar scoate output-ul
+      // în dist/pwa; deploy-ul existent (IDE, FTP) e configurat pe dist/spa,
+      // deci ținem folderul neschimbat ca să nu se rupă silențios.
+      distDir: 'dist/spa',
       env: {
         BUILD_VERSION: Date.now()
       },
