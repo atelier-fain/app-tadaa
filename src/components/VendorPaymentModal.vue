@@ -112,8 +112,7 @@ function onCardClick () {
     user: dataStore.user?.user,
     source: 'vendor',
     cart: props.cart,
-    // suprascrie default-ul CardPresent din viva-pay.js (tap-to-pay) — plata
-    // cu Card la vendor nu e o tranzacție cu cardul prezent fizic la terminal
+    // explicit, ca vendor să nu depindă tacit de default-ul din viva-pay.js
     paymentMethod: 'card'
   })
 }

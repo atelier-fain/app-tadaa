@@ -30,11 +30,9 @@
           <span>Card detected</span>
           <q-btn
             flat
-            dense
             no-caps
             icon="refresh"
             label="Rescan"
-            size="sm"
             class="card-badge-close"
             @click="resetCard"
           />
@@ -89,7 +87,7 @@
         :disabled="!finalAmount"
         @click="onCashOut"
       >
-        Confirm Top Up
+        Top Up
       </button>
       <button
         v-if="Number(cardData?.balance) > 0"
@@ -614,6 +612,15 @@ const onConfirmCashOut = async () => {
 
   .card-badge-close {
     color: #2e7d1f;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 8px 14px;
+    min-height: 44px;
+  }
+
+  .card-badge-close .q-icon.on-left {
+    font-size: 22px;
+    margin-right: 6px;
   }
 }
 

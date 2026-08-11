@@ -1,4 +1,5 @@
 {
+  "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#027be3",

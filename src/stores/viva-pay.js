@@ -10,9 +10,8 @@ const config = {
   ISV_sourceCode: dev ? process.env.DEV__ISCSourceCode : process.env.ISCSourceCode,
   ISV_currencyCode: '946',
   ISV_customerTrns: 'BigLittleFestival',
-  // fallback pentru tickets/topup (tap-to-pay cu telefonul ca terminal) —
-  // vendor trimite explicit paymentMethod: 'card' în payload (vezi
-  // VendorPaymentModal.vue onCardClick), nu e "card present" acolo.
+  // default pentru toate fluxurile (tickets/topup/vendor) — payload.paymentMethod
+  // poate suprascrie per apel dacă vreun flux are nevoie de altă valoare
   paymentMethod: 'card'
 }
 

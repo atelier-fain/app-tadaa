@@ -9,6 +9,12 @@
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover">
 
+    <!-- iOS nu citește display din manifest.json (Web App Manifest suport parțial
+         în Safari) — astea sunt echivalentul lui "fullscreen" la adăugare pe
+         ecranul principal, fără bara de adresă/status bar Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <link rel="icon" type="image/png" sizes="128x128" href="icons/favicon-128x128.png">
     <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
