@@ -46,7 +46,7 @@ bani/cenți)?
 Frontend-ul apelează deja acest endpoint după fiecare plată reușită (Card
 sau Card Festival), dar nu avem încă un răspuns confirmat de backend.
 
-**Endpoint apelat**: `POST /v2/app/vendor/orders/`
+**Endpoint apelat**: `POST /v2/app/vendor/order/create/`
 
 **Body trimis**:
 ```json
@@ -59,7 +59,7 @@ sau Card Festival), dar nu avem încă un răspuns confirmat de backend.
   "paymentMethod": "card"
 }
 ```
-(`paymentMethod`: `"card"` pentru Viva, `"card_festival"` pentru Card
+(`paymentMethod`: `"card"` pentru Viva, `"prepaid"` pentru Card
 Festival; `id` e generat de frontend momentan — de confirmat dacă backend-ul
 generează propriul id sau acceptă/preia id-ul trimis)
 

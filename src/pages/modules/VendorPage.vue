@@ -100,7 +100,7 @@
                     :key="i"
                     class="card-item"
                   >
-                    <span class="item-qty">{{ item.qty }}×</span>
+                    <span v-if="item.qty > 1" class="item-qty">{{ item.qty }}×</span>
                     <span class="item-name">{{ item.name }}</span>
                   </div>
                   <div v-if="order.extra" class="extra">
@@ -215,7 +215,7 @@
 
               <div class="card-items">
                 <div v-for="(item, i) in order.items" :key="i" class="card-item">
-                  <span class="item-qty">{{ item.qty }}×</span>
+                  <span v-if="item.qty > 1" class="item-qty">{{ item.qty }}×</span>
                   <span class="item-name">{{ item.name }}</span>
                 </div>
                 <div v-if="order.extra" class="extra">

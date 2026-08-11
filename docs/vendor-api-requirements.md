@@ -111,7 +111,7 @@ comenzile dispăreau.
 
 **Endpoint apelat** (neconfirmat încă de backend, spre deosebire de #1/#5 —
 de verificat dacă path-ul/forma răspunsului sunt corecte după primul test
-real): `POST /v2/app/vendor/orders/`
+real): `POST /v2/app/vendor/order/create/`
 
 **Body trimis** (payload logat în consolă la fiecare apel, vezi
 `fetchVendor`/`saveOrder` — `[vendor/orders] payload:`):
@@ -127,7 +127,7 @@ real): `POST /v2/app/vendor/orders/`
 ```
 (`id` e generat local, cu prefixul din `vendorStore.vendor.prefix`, ca
 fallback până confirmă backend-ul dacă generează el id-ul; `paymentMethod`
-e `"card"` pentru Viva sau `"card_festival"` pentru Card Festival)
+e `"card"` pentru Viva sau `"prepaid"` pentru Card Festival)
 
 **Response**: neconfirmat — de completat aici după primul test real (vezi
 `[vendor/orders] response:` / `[vendor/orders] error:` în consolă).

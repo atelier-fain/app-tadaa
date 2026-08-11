@@ -60,8 +60,11 @@ export const useDataStore = defineStore('data', {
         shortOrderCode
       })
 
-      this.pendingOrder = null
-      Cookies.remove('pendingOrder', { path: '/' })
+      // păstrăm doar un marker minimal (fără cardId/amount deja trimise) —
+      // un refresh pe /callback după succes citește orderSaved și redirectează
+      // direct spre top_up, în loc să retrimită aceeași plată a doua oară
+      this.pendingOrder = { source: 'topup', orderSaved: true }
+      Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
 
       return data
     },
@@ -192,8 +195,11 @@ export const useDataStore = defineStore('data', {
         shortOrderCode
       })
 
-      this.pendingOrder = null
-      Cookies.remove('pendingOrder', { path: '/' })
+      // păstrăm doar un marker minimal (fără tickets-urile deja trimise) —
+      // un refresh pe /callback după succes citește orderSaved și redirectează
+      // direct spre tickets, în loc să retrimită aceeași comandă a doua oară
+      this.pendingOrder = { source: 'tickets', orderSaved: true }
+      Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
 
       return data
     },

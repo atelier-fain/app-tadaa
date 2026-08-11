@@ -103,10 +103,13 @@ export default defineRouter(function ({ store }) {
         })
     }
 
-    // fetchVendor() doar la intrarea pe VendorPage din afara modulului Vendor
-    // (alt modul sau navigare externă) — trecerea între vendor/vendor-new-order/
-    // vendor-settings nu trebuie să reia apelul (vezi VendorPage.vue).
-    if (to.name === 'vendor' && !vendorModuleRoutes.includes(from.name)) {
+    // fetchVendor() la intrarea pe ORICARE rută din modulul Vendor
+    // (vendor/vendor-new-order/vendor-settings sunt "copii" ale aceluiași
+    // modul /modules/vendor), atâta timp cât se vine din AFARA modulului —
+    // altfel refresh direct pe /vendor/new-order sau /vendor/settings nu
+    // ar mai popula niciodată store-ul. Trecerea între ele (from.name deja
+    // în vendorModuleRoutes) nu reia apelul.
+    if (vendorModuleRoutes.includes(to.name) && !vendorModuleRoutes.includes(from.name)) {
       useVendorStore(store).fetchVendor()
         .catch((e) => console.error('[vendor/get] error:', e?.response?.data || e))
     }

@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Cookies } from 'quasar'
 import { useDataStore } from 'stores/data.js'
@@ -98,6 +98,15 @@ onMounted(() => {
 
   orderSource.value = pendingOrder.value.source
 
+  // dacă userul dă refresh pe /callback după ce plata a fost deja trimisă
+  // către backend (orderSaved: true, setat de buy_tickets/charge_prepaid_card/
+  // saveOrder după succes), sărim peste retrimitere și îl ducem direct la
+  // destinația lui, în loc să retrimitem aceeași comandă/plată a doua oară
+  if (isSuccess.value && pendingOrder.value.orderSaved) {
+    router.replace({ name: destinationRoute.value })
+    return
+  }
+
   if (isSuccess.value && pendingOrder.value.source === 'tickets') {
     store.buy_tickets({
       tickets: pendingOrder.value.tickets,
@@ -126,12 +135,34 @@ onMounted(() => {
   }
 
   if (isSuccess.value && pendingOrder.value.source === 'vendor') {
-    vendorStore.saveOrder(pendingOrder.value.cart || [], route.query.paymentMethod || 'card')
+    vendorStore.saveOrder(
+      pendingOrder.value.cart || [],
+      route.query.paymentMethod || 'card',
+      transactionId.value,
+      shortOrderCode.value
+    ).finally(() => {
+      store.pendingOrder = { source: 'vendor', orderSaved: true }
+      Cookies.set('pendingOrder', store.pendingOrder, { path: '/', expires: 1 })
+    })
   }
 })
 
+// odată ce userul pleacă de pe /callback (navigare internă Vue Router —
+// New order/Cancel/redirect-ul automat de mai sus), cookie-ul nu mai are
+// niciun rol — se șterge ca o revenire ulterioară pe /callback fără o
+// plată reală în curs să nu găsească un pendingOrder stale. NU se golește
+// aici la un retry Card (window.open(..., '_self') iese complet din SPA
+// înainte să apuce să ruleze acest hook, deci cookie-ul supraviețuiește
+// round-trip-ul prin Viva, exact cât trebuie).
+onBeforeUnmount(() => {
+  store.pendingOrder = null
+  Cookies.remove('pendingOrder', { path: '/' })
+})
+
+// replace (nu push) — /callback nu rămâne în istoric, ca un back de pe
+// pagina următoare să nu aterizeze din nou pe ecranul de succes
 function onNewOrder () {
-  router.push({ name: destinationRoute.value })
+  router.replace({ name: destinationRoute.value })
 }
 
 function onRetry () {
@@ -148,7 +179,7 @@ function onTryAnotherPaymentMethod () {
 }
 
 function onCancel () {
-  router.push({ name: destinationRoute.value })
+  router.replace({ name: destinationRoute.value })
 }
 </script>
 

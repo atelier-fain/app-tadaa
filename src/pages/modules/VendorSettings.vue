@@ -6,15 +6,46 @@
       <NotificationsBell />
     </div>
 
-    <div class="products-grid">
+    <!-- Loading: skeleton cu forma cardurilor reale, cât timp vendor/get e în zbor -->
+    <div v-if="vendorLoading" class="products-grid">
+      <div v-for="n in 4" :key="n" class="product-card">
+        <div class="card-top">
+          <div class="status-stripe skeleton-stripe" />
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-header-left">
+                <q-skeleton type="text" width="50px" height="11px" />
+                <q-skeleton type="text" width="150px" height="16px" class="q-mt-xs" />
+              </div>
+              <q-skeleton type="QBtn" width="88px" height="30px" />
+            </div>
+
+            <q-skeleton type="text" width="55px" height="12px" />
+
+            <div class="card-footer">
+              <div class="prep-info">
+                <q-skeleton type="text" width="58px" height="11px" />
+                <q-skeleton type="text" width="46px" height="15px" class="q-mt-xs" />
+              </div>
+              <div class="prep-controls">
+                <q-skeleton type="QBtn" width="46px" height="46px" />
+                <q-skeleton type="QBtn" width="46px" height="46px" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-else class="products-grid">
       <div
         v-for="product in products"
         :key="product.id"
         class="product-card"
-        :class="{ 'product-card--off': !product.enabled }"
+        :class="{ 'product-card--off': !product.active }"
       >
         <div class="card-top">
-          <div class="status-stripe" :class="product.enabled ? 'stripe-on' : 'stripe-off'" />
+          <div class="status-stripe" :class="product.active ? 'stripe-on' : 'stripe-off'" />
           <div class="card-body">
 
             <div class="card-header">
@@ -23,7 +54,7 @@
                 <span class="product-name">{{ product.name }}</span>
               </div>
               <q-btn-toggle
-                v-model="product.enabled"
+                v-model="product.active"
                 no-caps
                 rounded
                 unelevated
@@ -45,28 +76,20 @@
             <div class="card-footer">
               <div class="prep-info">
                 <span class="prep-label">Prep time</span>
-                <span class="prep-val">{{ product.prepTime }} min</span>
+                <span class="prep-val">{{ product.duration }} min</span>
               </div>
               <div class="prep-controls">
                 <q-btn
                   round flat icon="remove" size="sm"
                   class="prep-btn"
-                  :disable="product.prepTime <= 1 || !product.enabled"
-                  @mousedown="startHold(product, -1)"
-                  @touchstart.prevent="startHold(product, -1)"
-                  @mouseup="stopHold"
-                  @mouseleave="stopHold"
-                  @touchend="stopHold"
+                  :disable="product.duration <= 1 || !product.active"
+                  @click="adjustTime(product, -1)"
                 />
                 <q-btn
                   round flat icon="add" size="sm"
                   class="prep-btn"
-                  :disable="!product.enabled"
-                  @mousedown="startHold(product, 1)"
-                  @touchstart.prevent="startHold(product, 1)"
-                  @mouseup="stopHold"
-                  @mouseleave="stopHold"
-                  @touchend="stopHold"
+                  :disable="!product.active"
+                  @click="adjustTime(product, 1)"
                 />
               </div>
             </div>
@@ -80,41 +103,104 @@
       <q-btn fab icon="arrow_back" color="grey-7" @click="router.push({ name: 'vendor' })" />
     </q-page-sticky>
 
+    <!-- Save — apare doar cât timp există modificări nesalvate (on/off sau prep time) -->
+    <q-page-sticky v-if="hasChanges" position="bottom-right" :offset="[18, 18]">
+      <q-btn
+        no-caps
+        unelevated
+        label="Save changes"
+        icon="save"
+        class="save-btn"
+        :loading="saving"
+        @click="saveSettings"
+      />
+    </q-page-sticky>
+
   </q-page>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useVendorStore } from 'stores/vendor.js'
 import NotificationsBell from 'components/NotificationsBell.vue'
 
 const router = useRouter()
+const vendorStore = useVendorStore()
 
-const products = ref([
-  { id: 1, name: 'Pizza Margherita',        category: 'Pizza', price: 39, enabled: true,  prepTime: 10 },
-  { id: 2, name: 'Pizza Quattro Formagi',   category: 'Pizza', price: 45, enabled: true,  prepTime: 10 },
-  { id: 3, name: 'Pizza Diavola',           category: 'Pizza', price: 43, enabled: true,  prepTime: 10 },
-  { id: 4, name: 'Pizza Prosciutto Funghi', category: 'Pizza', price: 48, enabled: true,  prepTime: 10 },
-])
+// vendor/get e în zbor (declanșat din router/index.js la intrarea pe modul) —
+// vezi VendorPage.vue/VendorNewOrder.vue pentru același pattern
+const vendorLoading = computed(() => vendorStore.vendor === null)
 
+// copie locală editabilă — nu mutăm direct vendorStore.products, ca să știm
+// exact ce s-a schimbat (dirty tracking) și să trimitem la /vendor/settings/
+// doar produsele modificate, nu tot meniul; fără extras — pagina asta
+// editează doar active/duration.
+const products = ref([])
+const savedSnapshot = ref({}) // id -> { active, duration } — ultima stare salvată
+
+function snapshotOf (list) {
+  return Object.fromEntries(list.map(p => [p.id, { active: p.active, duration: p.duration }]))
+}
+
+watch(() => vendorStore.products, (list) => {
+  if (!list.length) return
+  products.value = list.map(p => ({
+    id: p.id,
+    name: p.name,
+    category: p.category,
+    price: p.price,
+    active: p.active,
+    duration: p.duration,
+  }))
+  savedSnapshot.value = snapshotOf(products.value)
+}, { immediate: true })
+
+const dirtyProducts = computed(() => products.value.filter(p => {
+  const saved = savedSnapshot.value[p.id]
+  return !saved || saved.active !== p.active || saved.duration !== p.duration
+}))
+const hasChanges = computed(() => dirtyProducts.value.length > 0)
+
+const saving = ref(false)
+
+async function saveSettings () {
+  if (!hasChanges.value || saving.value) return
+
+  saving.value = true
+  try {
+    const confirmed = await vendorStore.updateProductSettings(
+      dirtyProducts.value.map(p => ({ _id: p.id, duration: p.duration, active: p.active }))
+    )
+
+    // dacă răspunsul e array-ul confirmat, aliniem copia locală cu ce a
+    // salvat efectiv backend-ul (posibile normalizări/respingeri per produs)
+    if (Array.isArray(confirmed)) {
+      const byId = new Map(confirmed.map(p => [p._id, p]))
+      products.value.forEach(p => {
+        const updated = byId.get(p.id)
+        if (updated) {
+          p.active = updated.active
+          p.duration = Number(updated.duration)
+        }
+      })
+    }
+
+    // POST-ul a reușit (n-a aruncat) — resetăm evidența indiferent de forma
+    // exactă a răspunsului, ca butonul Save să dispară oricum
+    savedSnapshot.value = snapshotOf(products.value)
+  } catch (e) {
+    console.error('[vendor/settings] error:', e?.response?.data || e)
+  } finally {
+    saving.value = false
+  }
+}
+
+// @click simplu (nu press-and-hold) — un tap = un minut, ca să nu se
+// modifice accidental duration-ul la o apăsare ținută mai lung
 const adjustTime = (product, delta) => {
-  const next = product.prepTime + delta
-  if (next >= 1) product.prepTime = next
-}
-
-let holdTimer = null
-let holdInterval = null
-
-function startHold(product, delta) {
-  adjustTime(product, delta)
-  holdTimer = setTimeout(() => {
-    holdInterval = setInterval(() => adjustTime(product, delta), 80)
-  }, 400)
-}
-
-function stopHold() {
-  clearTimeout(holdTimer)
-  clearInterval(holdInterval)
+  const next = product.duration + delta
+  if (next >= 1) product.duration = next
 }
 </script>
 
@@ -170,6 +256,7 @@ function stopHold() {
 }
 .stripe-on  { background: #1D9E75; }
 .stripe-off { background: #B4B2A9; }
+.skeleton-stripe { background: $grey-3; }
 
 .card-body {
   flex: 1;
@@ -277,5 +364,16 @@ function stopHold() {
     border-radius: 0 20px 20px 0 !important;
     margin-left: -1px;
   }
+}
+
+.save-btn {
+  background: $primary !important;
+  color: white !important;
+  border-radius: 30px;
+  padding: 12px 22px;
+  min-height: 52px;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
 }
 </style>

@@ -285,7 +285,7 @@ async function chargeFestivalCard (scannedTdid) {
       query: {
         status: 'success',
         amount: String(cartTotal.value * 100),
-        paymentMethod: 'card_festival',
+        paymentMethod: 'prepaid',
         balance: String(data.balance)
       }
     })

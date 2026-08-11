@@ -4,6 +4,28 @@
       <span class="page-title">New order</span>
     </div>
 
+    <!-- Loading: skeleton cu forma tab-urilor + rândurilor reale, cât timp vendor/get e în zbor -->
+    <template v-if="vendorLoading">
+      <div class="category-tabs category-tabs--skeleton">
+        <q-skeleton v-for="n in 3" :key="n" type="QChip" width="80px" height="50px" class="category-tab-skeleton" />
+      </div>
+
+      <div class="products-list">
+        <div v-for="n in 4" :key="n" class="product-row">
+          <div class="product-main" style="padding: 16px 14px;">
+            <div class="product-info">
+              <q-skeleton type="text" width="140px" height="16px" />
+              <q-skeleton type="text" width="60px" height="13px" class="q-mt-xs" />
+            </div>
+            <div class="product-actions">
+              <q-skeleton type="QBtn" width="76px" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template v-else>
     <q-tabs
       v-model="activeCategory"
       dense
@@ -62,7 +84,9 @@
             class="extras-group"
           >
             <div class="group-title">
-              {{ group.title }} <span v-if="group.options.length > 3" class="group-max">(max {{ group.max }} selections)</span>
+              {{ group.title }}
+              <span v-if="group.required" class="group-required">(required)</span>
+              <span v-if="group.options.length > group.max" class="group-max">(max {{ group.max }} selections)</span>
             </div>
             <div
               v-for="opt in group.options"
@@ -81,11 +105,22 @@
 
           <div class="extras-footer">
             <span class="extras-total" v-html="formatPrice(expandedTotal, true)" />
-            <q-btn no-caps unelevated label="Add to order" class="add-btn" @click="confirmAdd(product)" />
+            <q-btn
+              no-caps
+              unelevated
+              label="Add to order"
+              class="add-btn"
+              :disable="missingRequiredGroups.length > 0"
+              @click="confirmAdd(product)"
+            />
+          </div>
+          <div v-if="missingRequiredGroups.length" class="extras-warning">
+            Select an option for: {{ missingRequiredGroups.join(', ') }}
           </div>
         </div>
       </div>
     </div>
+    </template>
 
     <!-- Coș sticky -->
     <q-page-sticky v-if="cart.length" position="bottom-right" :offset="[18, 18]">
@@ -113,7 +148,7 @@
 
         <div v-for="(item, i) in cart" :key="i" class="cart-summary-row">
           <div class="cart-summary-main">
-            <span class="cart-summary-name">{{ item.qty }}× {{ item.name }}</span>
+            <span class="cart-summary-name">{{ item.name }}</span>
             <span class="cart-summary-price" v-html="formatPrice(item.lineTotal)" />
           </div>
           <div v-if="item.extras.length" class="cart-summary-extras">
@@ -133,7 +168,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useVendorStore } from 'stores/vendor.js'
 import VendorPaymentModal from 'components/VendorPaymentModal.vue'
@@ -142,7 +177,18 @@ const router = useRouter()
 const vendorStore = useVendorStore()
 const showPayment = ref(false)
 
+// vendor/get e în zbor (declanșat din router/index.js la intrarea pe modul) —
+// produsele nu sunt încă disponibile, deci arătăm un skeleton (vezi VendorPage.vue)
+const vendorLoading = computed(() => vendorStore.vendor === null)
+
 const activeCategory = ref(vendorStore.categories[0])
+// products vine async din fetchVendor() — dacă pagina a fost deschisă direct
+// (refresh pe /vendor/new-order), categories e goală la mount, deci fixăm
+// tab-ul activ abia când apare prima categorie
+watch(() => vendorStore.categories, (categories) => {
+  if (!activeCategory.value && categories.length) activeCategory.value = categories[0]
+})
+
 const productsInCategory = computed(
   () => vendorStore.products.filter(p => p.category === activeCategory.value)
 )
@@ -178,7 +224,7 @@ function toggleExtra (group, opt) {
     return
   }
   if (selectedCount(group) >= group.max) return
-  selectedExtras.value.push({ group: group.title, name: opt.name, price: opt.price })
+  selectedExtras.value.push({ group: group.title, name: opt.name, price: opt.price, priceRaw: opt.priceRaw, plu: opt.plu })
 }
 
 const expandedProduct = computed(
@@ -188,14 +234,25 @@ const expandedTotal = computed(
   () => (expandedProduct.value?.price || 0) + selectedExtras.value.reduce((sum, e) => sum + e.price, 0)
 )
 
+// grupurile obligatorii (accept_no_selection: false pe backend) fără nicio
+// opțiune bifată încă — blochează "Add to order" cât timp lista nu e goală
+const missingRequiredGroups = computed(() => (expandedProduct.value?.extraGroups || [])
+  .filter(group => group.required && selectedCount(group) === 0)
+  .map(group => group.title)
+)
+
 function formatPrice (value, withUnit = false) {
   return `${Math.floor(value)}<sup>00</sup>${withUnit ? ' lei' : ''}`
 }
 
+// fiecare click de "Add" creează o linie nouă în coș (nu incrementează o
+// cantitate), deci nu există un câmp qty pe item.
 function quickAdd (product) {
   cart.value.push({
     name: product.name,
-    qty: 1,
+    productId: product.id,
+    plu: product.plu,
+    priceRaw: product.priceRaw,
     extras: [],
     lineTotal: product.price,
   })
@@ -203,10 +260,14 @@ function quickAdd (product) {
 }
 
 function confirmAdd (product) {
+  if (missingRequiredGroups.value.length) return
+
   cart.value.push({
     name: product.name,
-    qty: 1,
-    extras: selectedExtras.value.map(e => ({ name: e.name, price: e.price })),
+    productId: product.id,
+    plu: product.plu,
+    priceRaw: product.priceRaw,
+    extras: selectedExtras.value.map(e => ({ name: e.name, price: e.price, priceRaw: e.priceRaw, plu: e.plu })),
     lineTotal: expandedTotal.value,
   })
   expandedId.value = null
@@ -216,7 +277,8 @@ function confirmAdd (product) {
 
 // ----- coș -----
 const cart = ref([])
-const cartQty = computed(() => cart.value.reduce((sum, item) => sum + item.qty, 0))
+// fiecare linie din cart reprezintă 1 bucată (nu mai există qty per item)
+const cartQty = computed(() => cart.value.length)
 const cartTotal = computed(() => cart.value.reduce((sum, item) => sum + item.lineTotal, 0))
 const cartDialogOpen = ref(false)
 
@@ -260,6 +322,13 @@ function bumpCart () {
   :deep(.q-tabs__content) {
     gap: 6px;
   }
+}
+.category-tabs--skeleton {
+  display: flex;
+  gap: 6px;
+}
+.category-tab-skeleton {
+  border-radius: 22px;
 }
 .category-tab {
   border-radius: 22px;
@@ -366,6 +435,16 @@ function bumpCart () {
   font-size: 13px;
   font-weight: 400;
   color: $grey-6;
+}
+.group-required {
+  font-size: 13px;
+  font-weight: 600;
+  color: $primary;
+}
+.extras-warning {
+  margin-top: 4px;
+  font-size: 13px;
+  color: $negative;
 }
 .extras-row {
   display: flex;
