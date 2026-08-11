@@ -10,7 +10,10 @@ const config = {
   ISV_sourceCode: dev ? process.env.DEV__ISCSourceCode : process.env.ISCSourceCode,
   ISV_currencyCode: '946',
   ISV_customerTrns: 'BigLittleFestival',
-  paymentMethod: 'CardPresent'
+  // fallback pentru tickets/topup (tap-to-pay cu telefonul ca terminal) —
+  // vendor trimite explicit paymentMethod: 'card' în payload (vezi
+  // VendorPaymentModal.vue onCardClick), nu e "card present" acolo.
+  paymentMethod: 'card'
 }
 
 export function buildVivaPayUrl (payload = {}) {
@@ -27,7 +30,7 @@ export function buildVivaPayUrl (payload = {}) {
     ISV_currencyCode: config.ISV_currencyCode,
     ISV_customerTrns: config.ISV_customerTrns,
     clientTransactionId: payload.user,
-    paymentMethod: config.paymentMethod
+    paymentMethod: payload.paymentMethod || config.paymentMethod
   }
 
   return 'vivapayclient://pay/v1?' + Object.entries(params)

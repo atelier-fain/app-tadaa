@@ -8,23 +8,32 @@ import { useDataStore } from 'stores/data.js'
 // mai apar statusuri noi.
 export const ORDER_STATUS = { OPENED: 'opened', READY: 'ready', CLOSED: 'closed' }
 
+// backend-ul (PHP) serializează un array cu un singur element ca obiect
+// JSON, nu ca array cu un element (`{"0": {...}}` în loc de `[{...}]`) —
+// orice câmp care ar trebui să fie listă (products, orders, extras, items
+// dintr-un grup de extra etc.) trebuie trecut prin asta înainte de
+// .map/.forEach, altfel exact cazul cel mai comun — o singură intrare —
+// aruncă `TypeError: ... .map is not a function`. Filtrează și elementele
+// null/undefined din listă (ex. `[null]`/`{"0": null}`), altfel primul
+// `.map` care le atinge o proprietate aruncă `Cannot read properties of null`.
+export function toArray (value) {
+  const arr = Array.isArray(value) ? value : (value && typeof value === 'object' ? Object.values(value) : [])
+  return arr.filter(Boolean)
+}
+
 // mapează o comandă așa cum vine din POST /v2/app/vendor/get/ (câmp `orders`)
 // pe forma consumată de UI — doar comenzile cu type: "online" au `products`
 // (restul sunt tranzacții de POS fără listă de produse, gen plată cu cardul
 // direct la terminal, fără coș din app)
 function mapOrder (raw, prefix) {
-  // raw.products poate lipsi (comenzi non-"online") sau poate veni într-o
-  // formă neașteptată de la /vendor/order/create/ (răspuns încă neconfirmat
-  // complet) — Array.isArray, nu doar `|| []`, ca un `products` truthy dar
-  // ne-array (ex. un obiect) să nu arunce la `.map`
-  const products = Array.isArray(raw.products) ? raw.products : []
+  const products = toArray(raw.products)
 
   return {
     id: `#${prefix}${String(raw.nominal_order_id).padStart(4, '0')}`,
     _id: raw._id, // id-ul real din backend — necesar pentru change_status (vezi updateOrderStatus)
     status: raw.status || ORDER_STATUS.OPENED,
     items: products.map(p => ({ qty: Number(p.qty), name: p.name })),
-    extra: products.flatMap(p => (p.extras || []).map(e => e.name)).join(', ') || null,
+    extra: products.flatMap(p => toArray(p.extras).map(e => e.name)).join(', ') || null,
     total: Number(raw.subtotal) / 100,
   }
 }
@@ -51,11 +60,11 @@ function mapProduct (raw) {
     // preparare), salvate prin updateProductSettings() la /vendor/settings/
     active: raw.active,
     duration: Number(raw.duration) || 0,
-    extraGroups: (raw.extras || []).map(e => ({
+    extraGroups: toArray(raw.extras).map(e => ({
       title: e.value.title,
       max: Number(e.value.selections) || 1,
       required: !e.value.accept_no_selection,
-      options: (e.value.items || []).map(i => ({
+      options: toArray(e.value.items).map(i => ({
         name: i.value.title.trim(),
         price: Number(i.value.price) / 100,
         priceRaw: i.value.price,
@@ -94,10 +103,10 @@ export const useVendorStore = defineStore('vendor', {
       const { data } = await dataStore._post(ep.vendorGet)
       this.vendor = data
       if (data.orders) {
-        this.orders = data.orders.map(o => mapOrder(o, data.prefix || 'ita'))
+        this.orders = toArray(data.orders).map(o => mapOrder(o, data.prefix || 'ita'))
       }
       if (data.products) {
-        this.products = data.products.map(mapProduct)
+        this.products = toArray(data.products).map(mapProduct)
       }
       return data
     },
@@ -223,20 +232,19 @@ export const useVendorStore = defineStore('vendor', {
       console.log('[vendor/settings] response:', data)
 
       // sincronizăm valorile confirmate de backend înapoi în vendorStore.products,
-      // ca o revenire pe pagină (fără refetch) să reflecte ce s-a salvat — dacă
-      // răspunsul nu e array-ul așteptat (ack minimal etc.), sărim peste
-      // sincronizare fără să aruncăm, ca apelantul (VendorSettings.vue) să nu
-      // rateze resetarea evidenței de modificări doar din cauza formei răspunsului
-      if (Array.isArray(data)) {
-        const byId = new Map(data.map(p => [p._id, p]))
-        this.products.forEach(p => {
-          const updated = byId.get(p.id)
-          if (updated) {
-            p.active = updated.active
-            p.duration = Number(updated.duration)
-          }
-        })
-      }
+      // ca o revenire pe pagină (fără refetch) să reflecte ce s-a salvat.
+      // toArray acoperă și cazul cu un singur produs salvat (backend-ul îl
+      // serializează ca obiect, nu ca array cu un element); dacă răspunsul
+      // nu e deloc utilizabil (ack minimal etc.), toArray dă listă goală și
+      // pur și simplu sărim peste sincronizare, fără să aruncăm.
+      const byId = new Map(toArray(data).map(p => [p._id, p]))
+      this.products.forEach(p => {
+        const updated = byId.get(p.id)
+        if (updated) {
+          p.active = updated.active
+          p.duration = Number(updated.duration)
+        }
+      })
 
       return data
     }

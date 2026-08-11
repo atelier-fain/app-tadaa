@@ -149,7 +149,10 @@
         <div v-for="(item, i) in cart" :key="i" class="cart-summary-row">
           <div class="cart-summary-main">
             <span class="cart-summary-name">{{ item.name }}</span>
-            <span class="cart-summary-price" v-html="formatPrice(item.lineTotal)" />
+            <div class="cart-summary-right">
+              <span class="cart-summary-price" v-html="formatPrice(item.lineTotal)" />
+              <q-icon name="delete_outline" class="cart-summary-delete" @click="removeFromCart(i)" />
+            </div>
           </div>
           <div v-if="item.extras.length" class="cart-summary-extras">
             + {{ item.extras.map(e => e.name).join(', ') }}
@@ -301,6 +304,13 @@ const cart = ref([])
 const cartQty = computed(() => cart.value.length)
 const cartTotal = computed(() => cart.value.reduce((sum, item) => sum + item.lineTotal, 0))
 const cartDialogOpen = ref(false)
+
+// șterge o linie din coș direct din popup-ul "Your order" — dacă rămâne
+// gol, închidem popup-ul (butonul sticky care l-a deschis dispare oricum)
+function removeFromCart (index) {
+  cart.value.splice(index, 1)
+  if (!cart.value.length) cartDialogOpen.value = false
+}
 
 // declanșează un puls dublu pe box-shadow-ul butonului "Place order" la fiecare adăugare
 const cartBump = ref(false)
@@ -634,17 +644,19 @@ function bumpCart () {
   margin-bottom: 14px;
 }
 .cart-summary-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   color: $dark;
 }
 .cart-summary-close {
   cursor: pointer;
-  font-size: 20px;
+  font-size: 26px;
   color: $grey-7;
+  padding: 6px;
+  margin: -6px;
 }
 .cart-summary-row {
-  padding: 10px 0;
+  padding: 12px 0;
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 
   &:last-of-type {
@@ -658,35 +670,52 @@ function bumpCart () {
   gap: 8px;
 }
 .cart-summary-name {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: $dark;
 }
+.cart-summary-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
 .cart-summary-price {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: $dark;
 
   :deep(sup) {
-    font-size: 10px;
+    font-size: 11px;
+  }
+}
+.cart-summary-delete {
+  font-size: 24px;
+  color: $grey-6;
+  cursor: pointer;
+  padding: 6px;
+  margin: -6px;
+
+  &:active {
+    color: $negative;
   }
 }
 .cart-summary-extras {
-  font-size: 12px;
+  font-size: 13px;
   color: $grey-6;
-  margin-top: 3px;
+  margin-top: 4px;
 }
 .cart-summary-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12px;
-  font-size: 14px;
+  margin-top: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: $dark;
 }
 .cart-summary-total {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
   color: $primary;
 

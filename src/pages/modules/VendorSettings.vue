@@ -122,7 +122,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useVendorStore } from 'stores/vendor.js'
+import { useVendorStore, toArray } from 'stores/vendor.js'
 import NotificationsBell from 'components/NotificationsBell.vue'
 
 const router = useRouter()
@@ -173,18 +173,17 @@ async function saveSettings () {
       dirtyProducts.value.map(p => ({ _id: p.id, duration: p.duration, active: p.active }))
     )
 
-    // dacă răspunsul e array-ul confirmat, aliniem copia locală cu ce a
-    // salvat efectiv backend-ul (posibile normalizări/respingeri per produs)
-    if (Array.isArray(confirmed)) {
-      const byId = new Map(confirmed.map(p => [p._id, p]))
-      products.value.forEach(p => {
-        const updated = byId.get(p.id)
-        if (updated) {
-          p.active = updated.active
-          p.duration = Number(updated.duration)
-        }
-      })
-    }
+    // aliniem copia locală cu ce a salvat efectiv backend-ul (posibile
+    // normalizări/respingeri per produs) — toArray acoperă și cazul cu un
+    // singur produs salvat, serializat de backend ca obiect, nu ca array
+    const byId = new Map(toArray(confirmed).map(p => [p._id, p]))
+    products.value.forEach(p => {
+      const updated = byId.get(p.id)
+      if (updated) {
+        p.active = updated.active
+        p.duration = Number(updated.duration)
+      }
+    })
 
     // POST-ul a reușit (n-a aruncat) — resetăm evidența indiferent de forma
     // exactă a răspunsului, ca butonul Save să dispară oricum
