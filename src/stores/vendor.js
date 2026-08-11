@@ -2,9 +2,11 @@ import { defineStore } from 'pinia'
 import { ep } from 'stores/ep.js'
 import { useDataStore } from 'stores/data.js'
 
-// status real din backend (opened/ready/closed) → status folosit de UI
-// (lucru/finalizat/inchis, vezi tab-urile din VendorPage.vue)
-const STATUS_MAP = { opened: 'lucru', ready: 'finalizat', closed: 'inchis' }
+// Statusul comenzii folosește peste tot (state, UI, request-uri către
+// backend) direct vocabularul backend-ului — opened/ready/closed — fără
+// niciun strat de traducere intern, ca aplicația să rămână scalabilă dacă
+// mai apar statusuri noi.
+export const ORDER_STATUS = { OPENED: 'opened', READY: 'ready', CLOSED: 'closed' }
 
 // mapează o comandă așa cum vine din POST /v2/app/vendor/get/ (câmp `orders`)
 // pe forma consumată de UI — doar comenzile cu type: "online" au `products`
@@ -15,7 +17,8 @@ function mapOrder (raw, prefix) {
 
   return {
     id: `#${prefix}${String(raw.nominal_order_id).padStart(4, '0')}`,
-    status: STATUS_MAP[raw.status] || 'lucru',
+    _id: raw._id, // id-ul real din backend — necesar pentru change_status (vezi updateOrderStatus)
+    status: raw.status || ORDER_STATUS.OPENED,
     items: products.map(p => ({ qty: Number(p.qty), name: p.name })),
     extra: products.flatMap(p => (p.extras || []).map(e => e.name)).join(', ') || null,
     total: Number(raw.subtotal) / 100,
@@ -119,7 +122,7 @@ export const useVendorStore = defineStore('vendor', {
 
       const order = {
         id: `#${prefix}${String(nextNum).padStart(4, '0')}`,
-        status: 'lucru',
+        status: ORDER_STATUS.OPENED,
         items: cartItems.map(item => ({ qty: item.qty, name: item.name })),
         extra: cartItems.flatMap(item => item.extras.map(e => e.name)).join(', ') || null,
         total: cartItems.reduce((sum, item) => sum + item.lineTotal, 0),
@@ -136,6 +139,34 @@ export const useVendorStore = defineStore('vendor', {
       } catch (e) {
         console.error('[vendor/orders] error:', e?.response?.data || e)
       }
+
+      return order
+    },
+
+    // Apelat din VendorPage.vue după cele 5s de "waiting" pe butonul
+    // Complete/Close (fără modal de confirmare, vezi onStatusBtnClick).
+    // Comanda se mută din tab-ul curent (In progress/Completed) doar după ce
+    // vine efectiv răspunsul 200 — nu optimist, la fel ca mutarea butonului
+    // în loading. Dacă request-ul pică, aruncă mai departe (caller-ul decide
+    // ce arată userului) și comanda rămâne neschimbată.
+    // Endpoint confirmat: POST /v2/app/vendor/order/change_status/, body
+    // { _id, status } — _id e id-ul real din backend (order._id, vezi
+    // mapOrder), NU id-ul afișat gen "#ita0405". `status` e mereu una din
+    // ORDER_STATUS (opened/ready/closed) — trimisă ca atare, fără traducere.
+    async updateOrderStatus (orderId, status) {
+      const order = this.orders.find(o => o.id === orderId)
+      if (!order?._id) {
+        console.error('[vendor/order/change_status] lipsește order._id (comandă creată local, neconfirmată încă de backend?):', orderId)
+      }
+
+      const payload = { _id: order?._id, status }
+      console.log('[vendor/order/change_status] payload:', payload)
+
+      const dataStore = useDataStore()
+      const { data } = await dataStore._post(ep.vendorOrderStatus, payload)
+      console.log('[vendor/order/change_status] response:', data)
+
+      if (order) order.status = status
 
       return order
     }

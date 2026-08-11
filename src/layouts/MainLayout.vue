@@ -17,7 +17,7 @@
       v-if="route.path === '/'"
       icon="logout"
       round
-      size="md"
+      fab
       class="fixed-bottom-left text-white"
       style="margin: 18px; z-index: 2000; background-color: #e15350 !important;"
       @click="store.logout()"

@@ -169,9 +169,9 @@ profilul vendor-ului. Forma reală per comandă e diferită de mock:
 - `nominal_order_id` — numărul secvențial al comenzii; combinat cu
   `vendor.prefix` dă id-ul afișat (`#ita0406`), la fel ca id-urile generate
   local de `saveOrder()` (#3) — le face compatibile 1:1.
-- `status` — `"opened"` / `"ready"` / `"closed"`, diferit de
-  `lucru`/`finalizat`/`inchis` din mock. Mapat: `opened → lucru`,
-  `ready → finalizat`, `closed → inchis`.
+- `status` — `"opened"` / `"ready"` / `"closed"`. Aplicația folosește
+  peste tot (state, UI, request-uri) direct aceste 3 valori — fără niciun
+  strat de traducere intern (vezi `ORDER_STATUS` din `src/stores/vendor.js`).
 - `products` — apare **doar** la `type: "online"` (comenzi plasate prin
   coșul din app). Restul tipurilor (`"card"`, `"prepaid"`) sunt tranzacții
   de POS (plată directă la terminal, fără coș din app) — nu au listă de
@@ -181,18 +181,39 @@ profilul vendor-ului. Forma reală per comandă e diferită de mock:
 de modul) transformă fiecare comandă brută în forma UI (`{ id, status,
 items, extra, total }`), apelat din `fetchVendor()` pentru `data.orders`.
 
-**Actualizare status — încă neconectat**: `confirmFinalize`/`confirmClose`
-schimbă `order.status` doar local, fără apel către server.
+**Actualizare status — ✅ implementat**: nu mai există modal de confirmare —
+la click pe Complete/Close, butonul intră 5s în loading (progress simulat);
+un al doilea click în acest interval anulează acțiunea. Doar dacă cele 5s
+trec fără să fie anulat, pornește request-ul real — butonul rămâne în
+loading (nu mai primește click-uri) până vine răspunsul; comanda se mută în
+alt tab (In progress → Completed → Closed) doar la succes, nu optimist. La
+eroare, comanda rămâne neschimbată (vezi consolă).
 
-**Sugestie**: `POST /v2/app/vendor/orders/{id}/status/` — schimbă statusul
-unei comenzi. Body: `{ "status": "finalizat" | "inchis" }` (sau
-echivalentul lor în engleză, de aliniat cu backend: `in_progress` /
-`completed` / `closed`).
+**Endpoint confirmat**: `POST /v2/app/vendor/order/change_status/`
 
-**Unde se conectează**: `src/stores/vendor.js` — acțiuni noi
-`finalizeOrder(id)`/`closeOrder(id)` care ar face `POST` în loc să mute
-direct starea, consumate din `VendorPage.vue` (`confirmFinalize`/
-`confirmClose`).
+**Body trimis**:
+```json
+{ "_id": "0ec09ddb373934777c0003ae", "status": "opened" }
+```
+(`_id` e id-ul real din backend — **nu** id-ul afișat `#ita0405` — vezi
+`order._id`, populat de `mapOrder()` din `_id`-ul primit la #1; `status` e
+mereu una din `ORDER_STATUS` — `opened`/`ready`/`closed` — trimisă ca atare,
+fără nicio traducere intermediară.)
+
+**Response confirmat**:
+```json
+{ "_id": "0ec09ddb373934777c0003ae", "status": "opened", "_by": null, "_modified": 1786434249 }
+```
+
+**De reținut**: comenzile create local prin `saveOrder()` (#3) nu au încă
+`order._id` real (backend-ul de creare comandă e tot neconfirmat) — dacă
+userul apasă Complete/Close pe o astfel de comandă înainte de a exista un
+`_id` real, `updateOrderStatus()` loghează o eroare clară în consolă în loc
+să trimită `_id: undefined`.
+
+**Unde e conectat**: `ep.js` (`vendorOrderStatus`), `src/stores/vendor.js`
+(`mapOrder()` — populează `order._id`; `updateOrderStatus()`), apelat din
+`VendorPage.vue` (`onStatusBtnClick`).
 
 ---
 

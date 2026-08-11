@@ -141,6 +141,7 @@ function onConfirmCash() {
 
   .cart-bar-card {
     width: 100%;
+    max-width: 100%;
     border-radius: 0 !important;
     overflow: hidden;
     box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12) !important;

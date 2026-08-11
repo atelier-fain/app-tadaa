@@ -52,7 +52,7 @@
       >
         <div class="orders-tab-label">
           {{ tab.label }}
-          <span v-if="tab.name === 'lucru'" class="orders-tab-badge">{{ activeCount }}</span>
+          <span v-if="tab.name === ORDER_STATUS.OPENED" class="orders-tab-badge">{{ activeCount }}</span>
         </div>
       </q-tab>
     </q-tabs>
@@ -107,7 +107,7 @@
                     + {{ order.extra }}
                   </div>
                   <div
-                    v-if="order.items.length > 1 && order.status !== 'lucru'"
+                    v-if="order.items.length > 1 && order.status !== ORDER_STATUS.OPENED"
                     class="expand-toggle"
                     @click="toggleOrderExpand(order.id)"
                   >
@@ -121,22 +121,48 @@
                     <span class="total-label">Total</span>
                     <span class="order-total">{{ order.total }} lei</span>
                   </div>
-                  <q-btn
-                    v-if="order.status === 'lucru'"
-                    label="Complete"
-                    unelevated
-                    no-caps
-                    class="btn-finalize"
-                    @click="finalizeOrder(order.id)"
-                  />
-                  <q-btn
-                    v-else-if="order.status === 'finalizat'"
-                    label="Close"
-                    unelevated
-                    no-caps
-                    class="btn-close"
-                    @click="closeOrder(order.id)"
-                  />
+                  <!-- @click.capture pe wrapper (nu pe q-btn): cât timp loading e true,
+                       QBtn face stopAndPrevent pe propriul click intern (vezi
+                       QBtn.js/onLoadingEvt), deci un @click direct pe buton nu se mai
+                       declanșează la al doilea click — capture pe un ancestor tot
+                       primește evenimentul, indiferent, fiindcă rulează înaintea
+                       handler-ului intern al butonului -->
+                  <div
+                    v-if="order.status !== ORDER_STATUS.CLOSED"
+                    class="status-btn-wrap"
+                    @click.capture="onStatusBtnClick(order)"
+                  >
+                    <q-btn
+                      v-if="order.status === ORDER_STATUS.OPENED"
+                      label="Complete"
+                      unelevated
+                      no-caps
+                      class="btn-finalize"
+                      :class="{ 'btn-status--waiting': statusChange[order.id]?.loading }"
+                      :loading="statusChange[order.id]?.loading"
+                      :percentage="statusChange[order.id]?.percentage"
+                    >
+                      <template v-slot:loading>
+                        <q-spinner-gears class="on-left" />
+                        Completing...
+                      </template>
+                    </q-btn>
+                    <q-btn
+                      v-else
+                      label="Close"
+                      unelevated
+                      no-caps
+                      class="btn-close"
+                      :class="{ 'btn-status--waiting': statusChange[order.id]?.loading }"
+                      :loading="statusChange[order.id]?.loading"
+                      :percentage="statusChange[order.id]?.percentage"
+                    >
+                      <template v-slot:loading>
+                        <q-spinner-gears class="on-left" />
+                        Closing...
+                      </template>
+                    </q-btn>
+                  </div>
                   <span v-else class="status-done">
                     <q-icon name="check_circle" size="18px" /> Closed
                   </span>
@@ -209,32 +235,6 @@
       </div>
     </div>
 
-    <!-- Dialog confirmare finalizare -->
-    <q-dialog v-model="confirmDialog" persistent>
-      <q-card style="min-width: 280px">
-        <q-card-section>
-          <div class="text-body1">Confirm completing order <strong>{{ pendingOrderId }}</strong>?</div>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat no-caps label="No" v-close-popup />
-          <q-btn unelevated no-caps label="Yes" color="dark" @click="confirmFinalize" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
-    <!-- Dialog confirmare închidere -->
-    <q-dialog v-model="closeDialog" persistent>
-      <q-card style="min-width: 280px">
-        <q-card-section>
-          <div class="text-body1">Confirm closing order <strong>{{ pendingOrderId }}</strong>?</div>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat no-caps label="No" v-close-popup />
-          <q-btn unelevated no-caps label="Yes" color="dark" @click="confirmClose" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
     <!-- Dialog sumă custom (vendor value_only, fără meniu de produse) -->
     <q-dialog v-model="showCustomValueModal" @show="onCustomValueDialogShow">
       <q-card class="custom-value-dialog">
@@ -283,10 +283,10 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick } from 'vue'
+import { ref, reactive, computed, nextTick, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import VendorPaymentModal from 'components/VendorPaymentModal.vue'
-import { useVendorStore } from 'stores/vendor.js'
+import { useVendorStore, ORDER_STATUS } from 'stores/vendor.js'
 
 const router = useRouter()
 const vendorStore = useVendorStore()
@@ -313,15 +313,15 @@ const orders = computed(() => vendorStore.orders)
 
 // ----- tabs -----
 const tabs = [
-  { name: 'lucru',     label: 'In progress' },
-  { name: 'finalizat', label: 'Completed' },
-  { name: 'inchis',    label: 'Closed' },
+  { name: ORDER_STATUS.OPENED, label: 'In progress' },
+  { name: ORDER_STATUS.READY,  label: 'Completed' },
+  { name: ORDER_STATUS.CLOSED, label: 'Closed' },
 ]
-const activeTab = ref('lucru')
+const activeTab = ref(ORDER_STATUS.OPENED)
 
 // ----- computed -----
 const activeCount = computed(
-  () => orders.value.filter(o => o.status === 'lucru').length
+  () => orders.value.filter(o => o.status === ORDER_STATUS.OPENED).length
 )
 const filteredOrders = (status) =>
   orders.value.filter(o => o.status === status)
@@ -340,55 +340,96 @@ const toggleOrderExpand = (id) => {
 }
 
 const visibleItems = (order) =>
-  order.items.length <= 1 || order.status === 'lucru' || isExpanded(order.id)
+  order.items.length <= 1 || order.status === ORDER_STATUS.OPENED || isExpanded(order.id)
     ? order.items
     : order.items.slice(0, 1)
 
 // ----- helpers -----
 const statusLabel = (status) => ({
-  lucru:     'In progress',
-  finalizat: 'Completed',
-  inchis:    'Closed',
+  [ORDER_STATUS.OPENED]: 'In progress',
+  [ORDER_STATUS.READY]:  'Completed',
+  [ORDER_STATUS.CLOSED]: 'Closed',
 }[status] ?? status)
 
 const stripeClass = (status) => ({
-  lucru:     'stripe-lucru',
-  finalizat: 'stripe-finalizat',
-  inchis:    'stripe-inchis',
+  [ORDER_STATUS.OPENED]: 'stripe-lucru',
+  [ORDER_STATUS.READY]:  'stripe-finalizat',
+  [ORDER_STATUS.CLOSED]: 'stripe-inchis',
 }[status])
 
 const badgeClass = (status) => ({
-  lucru:     'badge-lucru',
-  finalizat: 'badge-finalizat',
-  inchis:    'badge-inchis',
+  [ORDER_STATUS.OPENED]: 'badge-lucru',
+  [ORDER_STATUS.READY]:  'badge-finalizat',
+  [ORDER_STATUS.CLOSED]: 'badge-inchis',
 }[status])
 
-// ----- actions -----
-const confirmDialog = ref(false)
-const closeDialog = ref(false)
-const pendingOrderId = ref(null)
+// ----- schimbare status (Complete/Close) — fără modal de confirmare -----
+// La click, butonul intră în loading 5s (progress simulat, ca la exemplul
+// Quasar "Compute PI"); un al doilea click în acest interval anulează
+// acțiunea. Doar dacă cele 5s trec fără să fie anulat, pornește request-ul
+// real — butonul rămâne în loading (fără să mai poată primi alte click-uri)
+// până vine răspunsul, iar comanda se mută în alt tab (In progress →
+// Completed → Closed) doar la succes.
+const statusChange = reactive({})
+const statusChangeTimers = {}
 
-const finalizeOrder = (id) => {
-  pendingOrderId.value = id
-  confirmDialog.value = true
+const nextStatus = (status) => status === ORDER_STATUS.OPENED ? ORDER_STATUS.READY : ORDER_STATUS.CLOSED
+
+const onStatusBtnClick = (order) => {
+  const pending = statusChange[order.id]
+
+  if (pending?.loading) {
+    // request-ul real deja a pornit — nu se mai poate anula, butonul nu
+    // primește alte acțiuni până vine răspunsul
+    if (pending.requesting) return
+
+    clearInterval(statusChangeTimers[order.id]?.interval)
+    clearTimeout(statusChangeTimers[order.id]?.timeout)
+    delete statusChangeTimers[order.id]
+    delete statusChange[order.id]
+    return
+  }
+
+  statusChange[order.id] = { loading: true, percentage: 0, requesting: false }
+
+  const start = Date.now()
+  const interval = setInterval(() => {
+    statusChange[order.id].percentage = Math.min(100, ((Date.now() - start) / 5000) * 100)
+  }, 100)
+
+  const timeout = setTimeout(() => {
+    clearInterval(interval)
+    statusChange[order.id].percentage = 100
+
+    // QBtn animă umplerea barei de progres cu transition: transform 0.6s —
+    // dacă am ascunde loading-ul chiar acum, tranziția n-ar apuca să ajungă
+    // vizual la 100% (rămânea undeva la ~85-90%). Așteptăm să se vadă plin
+    // înainte să pornească request-ul real.
+    statusChangeTimers[order.id].timeout = setTimeout(() => {
+      delete statusChangeTimers[order.id]
+      // rămâne loading:true — dispare abia după ce vine răspunsul (succes
+      // sau eroare), ca userul să vadă clar cât timp e request-ul în zbor
+      statusChange[order.id].requesting = true
+
+      vendorStore.updateOrderStatus(order.id, nextStatus(order.status))
+        .catch((e) => {
+          console.error('[vendor/orders/status] failed, order rămâne neschimbat:', e?.response?.data || e)
+        })
+        .finally(() => {
+          delete statusChange[order.id]
+        })
+    }, 650)
+  }, 5000)
+
+  statusChangeTimers[order.id] = { interval, timeout }
 }
 
-const confirmFinalize = () => {
-  const order = orders.value.find(o => o.id === pendingOrderId.value)
-  if (order) order.status = 'finalizat'
-  confirmDialog.value = false
-}
-
-const closeOrder = (id) => {
-  pendingOrderId.value = id
-  closeDialog.value = true
-}
-
-const confirmClose = () => {
-  const order = orders.value.find(o => o.id === pendingOrderId.value)
-  if (order) order.status = 'inchis'
-  closeDialog.value = false
-}
+onBeforeUnmount(() => {
+  Object.values(statusChangeTimers).forEach(({ interval, timeout }) => {
+    clearInterval(interval)
+    clearTimeout(timeout)
+  })
+})
 
 const addOrder = () => {
   if (valueOnly.value) {
@@ -683,6 +724,9 @@ const onCustomValueOk = () => {
   padding-top: 10px;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
+.status-btn-wrap {
+  display: contents;
+}
 .total-label {
   font-size: 11px;
   color: $grey-5;
@@ -704,6 +748,12 @@ const onCustomValueOk = () => {
   font-weight: 600;
   padding: 10px 18px;
   min-height: 44px;
+
+  // umplerea (progress fill) din timpul loading-ului — verde, ca vizual să
+  // anticipeze culoarea de status "Completed" (badge-finalizat mai jos)
+  :deep(.q-btn__progress-indicator) {
+    background: #1D9E75;
+  }
 }
 .btn-close {
   background: $grey-2 !important;
@@ -713,6 +763,34 @@ const onCustomValueOk = () => {
   font-weight: 600;
   padding: 10px 18px;
   min-height: 44px;
+
+  // umplerea din timpul loading-ului — gri mai închis decât fundalul
+  // butonului ($grey-2), dar mai deschis decât textul ($grey-8), altfel
+  // textul devine ilizibil peste zona umplută
+  :deep(.q-btn__progress-indicator) {
+    background: $grey-5;
+  }
+}
+// Conținutul slotului "loading" e randat de Quasar într-un span separat,
+// absolut poziționat peste tot butonul — class="absolute-full flex flex-center"
+// (nu în .q-btn__content, vezi QBtn.js). .flex e clasa utilitară Quasar cu
+// flex-wrap:wrap, de-aia iconița sare pe linia ei când nu încape lângă
+// "Completing...". nowrap ține totul pe un rând — dar fiind position:absolute,
+// span-ul ăsta NU poate lărgi singur butonul, iar fără loc suficient flex-ul
+// face shrink pe iconiță până la width:0 (dispare complet) ca să țină
+// white-space:nowrap pe text. De-aia .btn-status--waiting dă puțin spațiu în
+// plus DOAR cât timp e activ loading-ul (nu modifică butonul în starea normală).
+.btn-finalize, .btn-close {
+  :deep(.absolute-full) {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+  :deep(.q-spinner) {
+    flex-shrink: 0;
+  }
+  &.btn-status--waiting {
+    min-width: 150px;
+  }
 }
 .status-done {
   font-size: 12px;
