@@ -121,6 +121,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { Notify } from 'quasar'
 import { useVendorStore, toArray } from 'stores/vendor.js'
 import NotificationsBell from 'components/NotificationsBell.vue'
 
@@ -166,6 +167,10 @@ const saving = ref(false)
 async function saveSettings () {
   if (!hasChanges.value || saving.value) return
 
+  // capturat înainte de await — dirtyProducts se golește după ce
+  // savedSnapshot se resetează la succes
+  const updatedCount = dirtyProducts.value.length
+
   saving.value = true
   try {
     const confirmed = await vendorStore.updateProductSettings(
@@ -187,8 +192,19 @@ async function saveSettings () {
     // POST-ul a reușit (n-a aruncat) — resetăm evidența indiferent de forma
     // exactă a răspunsului, ca butonul Save să dispară oricum
     savedSnapshot.value = snapshotOf(products.value)
+
+    Notify.create({
+      type: 'positive',
+      message: `Settings updated successfully`,
+      position: 'top'
+    })
   } catch (e) {
     console.error('[vendor/settings] error:', e?.response?.data || e)
+    Notify.create({
+      type: 'negative',
+      message: e?.response?.data?.message || 'Could not save product settings. Please try again.',
+      position: 'top'
+    })
   } finally {
     saving.value = false
   }
