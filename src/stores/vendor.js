@@ -13,7 +13,11 @@ export const ORDER_STATUS = { OPENED: 'opened', READY: 'ready', CLOSED: 'closed'
 // (restul sunt tranzacții de POS fără listă de produse, gen plată cu cardul
 // direct la terminal, fără coș din app)
 function mapOrder (raw, prefix) {
-  const products = raw.products || []
+  // raw.products poate lipsi (comenzi non-"online") sau poate veni într-o
+  // formă neașteptată de la /vendor/order/create/ (răspuns încă neconfirmat
+  // complet) — Array.isArray, nu doar `|| []`, ca un `products` truthy dar
+  // ne-array (ex. un obiect) să nu arunce la `.map`
+  const products = Array.isArray(raw.products) ? raw.products : []
 
   return {
     id: `#${prefix}${String(raw.nominal_order_id).padStart(4, '0')}`,
@@ -105,22 +109,14 @@ export const useVendorStore = defineStore('vendor', {
     // din VendorNewOrder.vue cu productId/priceRaw/plu) — aceeași formă
     // de cart în ambele cazuri, deci un singur punct de salvare.
     // cartItems: [{ name, productId?, plu?, priceRaw?, extras: [{name, price, priceRaw?, plu?}], lineTotal }]
+    // Comanda e trimisă către backend ÎNAINTE să apară în this.orders — dacă
+    // POST-ul pică, funcția aruncă mai departe (nu înghite eroarea) și nimic
+    // nu ajunge în listă. Altfel (varianta veche, optimistă) vendorul vedea
+    // comanda ca "intrată" în /vendor chiar dacă order-create-ul chiar picase
+    // pe backend, deși clientul plătise deja — fals pozitiv fără nicio cale
+    // de retry. Caller-ul (Callback.vue) decide ce arată userului la eroare.
     async saveOrder (cartItems, paymentMethod, transactionId, shortOrderCode) {
       const prefix = this.vendor?.prefix || 'ita'
-      const nextNum = this.orders.length
-        ? Math.max(...this.orders.map(o => parseInt(o.id.replace(`#${prefix}`, ''), 10))) + 1
-        : 401
-
-      const order = {
-        id: `#${prefix}${String(nextNum).padStart(4, '0')}`,
-        status: ORDER_STATUS.OPENED,
-        // fără qty — fiecare linie din cart e 1 bucată (vezi VendorNewOrder.vue,
-        // "Add" creează mereu o linie nouă, nu incrementează o cantitate)
-        items: cartItems.map(item => ({ name: item.name })),
-        extra: cartItems.flatMap(item => item.extras.map(e => e.name)).join(', ') || null,
-        total: cartItems.reduce((sum, item) => sum + item.lineTotal, 0),
-      }
-      this.orders.unshift(order)
 
       // preț brut per item/extra — cel primit de la backend prin vendor/get
       // (item.priceRaw/e.priceRaw, vezi mapProduct), nu valoarea în lei
@@ -157,21 +153,31 @@ export const useVendorStore = defineStore('vendor', {
       console.log('[vendor/orders] payload:', payload)
 
       const dataStore = useDataStore()
-      try {
-        const { data } = await dataStore._post(ep.vendorOrderCreate, payload)
-        console.log('[vendor/orders] response:', data)
+      const { data } = await dataStore._post(ep.vendorOrderCreate, payload)
+      console.log('[vendor/orders] response:', data)
 
-        // răspunsul e comanda reală creată în backend (aceeași formă ca
-        // `orders` din vendor/get, vezi mapOrder) — actualizăm imediat comanda
-        // locală optimistă cu statusul/id-ul real la primirea lui 200, nu la
-        // următorul fetchVendor(): altfel în /vendor apare o clipă comanda cu
-        // categorisirea optimistă greșită, până se reface lista la refetch.
-        if (data?._id) {
-          Object.assign(order, mapOrder(data, prefix))
-        }
-      } catch (e) {
-        console.error('[vendor/orders] error:', e?.response?.data || e)
-      }
+      // răspunsul e comanda reală creată în backend (aceeași formă ca
+      // `orders` din vendor/get, vezi mapOrder) — dacă are _id, o folosim ca
+      // atare; altfel (răspuns minimal/neconfirmat încă) construim local
+      // aceeași formă din cartItems, ca vendorul să vadă totuși comanda
+      // odată ce backend-ul a confirmat cu 200. Id-ul afișat se formează
+      // mereu din prefix + nominal_order_id (la fel ca mapOrder) — folosim
+      // nominal_order_id din răspuns dacă există și fără _id; doar dacă
+      // backend-ul nu trimite niciunul din cele două cădem pe un contor
+      // simplu (this.orders.length), fără să mai parsăm/ghicim din id-urile
+      // deja existente (asta producea NaN dacă vreun id nu se potrivea cu
+      // prefixul curent — vezi Math.max(...NaN...) => NaN).
+      const order = data?._id
+        ? mapOrder(data, prefix)
+        : {
+            id: `#${prefix}${String(data?.nominal_order_id ?? this.orders.length + 401).padStart(4, '0')}`,
+            status: ORDER_STATUS.OPENED,
+            items: cartItems.map(item => ({ name: item.name })),
+            extra: cartItems.flatMap(item => item.extras.map(e => e.name)).join(', ') || null,
+            total: cartItems.reduce((sum, item) => sum + item.lineTotal, 0),
+          }
+
+      this.orders.unshift(order)
 
       return order
     },

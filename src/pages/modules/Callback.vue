@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
+import { computed, watch, onBeforeUnmount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Cookies } from 'quasar'
 import { useDataStore } from 'stores/data.js'
@@ -88,7 +88,15 @@ const destinationRoute = computed(() => {
   return 'tickets'
 })
 
-onMounted(() => {
+// watch pe route.query (nu onMounted) — "Try another payment method" pentru
+// Card Festival rămâne pe aceeași instanță de Callback.vue (modalul se
+// deschide inline, fără navigare), iar la succes doar face router.push spre
+// aceeași rută cu query nou (:key din MainLayout.vue e route.path, nu
+// fullPath, deci nu are loc remount). Fără watch pe query, acel retry n-ar
+// mai declanșa deloc saveOrder/buy_tickets/charge_prepaid_card — userul ar
+// vedea "Payment successful" fără ca plata să ajungă vreodată în backend.
+// {immediate:true} acoperă și primul mount, la fel ca onMounted înainte.
+watch(() => route.query, () => {
   pendingOrder.value = Cookies.get('pendingOrder')
 
   if (!pendingOrder.value) {
@@ -97,6 +105,12 @@ onMounted(() => {
   }
 
   orderSource.value = pendingOrder.value.source
+
+  // reset — un retry rulează acest handler din nou pe aceeași instanță;
+  // hasError trebuie golit, altfel eșecul anterior ar bloca isSuccess
+  // permanent (isSuccess = status === 'success' && !hasError)
+  hasError.value = false
+  errorMessage.value = ''
 
   // dacă userul dă refresh pe /callback după ce plata a fost deja trimisă
   // către backend (orderSaved: true, setat de buy_tickets/charge_prepaid_card/
@@ -140,21 +154,31 @@ onMounted(() => {
       route.query.paymentMethod || 'card',
       transactionId.value,
       shortOrderCode.value
-    ).finally(() => {
+    ).then(() => {
+      // orderSaved se setează DOAR la succes real (saveOrder aruncă la eșec) —
+      // altfel o comandă netrimisă în DB ar bloca orice reîncercare ulterioară
       store.pendingOrder = { source: 'vendor', orderSaved: true }
       Cookies.set('pendingOrder', store.pendingOrder, { path: '/', expires: 1 })
+    }).catch((e) => {
+      console.error('[vendor/orders] error:', e?.response?.data || e)
+      hasError.value = true
+      errorMessage.value = 'Payment succeeded, but the order could not be sent. Please contact support.'
     })
   }
-})
+}, { immediate: true })
 
 // odată ce userul pleacă de pe /callback (navigare internă Vue Router —
-// New order/Cancel/redirect-ul automat de mai sus), cookie-ul nu mai are
-// niciun rol — se șterge ca o revenire ulterioară pe /callback fără o
-// plată reală în curs să nu găsească un pendingOrder stale. NU se golește
-// aici la un retry Card (window.open(..., '_self') iese complet din SPA
-// înainte să apuce să ruleze acest hook, deci cookie-ul supraviețuiește
-// round-trip-ul prin Viva, exact cât trebuie).
+// New order/Cancel/redirect-ul automat de mai sus), ștergem cookie-ul DOAR
+// dacă plata + trimiterea către backend au reușit (orderSaved: true, setat
+// de buy_tickets/charge_prepaid_card/saveOrder după succes) — la eșec,
+// păstrăm pendingOrder-ul original (cart/tickets/cardId), ca userul să nu
+// piardă contextul dacă navighează în afara ecranului de eroare. NU se
+// golește aici la un retry Card (window.open(..., '_self') iese complet
+// din SPA înainte să apuce să ruleze acest hook, deci cookie-ul
+// supraviețuiește round-trip-ul prin Viva, exact cât trebuie).
 onBeforeUnmount(() => {
+  if (!store.pendingOrder?.orderSaved) return
+
   store.pendingOrder = null
   Cookies.remove('pendingOrder', { path: '/' })
 })

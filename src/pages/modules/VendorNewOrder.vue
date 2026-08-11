@@ -82,12 +82,16 @@
             v-for="group in product.extraGroups"
             :key="group.title"
             class="extras-group"
+            :class="{ 'extras-group--error': showRequiredError && group.required && selectedCount(group) === 0 }"
           >
             <div class="group-title">
               {{ group.title }}
-              <span v-if="group.required" class="group-required">(required)</span>
+              <span v-if="group.required" class="group-required-star" title="Required">*</span>
               <span v-if="group.options.length > group.max" class="group-max">(max {{ group.max }} selections)</span>
             </div>
+            <p v-if="showRequiredError && group.required && selectedCount(group) === 0" class="group-error-msg">
+              This is required
+            </p>
             <div
               v-for="opt in group.options"
               :key="opt.name"
@@ -110,12 +114,8 @@
               unelevated
               label="Add to order"
               class="add-btn"
-              :disable="missingRequiredGroups.length > 0"
               @click="confirmAdd(product)"
             />
-          </div>
-          <div v-if="missingRequiredGroups.length" class="extras-warning">
-            Select an option for: {{ missingRequiredGroups.join(', ') }}
           </div>
         </div>
       </div>
@@ -196,6 +196,10 @@ const productsInCategory = computed(
 // ----- panou extra-uri (expand inline) -----
 const expandedId = ref(null)
 const selectedExtras = ref([]) // [{ group, name, price }]
+// true = arată highlight + "This is required" pe grupurile obligatorii
+// nesatisfăcute — pornit doar după o încercare de Add/Add to order blocată,
+// nu la simpla deschidere a panoului (vezi quickAdd/confirmAdd)
+const showRequiredError = ref(false)
 
 function toggleExpand (product) {
   if (expandedId.value === product.id) {
@@ -204,6 +208,7 @@ function toggleExpand (product) {
   }
   expandedId.value = product.id
   selectedExtras.value = []
+  showRequiredError.value = false
 }
 
 function isSelected (opt, group) {
@@ -247,7 +252,18 @@ function formatPrice (value, withUnit = false) {
 
 // fiecare click de "Add" creează o linie nouă în coș (nu incrementează o
 // cantitate), deci nu există un câmp qty pe item.
+// Dacă produsul are vreun grup de extra obligatoriu, "Add" (quick-add) nu
+// mai adaugă direct — deschide panoul de extra-uri și arată highlight +
+// "This is required" pe grupul nesatisfăcut, la fel ca la un "Add to order"
+// blocat (altfel quick-add ocolea complet validarea).
 function quickAdd (product) {
+  if (product.extraGroups?.some(g => g.required)) {
+    expandedId.value = product.id
+    selectedExtras.value = []
+    showRequiredError.value = true
+    return
+  }
+
   cart.value.push({
     name: product.name,
     productId: product.id,
@@ -260,7 +276,10 @@ function quickAdd (product) {
 }
 
 function confirmAdd (product) {
-  if (missingRequiredGroups.value.length) return
+  if (missingRequiredGroups.value.length) {
+    showRequiredError.value = true
+    return
+  }
 
   cart.value.push({
     name: product.name,
@@ -272,6 +291,7 @@ function confirmAdd (product) {
   })
   expandedId.value = null
   selectedExtras.value = []
+  showRequiredError.value = false
   bumpCart()
 }
 
@@ -424,6 +444,17 @@ function bumpCart () {
 }
 .extras-group {
   margin-bottom: 14px;
+  padding: 8px;
+  margin-left: -8px;
+  margin-right: -8px;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  transition: border-color 0.15s, background 0.15s;
+
+  &--error {
+    border-color: $negative;
+    background: rgba(210, 50, 50, 0.06);
+  }
 }
 .group-title {
   font-size: 14px;
@@ -436,14 +467,16 @@ function bumpCart () {
   font-weight: 400;
   color: $grey-6;
 }
-.group-required {
+.group-required-star {
+  font-size: 16px;
+  font-weight: 700;
+  color: $negative;
+  margin-left: 2px;
+}
+.group-error-msg {
+  margin: -4px 0 8px;
   font-size: 13px;
   font-weight: 600;
-  color: $primary;
-}
-.extras-warning {
-  margin-top: 4px;
-  font-size: 13px;
   color: $negative;
 }
 .extras-row {
