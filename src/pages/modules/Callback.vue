@@ -151,7 +151,7 @@ watch(() => route.query, () => {
   if (isSuccess.value && pendingOrder.value.source === 'vendor') {
     vendorStore.saveOrder(
       pendingOrder.value.cart || [],
-      route.query.paymentMethod || 'card',
+      pendingOrder.value?.paymentMethod || 'card',
       transactionId.value,
       shortOrderCode.value
     ).then(() => {

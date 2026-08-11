@@ -30,10 +30,10 @@ function mapOrder (raw, prefix) {
 
   return {
     id: `#${prefix}${String(raw.nominal_order_id).padStart(4, '0')}`,
-    _id: raw._id, // id-ul real din backend — necesar pentru change_status (vezi updateOrderStatus)
+    _id: raw._id,
     status: raw.status || ORDER_STATUS.OPENED,
-    items: products.map(p => ({ qty: Number(p.qty), name: p.name })),
-    extra: products.flatMap(p => toArray(p.extras).map(e => e.name)).join(', ') || null,
+    type: raw.type,
+    items: products,
     total: Number(raw.subtotal) / 100,
   }
 }

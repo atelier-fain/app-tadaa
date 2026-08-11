@@ -10,12 +10,11 @@
           :href="`/modules/${id}`"
           @click.prevent="handleButton(id)"
           :key="id">
-          <q-img
+          <img
+            class="q-img"
             :src="$img(`icon_${id}.png`)"
-            no-spinner
-            no-transition
             :alt="`icon_${id}.png`"
-          />
+          >
         </q-btn>
       </template>
       <template v-else-if="checking">
@@ -34,7 +33,7 @@
 import {computed, ref, onMounted} from "vue";
 import {useRouter} from "vue-router";
 import {useDataStore} from "stores/data.js";
-import {useQuasar} from "quasar";
+import {Cookies, useQuasar} from "quasar";
 
 const $q = useQuasar();
 
@@ -61,6 +60,8 @@ const debugInfo = ref('')
 const checking = ref(true)
 
 onMounted(() => {
+  Cookies.remove('pendingOrder', { path: '/' })
+  Cookies.remove('scannedCard', { path: '/' })
   store.check_token()
     .then((user) => {
       debugInfo.value = JSON.stringify({ user }, null, 2)
@@ -83,11 +84,10 @@ function handleButton (id) {
 
 <style lang="scss">
 .dashboard {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  height: calc(100dvh - 60px);
-  overflow-y: auto;
+  height: calc(100dvh - 50px);
+  overflow: auto;
   .main-container {
+    overflow: auto;
     display: flex;
     justify-content: center;
     gap: 20px;

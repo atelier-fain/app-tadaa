@@ -3,12 +3,11 @@
 
     <div class="page-header">
       <span class="page-title">Settings</span>
-      <NotificationsBell />
     </div>
 
-    <!-- Loading: skeleton cu forma cardurilor reale, cât timp vendor/get e în zbor -->
+
     <div v-if="vendorLoading" class="products-grid">
-      <div v-for="n in 4" :key="n" class="product-card">
+      <div v-for="n in 2" :key="n" class="product-card">
         <div class="card-top">
           <div class="status-stripe skeleton-stripe" />
           <div class="card-body">

@@ -3,10 +3,10 @@
     <div class="page-header">
       <span class="page-title">Orders</span>
     </div>
-    <!-- Loading: skeleton cu forma cardurilor reale, cât timp vendor/get e în zbor -->
+
     <div v-if="vendorLoading" class="value-only-panel">
       <div class="orders-grid">
-        <div v-for="n in 3" :key="n" class="order-card">
+        <div v-for="n in 2" :key="n" class="order-card">
           <div class="card-top">
             <div class="status-stripe skeleton-stripe" />
             <div class="card-body">
@@ -57,7 +57,6 @@
       </q-tab>
     </q-tabs>
 
-    <!-- Tab panels cu animatie -->
     <q-tab-panels
       v-model="activeTab"
       animated
@@ -89,30 +88,38 @@
               <div class="card-body">
                 <div class="card-header">
                   <span class="order-id">{{ order.id }}</span>
-                  <span class="order-badge" :class="badgeClass(order.status)">
+                  <span
+                    v-if="order.status !== ORDER_STATUS.CLOSED"
+                    class="order-badge"
+                    :class="badgeClass(order.status)"
+                  >
                     {{ statusLabel(order.status) }}
+                  </span>
+                  <span
+                    v-else-if="order.type === 'online'"
+                    class="order-badge badge-online"
+                  >
+                    Online
                   </span>
                 </div>
 
                 <div class="card-items">
                   <div
-                    v-for="(item, i) in visibleItems(order)"
+                    v-for="(item, i) in order.items"
                     :key="i"
                     class="card-item"
                   >
-                    <span v-if="item.qty > 1" class="item-qty">{{ item.qty }}×</span>
-                    <span class="item-name">{{ item.name }}</span>
-                  </div>
-                  <div v-if="order.extra" class="extra">
-                    + {{ order.extra }}
-                  </div>
-                  <div
-                    v-if="order.items.length > 1 && order.status !== ORDER_STATUS.OPENED"
-                    class="expand-toggle"
-                    @click="toggleOrderExpand(order.id)"
-                  >
-                    <q-icon :name="isExpanded(order.id) ? 'expand_less' : 'expand_more'" size="20px" />
-                    <span>{{ isExpanded(order.id) ? 'See less' : 'See more' }}</span>
+                    <div class="card-item-row">
+                      <span v-if="item.qty > 1" class="item-qty">{{ item.qty }}×</span>
+                      <span class="item-name">{{ item.name }}</span>
+                    </div>
+                    <div
+                      v-for="(extra, j) in item.extras"
+                      :key="j"
+                      class="extra"
+                    >
+                      + {{ extra?.name }}
+                    </div>
                   </div>
                 </div>
 
@@ -191,8 +198,7 @@
     </div>
 
     <!-- value_only: false + online_orders: false — fără tab-uri de status; carduri ca la
-         Completed (produse), dar fără stripe/badge/buton Close și fără "See more" —
-         toate produsele apar direct -->
+         Completed (produse), dar fără stripe/badge/buton Close -->
     <div v-else class="value-only-panel">
       <div v-if="orders.length === 0" class="empty-state">
         <q-icon name="receipt_long" size="40px" color="grey-5" />
@@ -215,12 +221,17 @@
 
               <div class="card-items">
                 <div v-for="(item, i) in order.items" :key="i" class="card-item">
-                  <span v-if="item.qty > 1" class="item-qty">{{ item.qty }}×</span>
-                  <span class="item-name">{{ item.name }}</span>
+                  <div class="card-item-row">
+                    <span v-if="item?.qty > 1" class="item-qty">{{ item?.qty }}×</span>
+                    <span class="item-name">{{ item.name }}</span>
+                  </div>
+                  <div v-for="(extra, j) in item.extras"
+                       :key="j"
+                       class="extra">
+                    + {{ extra?.name }}
+                  </div>
                 </div>
-                <div v-if="order.extra" class="extra">
-                  + {{ order.extra }}
-                </div>
+
               </div>
 
               <div class="card-footer">
@@ -283,7 +294,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, nextTick, onBeforeUnmount } from 'vue'
+import {ref, reactive, computed, nextTick, onBeforeUnmount, onMounted} from 'vue'
 import { useRouter } from 'vue-router'
 import VendorPaymentModal from 'components/VendorPaymentModal.vue'
 import { useVendorStore, ORDER_STATUS } from 'stores/vendor.js'
@@ -325,24 +336,6 @@ const activeCount = computed(
 )
 const filteredOrders = (status) =>
   orders.value.filter(o => o.status === status)
-
-// ----- expand comenzi cu mai multe produse -----
-const expandedOrders = ref(new Set())
-
-const isExpanded = (id) => expandedOrders.value.has(id)
-
-const toggleOrderExpand = (id) => {
-  if (expandedOrders.value.has(id)) {
-    expandedOrders.value.delete(id)
-  } else {
-    expandedOrders.value.add(id)
-  }
-}
-
-const visibleItems = (order) =>
-  order.items.length <= 1 || order.status === ORDER_STATUS.OPENED || isExpanded(order.id)
-    ? order.items
-    : order.items.slice(0, 1)
 
 // ----- helpers -----
 const statusLabel = (status) => ({
@@ -676,6 +669,7 @@ const onCustomValueOk = () => {
 .badge-lucru     { background: #FAEEDA; color: #854F0B; }
 .badge-finalizat { background: #E1F5EE; color: #0F6E56; }
 .badge-inchis    { background: #F1EFE8; color: #5F5E5A; }
+.badge-online    { background: #FF7A00; color: white; font-weight: 700; }
 
 /* Card items */
 .card-items {
@@ -686,10 +680,15 @@ const onCustomValueOk = () => {
 }
 .card-item {
   display: flex;
-  align-items: center;
-  gap: 6px;
+  flex-direction: column;
+  gap: 2px;
   font-size: 14px;
   color: $dark;
+}
+.card-item-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 .item-qty {
   font-size: 12px;
@@ -702,20 +701,6 @@ const onCustomValueOk = () => {
   color: $grey-6;
   margin-left: 26px;
 }
-.expand-toggle {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 14px;
-  font-weight: 600;
-  color: $primary;
-  margin-left: -6px;
-  padding: 0 8px 6px;
-  min-height: 30px;
-  cursor: pointer;
-  width: fit-content;
-}
-
 /* Card footer */
 .card-footer {
   display: flex;

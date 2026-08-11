@@ -164,6 +164,7 @@ export const useDataStore = defineStore('data', {
         // retry from Callback.vue omits it and reuses the pendingOrder from the failed attempt.
         if (payload.source) {
           this.pendingOrder = {
+            paymentMethod: payload?.paymentMethod,
             source: payload.source,
             tickets: payload.tickets || [],
             cardId: payload.cardId || null,

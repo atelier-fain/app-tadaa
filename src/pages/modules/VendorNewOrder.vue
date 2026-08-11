@@ -7,11 +7,11 @@
     <!-- Loading: skeleton cu forma tab-urilor + rândurilor reale, cât timp vendor/get e în zbor -->
     <template v-if="vendorLoading">
       <div class="category-tabs category-tabs--skeleton">
-        <q-skeleton v-for="n in 3" :key="n" type="QChip" width="80px" height="50px" class="category-tab-skeleton" />
+        <q-skeleton v-for="n in 2" :key="n" type="QChip" width="80px" height="50px" class="category-tab-skeleton" />
       </div>
 
       <div class="products-list">
-        <div v-for="n in 4" :key="n" class="product-row">
+        <div v-for="n in 2" :key="n" class="product-row">
           <div class="product-main" style="padding: 16px 14px;">
             <div class="product-info">
               <q-skeleton type="text" width="140px" height="16px" />

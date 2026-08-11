@@ -277,7 +277,7 @@ async function chargeFestivalCard (scannedTdid) {
       return
     }
 
-    dataStore.pendingOrder = { source: 'vendor', cart: props.cart }
+    dataStore.pendingOrder = { source: 'vendor', cart: props.cart, paymentMethod: 'prepaid', }
     Cookies.set('pendingOrder', dataStore.pendingOrder, { path: '/', expires: 1 })
 
     stopNfcScan()
