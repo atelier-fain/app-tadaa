@@ -11,6 +11,10 @@ export const ep = {
   vendorGet: '/v2/app/vendor/get/',
   vendorOrderCreate: '/v2/app/vendor/order/create/',
   vendorOrderStatus: '/v2/app/vendor/order/change_status/',
-  vendorSettingsUpdate: '/v2/app/vendor/settings/'
+  vendorSettingsUpdate: '/v2/app/vendor/settings/',
+  reportTickets: '/v2/app/tickets/report/',
+  reportVendor: '/v2/app/vendor/report/',
+  reportAccess: '/v2/app/access/report/',
+  reportTopUp: '/v2/app/prepaid/report/'
 }
 

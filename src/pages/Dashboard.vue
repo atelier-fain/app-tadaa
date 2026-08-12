@@ -3,11 +3,11 @@
     <div class="main-container">
       <template v-if="listCategories.length">
         <q-btn
-          v-for="{id} in listCategories"
+          v-for="{id, path} in listCategories"
           type="a"
           v-ripple="false"
           flat
-          :href="`/modules/${id}`"
+          :href="path"
           @click.prevent="handleButton(id)"
           :key="id">
           <img
@@ -41,16 +41,18 @@ const router = useRouter()
 const store = useDataStore()
 
 const categories = [
-  {id: 'top_up', permission: 'app_topup'},
-  {id: 'access', permission: 'app_access'},
-  {id: 'tickets', permission: 'app_tickets'},
-  {id: 'vendor', permission: 'app_vendor'},
+  {id: 'top_up', permission: 'app_topup', path: '/modules/top_up'},
+  {id: 'access', permission: 'app_access', path: '/modules/access'},
+  {id: 'tickets', permission: 'app_tickets', path: '/modules/tickets'},
+  {id: 'vendor', permission: 'app_vendor', path: '/modules/vendor'},
+  {id: 'report', permission: '', path: '/report'},
 ]
 
 // store.user is hydrated synchronously from the 'user' cookie (see stores/data.js),
 // so buttons render immediately from the cached value. check_token() below only
 // refreshes that cache in the background — it never gates the initial render.
-const listCategories = computed(() => categories.filter(({ permission }) => store.user?.[permission]))
+// empty permission (report) = accessible to any logged-in user, no store.user check needed
+const listCategories = computed(() => categories.filter(({ permission }) => !permission || store.user?.[permission]))
 const debugInfo = ref('')
 
 // true doar cât timp NU avem încă date de undeva (cache sau alt check_token
