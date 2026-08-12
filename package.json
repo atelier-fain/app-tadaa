@@ -1,8 +1,8 @@
 {
   "name": "dev-tadaa",
   "version": "0.0.1",
-  "description": "App Tadaa",
-  "productName": "App Tadaa",
+  "description": "TADA",
+  "productName": "TADA",
   "author": "Catalin Muresian mcatalin.dev@gmail.com",
   "type": "module",
   "private": true,

@@ -290,8 +290,14 @@ async function startNfcScan () {
   }
 }
 
-function stopNfcScan () {
-  document.removeEventListener('visibilitychange', onVisibilityChange)
+// keepListener: true doar când oprim temporar cititorul NFC la backgrounding
+// (vezi onVisibilityChange) — vrem să rămânem abonați la visibilitychange
+// ca să putem relua scanarea la revenire. La orice altă oprire (card citit,
+// eroare, reset, unmount) scoatem listener-ul, e o oprire definitivă.
+function stopNfcScan (keepListener = false) {
+  if (!keepListener) {
+    document.removeEventListener('visibilitychange', onVisibilityChange)
+  }
 
   if (nfcReader) {
     nfcReader.onreading = null
@@ -303,10 +309,22 @@ function stopNfcScan () {
   nfcAbortController = null
 }
 
+// La blocarea ecranului sesiunea NDEFReader devine nefolosibilă, dar NU
+// schimbăm nfcStatus — rămâne 'scanning' cât timp pagina e ascunsă, ca
+// textul "Hold the card near..." să nu sară pe "Scan the customer's card"
+// (idle) fără ca userul să fi făcut nimic. La revenirea din fundal pornim
+// din nou cititorul; dacă asta eșuează, startNfcScan își gestionează
+// singur eroarea (trece pe starea 'error').
 function onVisibilityChange () {
-  if (document.hidden && nfcStatus.value === 'scanning') {
-    stopNfcScan()
-    nfcStatus.value = 'idle'
+  if (document.hidden) {
+    if (nfcStatus.value === 'scanning') {
+      stopNfcScan(true)
+    }
+    return
+  }
+
+  if (nfcStatus.value === 'scanning') {
+    startNfcScan()
   }
 }
 

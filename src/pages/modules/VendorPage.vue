@@ -133,11 +133,24 @@
                        QBtn.js/onLoadingEvt), deci un @click direct pe buton nu se mai
                        declanșează la al doilea click — capture pe un ancestor tot
                        primește evenimentul, indiferent, fiindcă rulează înaintea
-                       handler-ului intern al butonului -->
+                       handler-ului intern al butonului.
+                       @touchstart.capture e necesar separat pentru Android: QBtn leagă
+                       onLoadingEvt și pe touchstart (nu doar pe click) cât timp loading
+                       e true, iar preventDefault() pe touchstart suprimă complet click-ul
+                       sintetic pe care browserul l-ar genera după tap — pe mobil nu mai
+                       ajunge NICIUN eveniment de click la wrapper cât timp butonul așteaptă,
+                       fiindcă nu mai există deloc. Handler-ul de touchstart e separat de cel
+                       de click (nu același onStatusBtnClick) și acționează DOAR dacă butonul
+                       e deja în starea de waiting — pe primul tap (pornirea countdown-ului)
+                       QBtn nu face preventDefault pe touchstart-ul lui normal, deci click-ul
+                       sintetic tot ajunge; dacă am fi legat onStatusBtnClick direct și pe
+                       touchstart, primul tap ar fi pornit countdown-ul pe touchstart și l-ar
+                       fi anulat imediat pe click-ul care urmează, un fals "dublu tap". -->
                   <div
                     v-if="order.status !== ORDER_STATUS.CLOSED"
                     class="status-btn-wrap"
                     @click.capture="onStatusBtnClick(order)"
+                    @touchstart.capture="onStatusBtnTouchStart(order)"
                   >
                     <q-btn
                       v-if="order.status === ORDER_STATUS.OPENED"
@@ -148,10 +161,11 @@
                       :class="{ 'btn-status--waiting': statusChange[order.id]?.loading }"
                       :loading="statusChange[order.id]?.loading"
                       :percentage="statusChange[order.id]?.percentage"
+                      :ripple="false"
                     >
                       <template v-slot:loading>
                         <q-spinner-gears class="on-left" />
-                        Completing...
+                        {{ statusChange[order.id]?.requesting ? 'Completing...' : 'Cancel' }}
                       </template>
                     </q-btn>
                     <q-btn
@@ -163,10 +177,11 @@
                       :class="{ 'btn-status--waiting': statusChange[order.id]?.loading }"
                       :loading="statusChange[order.id]?.loading"
                       :percentage="statusChange[order.id]?.percentage"
+                      :ripple="false"
                     >
                       <template v-slot:loading>
                         <q-spinner-gears class="on-left" />
-                        Closing...
+                        {{ statusChange[order.id]?.requesting ? 'Closing...' : 'Cancel' }}
                       </template>
                     </q-btn>
                   </div>
@@ -366,9 +381,23 @@ const badgeClass = (status) => ({
 const statusChange = reactive({})
 const statusChangeTimers = {}
 
+// pe Android, preventDefault() pe touchstart-ul intern al QBtn (onLoadingEvt)
+// nu suprimă mereu, în practică, click-ul sintetic care urmează — tap-ul de
+// Cancel ajunge de două ori (o dată prin @touchstart.capture, apoi din nou
+// prin @click.capture), iar a doua invocare vede starea deja ștearsă și
+// repornește countdown-ul imediat (exact bug-ul "se oprește și pornește
+// instant la loc"). Blocăm orice a doua invocare pentru aceeași comandă cât
+// timp se întâmplă în aceeași "atingere" (sub 300ms), indiferent care dintre
+// cele două evenimente a ajuns primul.
+const lastActionAt = {}
+
 const nextStatus = (status) => status === ORDER_STATUS.OPENED ? ORDER_STATUS.READY : ORDER_STATUS.CLOSED
 
 const onStatusBtnClick = (order) => {
+  const now = Date.now()
+  if (lastActionAt[order.id] && now - lastActionAt[order.id] < 300) return
+  lastActionAt[order.id] = now
+
   const pending = statusChange[order.id]
 
   if (pending?.loading) {
@@ -376,7 +405,7 @@ const onStatusBtnClick = (order) => {
     // primește alte acțiuni până vine răspunsul
     if (pending.requesting) return
 
-    clearInterval(statusChangeTimers[order.id]?.interval)
+    cancelAnimationFrame(statusChangeTimers[order.id]?.rafId)
     clearTimeout(statusChangeTimers[order.id]?.timeout)
     delete statusChangeTimers[order.id]
     delete statusChange[order.id]
@@ -385,19 +414,27 @@ const onStatusBtnClick = (order) => {
 
   statusChange[order.id] = { loading: true, percentage: 0, requesting: false }
 
+  // requestAnimationFrame, nu setInterval — QBtn animă bara de progres cu
+  // transition: transform 0.6s (fix intern, vezi use-btn.js/percentageStyle),
+  // deci actualizări la fiecare 100ms rețintesc o tranziție de 0.6s încă în
+  // desfășurare, iar bara "tremură" în loc să curgă lin. Pe frame (raf) +
+  // transition dezactivat pe .q-btn__progress-indicator (vezi stil mai jos)
+  // desenăm noi fiecare pas, fără nicio tranziție CSS care să se lupte cu ele.
   const start = Date.now()
-  const interval = setInterval(() => {
-    statusChange[order.id].percentage = Math.min(100, ((Date.now() - start) / 5000) * 100)
-  }, 100)
+  let rafId
+  const tick = () => {
+    const pct = Math.min(100, ((Date.now() - start) / 5000) * 100)
+    statusChange[order.id].percentage = pct
+    if (pct < 100) {
+      rafId = requestAnimationFrame(tick)
+    }
+  }
+  rafId = requestAnimationFrame(tick)
 
   const timeout = setTimeout(() => {
-    clearInterval(interval)
+    cancelAnimationFrame(rafId)
     statusChange[order.id].percentage = 100
 
-    // QBtn animă umplerea barei de progres cu transition: transform 0.6s —
-    // dacă am ascunde loading-ul chiar acum, tranziția n-ar apuca să ajungă
-    // vizual la 100% (rămânea undeva la ~85-90%). Așteptăm să se vadă plin
-    // înainte să pornească request-ul real.
     statusChangeTimers[order.id].timeout = setTimeout(() => {
       delete statusChangeTimers[order.id]
       // rămâne loading:true — dispare abia după ce vine răspunsul (succes
@@ -411,15 +448,29 @@ const onStatusBtnClick = (order) => {
         .finally(() => {
           delete statusChange[order.id]
         })
-    }, 650)
+    }, 250)
   }, 5000)
 
-  statusChangeTimers[order.id] = { interval, timeout }
+  statusChangeTimers[order.id] = { rafId, timeout }
+}
+
+// legat separat pe @touchstart.capture (nu pe onStatusBtnClick direct) —
+// acționează DOAR când butonul e deja în waiting (loading, nu încă
+// requesting). Pe primul tap (pornirea countdown-ului) QBtn nu blochează
+// touchstart-ul lui normal, deci click-ul sintetic tot ajunge și pornește
+// countdown-ul acolo; dacă am fi anulat/pornit direct de aici, primul tap
+// ar fi pornit pe touchstart și s-ar fi anulat imediat pe click-ul care
+// urmează (fals "dublu tap").
+const onStatusBtnTouchStart = (order) => {
+  const pending = statusChange[order.id]
+  if (pending?.loading && !pending.requesting) {
+    onStatusBtnClick(order)
+  }
 }
 
 onBeforeUnmount(() => {
-  Object.values(statusChangeTimers).forEach(({ interval, timeout }) => {
-    clearInterval(interval)
+  Object.values(statusChangeTimers).forEach(({ rafId, timeout }) => {
+    cancelAnimationFrame(rafId)
     clearTimeout(timeout)
   })
 })
@@ -735,9 +786,15 @@ const onCustomValueOk = () => {
   min-height: 44px;
 
   // umplerea (progress fill) din timpul loading-ului — verde, ca vizual să
-  // anticipeze culoarea de status "Completed" (badge-finalizat mai jos)
+  // anticipeze culoarea de status "Completed" (badge-finalizat mai jos).
+  // transition: none — QBtn pune implicit transition: transform 0.6s (vezi
+  // use-btn.js/percentageStyle), dar percentage se actualizează pe fiecare
+  // frame (requestAnimationFrame, vezi script), deci o tranziție CSS peste
+  // asta doar reținteste constant o animație încă în desfășurare și bara
+  // "tremură" în loc să curgă lin.
   :deep(.q-btn__progress-indicator) {
     background: #1D9E75;
+    transition: none !important;
   }
 }
 .btn-close {
@@ -751,9 +808,11 @@ const onCustomValueOk = () => {
 
   // umplerea din timpul loading-ului — gri mai închis decât fundalul
   // butonului ($grey-2), dar mai deschis decât textul ($grey-8), altfel
-  // textul devine ilizibil peste zona umplută
+  // textul devine ilizibil peste zona umplută. transition: none — vezi
+  // explicația de la .btn-finalize mai sus.
   :deep(.q-btn__progress-indicator) {
     background: $grey-5;
+    transition: none !important;
   }
 }
 // Conținutul slotului "loading" e randat de Quasar într-un span separat,
