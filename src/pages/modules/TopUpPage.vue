@@ -616,6 +616,7 @@ const onConfirmCashOut = async () => {
     font-weight: 700;
     padding: 8px 14px;
     min-height: 44px;
+    margin-right: -14px;
   }
 
   .card-badge-close .q-icon.on-left {
