@@ -1,4 +1,11 @@
-const dev = process.env.DEV === 'true'
+import { Cookies } from 'quasar'
+
+const dev = true
+
+// de reactivat dacă mai apar probleme de tipul RESELLER_ORDER_DECLINED —
+// controlează atât salvarea cookie-ului de debug de aici, cât și afișarea
+// lui în Callback.vue
+export const SHOW_VIVA_DEBUG = false
 
 // ISV_merchantSourceCode / ISV_sourceCode diferă per sursă (tickets/vendor/topup) —
 // vezi payload.source trimis de TicketsPage/VendorPaymentModal/TopUpPage
@@ -49,6 +56,12 @@ export function buildVivaPayUrl (payload = {}) {
     ISV_customerTrns: config.ISV_customerTrns,
     ISV_clientTransactionId: payload.user,
     paymentMethod: payload.paymentMethod || config.paymentMethod
+  }
+
+  // debug — supraviețuiește round-trip-ul prin Viva (cookie, nu sessionStorage),
+  // citit în /callback ca să se vadă ce s-a trimis vs ce s-a primit înapoi
+  if (SHOW_VIVA_DEBUG) {
+    Cookies.set('vivaDebugRequest', params, { path: '/', expires: 1 })
   }
 
   return 'vivapayclient://pay/v1?' + Object.entries(params)

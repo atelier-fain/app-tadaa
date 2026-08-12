@@ -49,6 +49,20 @@
       :cart="retryCart"
       :cart-total="retryCartTotal"
     />
+
+    <!-- debug Viva Pay — de reactivat (SHOW_VIVA_DEBUG = true) dacă mai
+         apar probleme de tipul RESELLER_ORDER_DECLINED -->
+    <div v-if="SHOW_VIVA_DEBUG" class="callback-debug">
+      <div class="callback-debug__title">Debug — Viva Pay</div>
+      <div class="callback-debug__section">
+        <strong>Trimis către Viva:</strong>
+        <pre>{{ JSON.stringify(debugRequest, null, 2) }}</pre>
+      </div>
+      <div class="callback-debug__section">
+        <strong>Primit înapoi (URL curent /callback):</strong>
+        <pre>{{ JSON.stringify(route.query, null, 2) }}</pre>
+      </div>
+    </div>
   </q-page>
 </template>
 
@@ -58,6 +72,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Cookies } from 'quasar'
 import { useDataStore } from 'stores/data.js'
 import { useVendorStore } from 'stores/vendor.js'
+import { SHOW_VIVA_DEBUG } from 'stores/viva-pay.js'
 import VendorPaymentModal from 'components/VendorPaymentModal.vue'
 import _formattedPrice from '../../mixins/formattedPrice.js'
 
@@ -71,6 +86,7 @@ const errorMessage = ref('')
 const orderSource = ref(null)
 const pendingOrder = ref(null)
 const showPayment = ref(false)
+const debugRequest = ref(null)
 const retryCart = computed(() => pendingOrder.value?.cart || [])
 const retryCartTotal = computed(() => retryCart.value.reduce((sum, item) => sum + item.lineTotal, 0))
 
@@ -97,6 +113,7 @@ const destinationRoute = computed(() => {
 // vedea "Payment successful" fără ca plata să ajungă vreodată în backend.
 // {immediate:true} acoperă și primul mount, la fel ca onMounted înainte.
 watch(() => route.query, () => {
+  debugRequest.value = Cookies.get('vivaDebugRequest')
   pendingOrder.value = Cookies.get('pendingOrder')
 
   if (!pendingOrder.value) {
@@ -210,6 +227,7 @@ function onCancel () {
 <style lang="scss">
 .callback-module {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 24px;
@@ -292,6 +310,37 @@ function onCancel () {
     width: 100%;
 
     .callback-btn { margin-top: 0; }
+  }
+}
+
+.callback-debug {
+  width: 100%;
+  margin: 24px auto 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #1a1a1a;
+  color: #d6d6d6;
+  font-size: 11px;
+
+  &__title {
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  &__section {
+    margin-top: 8px;
+
+    strong {
+      color: #9adbc0;
+    }
+  }
+
+  pre {
+    margin: 4px 0 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-family: monospace;
   }
 }
 </style>
