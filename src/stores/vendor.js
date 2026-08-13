@@ -8,6 +8,12 @@ import { useDataStore } from 'stores/data.js'
 // mai apar statusuri noi.
 export const ORDER_STATUS = { OPENED: 'opened', READY: 'ready', CLOSED: 'closed' }
 
+// Timer-ul de auto-clear al highlight-ului (vezi highlightOrders/clearHighlight
+// mai jos) — la nivel de modul, nu de store, ca să nu fie stare reactivă;
+// pornește/repornește indiferent dacă VendorPage.vue e montată sau nu, ca
+// highlight-ul să funcționeze la fel indiferent pe ce pagină/tab e userul.
+let highlightClearTimer = null
+
 // backend-ul (PHP) serializează un array cu un singur element ca obiect
 // JSON, nu ca array cu un element (`{"0": {...}}` în loc de `[{...}]`) —
 // orice câmp care ar trebui să fie listă (products, orders, extras, items
@@ -304,22 +310,34 @@ export const useVendorStore = defineStore('vendor', {
     },
 
     // Apelat din vendorPolling.js — automat la sosirea unor comenzi noi ȘI
-    // la click pe "View" din notificare. Doar evidențiere (fără scroll) —
-    // VendorPage.vue pune animația de highlight pe toate cardurile din listă,
-    // indiferent dacă e vizibil userul acum sau nu.
-    // [...orderIds] (nu doar `orderIds`) — dacă userul apasă "View" cât timp
-    // highlight-ul automat de la sosire e ÎNCĂ activ, array-ul primit e
+    // la click pe "View" din notificare, indiferent de starea curentă
+    // (deja evidențiate, animația deja terminată, etc.) — de fiecare dată
+    // repornește highlight-ul de la zero. VendorPage.vue leagă direct clasa
+    // CSS de highlightOrderIds (computed simplu, fără watcher), deci
+    // evidențierea e complet independentă de pe ce tab/pagină e userul —
+    // apare pe orice card din listă ale cărui id-uri sunt aici, oricând.
+    // [...orderIds] (nu doar `orderIds`) — la un click pe "View" cât timp
+    // highlight-ul de la sosire e ÎNCĂ activ, array-ul primit ar putea fi
     // literalmente ACELAȘI obiect din closure-ul din vendorPolling.js; fără
-    // copiere, reasignarea n-ar schimba referința, iar Vue n-ar detecta nicio
-    // schimbare — watcher-ul din VendorPage.vue nu s-ar re-declanșa și
-    // highlight-ul NU s-ar reporni. Cu o copie nouă de fiecare dată, referința
-    // diferă mereu de valoarea anterioară, deci re-highlight-ul funcționează
-    // indiferent dacă orderele erau deja evidențiate default.
+    // copiere, reasignarea n-ar schimba referința și Vue n-ar detecta nicio
+    // schimbare. Cu o copie nouă de fiecare dată, referința diferă mereu,
+    // deci re-highlight-ul funcționează indiferent de starea anterioară.
+    // Timer-ul de auto-clear (5.1s, puțin peste cei 5s cât ține animația CSS
+    // order-highlight din VendorPage.vue) e gestionat AICI, nu într-un
+    // watcher din VendorPage.vue — pornește/repornește la fiecare apel,
+    // indiferent dacă pagina e montată, ca reapelarea "View" să funcționeze
+    // chiar dacă userul a plecat și s-a întors între timp.
     highlightOrders (orderIds) {
       this.highlightOrderIds = [...orderIds]
+
+      clearTimeout(highlightClearTimer)
+      highlightClearTimer = setTimeout(() => {
+        this.highlightOrderIds = []
+      }, 5100)
     },
 
     clearHighlight () {
+      clearTimeout(highlightClearTimer)
       this.highlightOrderIds = []
     },
 

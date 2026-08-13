@@ -310,13 +310,15 @@ import { useVendorStore, ORDER_STATUS } from 'stores/vendor.js'
 const router = useRouter()
 const vendorStore = useVendorStore()
 
-// clasa CSS de highlight NU e legată direct de vendorStore.highlightOrderIds
-// (semnalul brut, setat de vendorPolling.js automat la sosire sau la click
-// pe "View") — dacă ar fi, animația ar porni chiar în clipa comutării de
-// tab, suprapunându-se cu slide-ul panoului Quasar (~300ms) și arătând
-// "întreruptă". activeHighlightIds se populează abia după ce tab-ul + scroll-ul
-// s-au așezat (vezi watcher-ul de mai jos).
-const activeHighlightIds = ref([])
+// clasa CSS de highlight e legată DIRECT de vendorStore.highlightOrderIds —
+// setat de vendorPolling.js automat la sosirea de comenzi noi ȘI la click pe
+// "View" din notificare (de fiecare dată repornit, vezi highlightOrders() în
+// stores/vendor.js). Complet independent de pe ce tab/pagină e userul: dacă
+// e pe /vendor cu tab-ul potrivit deschis, cardul apare highlighted imediat;
+// dacă nu, apare highlighted în clipa în care ajunge acolo (navigare sau
+// schimbare de tab) — timer-ul de auto-clear (2.6s) e gestionat în store,
+// nu aici, ca să funcționeze la fel indiferent de montarea paginii.
+const activeHighlightIds = computed(() => vendorStore.highlightOrderIds)
 
 // vendor/get e în zbor (declanșat din router/index.js la intrarea pe modul) —
 // nu știm încă value_only/online_orders, deci arătăm un skeleton generic
@@ -351,43 +353,10 @@ const activeCount = computed(
 const filteredOrders = (status) =>
   orders.value.filter(o => o.status === status)
 
-// ----- highlight comenzi noi (automat la sosire ȘI la click pe "View" din
-// notificare, vezi vendorPolling.js) -----
-let highlightClearTimeout = null
-
-function startHighlightClear () {
-  clearTimeout(highlightClearTimeout)
-  highlightClearTimeout = setTimeout(() => {
-    activeHighlightIds.value = []
-    vendorStore.clearHighlight()
-  }, 2600)
-}
-
-// `immediate: true` — dacă pagina se montează cu highlightOrderIds deja
-// populat (ex. navigare venită din altă parte prin "View"), tot se aplică
-// highlight-ul, nu doar la schimbări ulterioare.
-watch(() => vendorStore.highlightOrderIds, (orderIds) => {
-  if (!orderIds || orderIds.length === 0) {
-    clearTimeout(highlightClearTimeout)
-    activeHighlightIds.value = []
-    return
-  }
-
-  // Dacă vine ÎMPREUNĂ cu o cerere de scroll (click pe "View" — vezi
-  // vendorPolling.js -> viewNewOrders, care setează highlightOrderIds ȘI
-  // scrollToId simultan), NU aplicăm încă highlight-ul aici — o face
-  // watcher-ul de mai jos, sincronizat cu momentul în care tab-ul + scroll-ul
-  // s-au așezat (altfel animația s-ar suprapune cu slide-ul panoului, exact
-  // bug-ul reparat anterior). Fără cerere de scroll (highlight automat la
-  // sosirea unei comenzi noi), se aplică imediat, fără să mute userul nicăieri.
-  if (vendorStore.scrollToId) return
-
-  activeHighlightIds.value = orderIds
-  startHighlightClear()
-}, { immediate: true })
-
 // ----- scroll + switch de tab la comanda nouă — DOAR la click explicit pe
-// "View" din notificare (vezi vendorStore.scrollToOrder/vendorPolling.js) -----
+// "View" din notificare (vezi vendorStore.scrollToOrder/vendorPolling.js).
+// Highlight-ul (activeHighlightIds, mai sus) e complet separat/automat —
+// aici se ocupă STRICT de "du-mă acolo", nu de evidențiere. -----
 watch(() => vendorStore.scrollToId, (orderId) => {
   if (!orderId) return
 
@@ -408,12 +377,6 @@ watch(() => vendorStore.scrollToId, (orderId) => {
         const top = rect.top + window.scrollY - (window.innerHeight - rect.height) / 2
         window.scrollTo({ top, behavior: 'smooth' })
       }
-
-      // abia acum aplicăm efectiv highlight-ul — cardul e deja vizibil/
-      // centrat, animația nu mai concurează cu slide-ul de tab
-      activeHighlightIds.value = vendorStore.highlightOrderIds
-      startHighlightClear()
-
       vendorStore.clearScrollRequest()
     }, tabChanged ? 350 : 0)
   })
@@ -562,7 +525,6 @@ onBeforeUnmount(() => {
     cancelAnimationFrame(rafId)
     clearTimeout(timeout)
   })
-  clearTimeout(highlightClearTimeout)
 })
 
 const addOrder = () => {
@@ -748,7 +710,7 @@ const onCustomValueOk = () => {
 
   &--highlight {
     animation:
-      order-highlight 2.5s ease-in-out forwards,
+      order-highlight 5s ease-in-out forwards,
       order-bounce 0.7s ease-out;
   }
 }

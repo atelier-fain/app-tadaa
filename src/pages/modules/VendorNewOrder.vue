@@ -142,11 +142,14 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { Cookies } from 'quasar'
 import { useVendorStore } from 'stores/vendor.js'
+import { useDataStore } from 'stores/data.js'
 import VendorPaymentModal from 'components/VendorPaymentModal.vue'
 
 const router = useRouter()
 const vendorStore = useVendorStore()
+const dataStore = useDataStore()
 const showPayment = ref(false)
 
 // vendor/get e în zbor (declanșat din router/index.js la intrarea pe modul) —
@@ -268,7 +271,30 @@ function confirmAdd (product) {
 }
 
 // ----- coș -----
-const cart = ref([])
+// Dacă venim de la "Try another payment method" (Callback.vue, plată eșuată
+// pentru o comandă de meniu — vezi onTryAnotherPaymentMethod), coșul eșuat e
+// încă în pendingOrder — îl preluăm aici, ca userul să continue de unde a
+// rămas (poate adăuga produse, poate șterge, poate reîncerca plata), în loc
+// să pornească de la un coș gol. Doar comenzile NESALVATE încă (!orderSaved)
+// și "de meniu" (item-uri cu productId) — cele "Custom amount" (VendorPage.vue)
+// nu ajung niciodată aici (Callback.vue le ține pe modalul inline).
+// Cookie-ul se șterge imediat după preluare, ca un refresh ulterior sau o
+// vizită normală pe /new-order să nu re-hidrateze din greșeală un coș vechi,
+// abandonat. Redeschide și modalul de plată automat — userul venea direct
+// de pe "Select payment method" (doar eșuase plata), deci trebuie să-l vadă
+// din nou imediat, nu să mai apese o dată pe "Payment".
+function takeOverFailedCart () {
+  const pending = dataStore.pendingOrder
+  if (pending?.source !== 'vendor' || pending.orderSaved) return []
+  if (!pending.cart?.some(item => item.productId)) return []
+
+  dataStore.pendingOrder = null
+  Cookies.remove('pendingOrder', { path: '/' })
+  showPayment.value = true
+  return pending.cart
+}
+
+const cart = ref(takeOverFailedCart())
 // fiecare linie din cart reprezintă 1 bucată (nu mai există qty per item)
 const cartQty = computed(() => cart.value.length)
 const cartTotal = computed(() => cart.value.reduce((sum, item) => sum + item.lineTotal, 0))

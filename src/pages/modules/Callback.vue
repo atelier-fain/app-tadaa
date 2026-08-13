@@ -208,12 +208,23 @@ function onRetry () {
   store.pay_card({ amount: 1, totalPrice: amount.value, user: store.user?.user })
 }
 
-// Deschide direct modalul de plată (Card Festival/Card) peste ecranul de
-// eșec, fără nicio navigare — evită complet round-trip-ul prin router (care
-// depindea de query param + onMounted pe alta pagină și se putea pierde din
-// cauza guard-ului de permisiuni async care rulează la fiecare reload venit
-// de la Viva).
+// Comenzile "de meniu" (item-uri cu productId, venite din VendorNewOrder.vue)
+// se reiau direct pe /new-order — VendorNewOrder.vue preia cart-ul eșuat din
+// pendingOrder la mount (vezi acolo) — ca userul să poată și adăuga produse,
+// nu doar retrimite/șterge din coșul deja existent. Comenzile "Custom amount"
+// (VendorPage.vue, vendor value_only, fără productId — nu au nicio pagină de
+// produse unde s-ar putea duce) rămân pe modalul inline, ca înainte: se
+// deschide direct peste ecranul de eșec, fără nicio navigare — evită complet
+// round-trip-ul prin router (care depindea de query param + onMounted pe altă
+// pagină și se putea pierde din cauza guard-ului de permisiuni async care
+// rulează la fiecare reload venit de la Viva).
 function onTryAnotherPaymentMethod () {
+  const isMenuOrder = retryCart.value.some(item => item.productId)
+  if (isMenuOrder) {
+    router.replace({ name: 'vendor-new-order' })
+    return
+  }
+
   showPayment.value = true
 }
 
