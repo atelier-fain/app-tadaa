@@ -5,6 +5,7 @@ import routes from './routes'
 import {pageTransition} from "src/mixins/promiseTransitions.js";
 import { useDataStore } from 'stores/data.js'
 import { useVendorStore } from 'stores/vendor.js'
+import { connectVendorStream, disconnectVendorStream, setRouter } from 'src/services/vendorStream.js'
 
 // rutele modulului Vendor — navigarea între ele nu trebuie să re-declanșeze
 // fetchVendor() (vezi guard-ul de mai jos)
@@ -36,6 +37,11 @@ export default defineRouter(function ({ store }) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
+
+  // vendorStream.js are nevoie de instanța de router doar ca să poată naviga
+  // la /modules/vendor la click pe "View" din notificarea de comandă nouă —
+  // setter în loc de import direct, ca să nu apară un ciclu router -> stream -> router.
+  setRouter(Router)
 
   // Viva Payments redirects back with a real page load to /modules/tickets/callback/?...
   // Since the app uses hash routing, that path is never seen by the router (only the
@@ -111,7 +117,25 @@ export default defineRouter(function ({ store }) {
     // în vendorModuleRoutes) nu reia apelul.
     if (vendorModuleRoutes.includes(to.name) && !vendorModuleRoutes.includes(from.name)) {
       useVendorStore(store).fetchVendor()
+        .then((data) => {
+          // Streamul se deschide DOAR dacă vendorul acceptă comenzi online
+          // (online_orders: true în răspunsul vendor/get) — un vendor
+          // value_only/fără online_orders nu are ce evenimente să primească.
+          // Id-ul din URL e mereu data._id (id-ul vendorului din vendor/get),
+          // nu ceva calculat local.
+          if (data?.online_orders) {
+            connectVendorStream(data._id)
+          }
+        })
         .catch((e) => console.error('[vendor/get] error:', e?.response?.data || e))
+    }
+
+    // Conexiunea live rămâne deschisă cât timp userul e ORIUNDE sub
+    // /modules/vendor (vendor/vendor-new-order/vendor-settings), indiferent
+    // pe care din cele trei se navighează — se închide abia când iese
+    // complet din modul (to.name nu mai e în vendorModuleRoutes).
+    if (!vendorModuleRoutes.includes(to.name) && vendorModuleRoutes.includes(from.name)) {
+      disconnectVendorStream()
     }
   })
 

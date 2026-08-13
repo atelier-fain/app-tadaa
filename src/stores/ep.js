@@ -9,6 +9,7 @@ export const ep = {
   cashOutPrepaidCard: '/v2/app/prepaid/cash_out/',
   purchasePrepaidCard: '/v2/app/prepaid/purchase/',
   vendorGet: '/v2/app/vendor/get/',
+  vendorEvent: '/v2/app/vendor/event/',
   vendorOrderCreate: '/v2/app/vendor/order/create/',
   vendorOrderStatus: '/v2/app/vendor/order/change_status/',
   vendorOrdersGetMore: '/v2/app/vendor/orders/get_more/',

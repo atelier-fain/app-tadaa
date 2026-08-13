@@ -89,6 +89,12 @@ export const useVendorStore = defineStore('vendor', {
     products: [],
 
     orders: [],
+
+    // id-ul comenzii (`order.id`, gen "#ita0406") care trebuie evidențiată
+    // în UI chiar acum — setat de vendorStream.js la click pe "View" din
+    // notificarea de comandă nouă, citit de VendorPage.vue ca să știe pe ce
+    // tab să sară și pe ce card să pună animația de highlight.
+    highlightOrderId: null,
   }),
 
   getters: {
@@ -241,6 +247,36 @@ export const useVendorStore = defineStore('vendor', {
       this.orders.push(...newOrders)
 
       return newOrders
+    },
+
+    // Apelat din vendorStream.js la evenimentul SSE 'order.created'. Payload-ul
+    // e o comandă brută, aceeași formă ca elementele din `orders` la
+    // vendor/get (vezi mapOrder/docs #4). Dacă userul curent chiar a creat
+    // comanda, saveOrder() (#3 mai sus) a adăugat-o deja local imediat după
+    // succesul POST-ului — cu mult înainte ca evenimentul să ajungă prin
+    // stream — deci deduplicăm după _id ca să nu apară de două ori.
+    // Întoarce comanda mapată (pentru mesajul notificării) doar dacă a fost
+    // efectiv adăugată; altfel null, ca vendorStream.js să știe că userul
+    // și-a văzut deja comanda și să nu se mai notifice singur.
+    addOrderFromStream (raw) {
+      if (!raw?._id) return null
+      if (this.orders.some(o => o._id === raw._id)) return null
+
+      const prefix = this.vendor?.prefix || 'ita'
+      const order = mapOrder(raw, prefix)
+      this.orders.unshift(order)
+      return order
+    },
+
+    // Apelat din vendorStream.js la click pe "View" din notificarea de
+    // comandă nouă. VendorPage.vue urmărește highlightOrderId ca să sară pe
+    // tab-ul corect și să deruleze/evidențieze cardul comenzii.
+    highlightOrder (orderId) {
+      this.highlightOrderId = orderId
+    },
+
+    clearHighlight () {
+      this.highlightOrderId = null
     },
 
     // Apelat din VendorSettings.vue la "Save", doar cu produsele modificate

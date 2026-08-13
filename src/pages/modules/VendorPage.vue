@@ -305,7 +305,7 @@
 </template>
 
 <script setup>
-import {ref, reactive, computed, nextTick, onBeforeUnmount, onMounted} from 'vue'
+import {ref, reactive, computed, watch, nextTick, onBeforeUnmount, onMounted} from 'vue'
 import { useRouter } from 'vue-router'
 import { Notify } from 'quasar'
 import VendorPaymentModal from 'components/VendorPaymentModal.vue'
@@ -314,7 +314,10 @@ import { useVendorStore, ORDER_STATUS } from 'stores/vendor.js'
 const router = useRouter()
 const vendorStore = useVendorStore()
 
-const highlightedOrderId = ref(null)
+// setat de vendorStream.js (highlightOrder()) la click pe "View" din
+// notificarea de comandă nouă — vezi watcher-ul de mai jos, care face
+// switch de tab + scroll + animația de highlight.
+const highlightedOrderId = computed(() => vendorStore.highlightOrderId)
 
 // vendor/get e în zbor (declanșat din router/index.js la intrarea pe modul) —
 // nu știm încă value_only/online_orders, deci arătăm un skeleton generic
@@ -348,6 +351,33 @@ const activeCount = computed(
 )
 const filteredOrders = (status) =>
   orders.value.filter(o => o.status === status)
+
+// ----- highlight comandă nouă (din notificarea "View", vezi vendorStream.js) -----
+// `immediate: true` — dacă notificarea a fost apăsată de pe altă pagină
+// (vendor-new-order/vendor-settings), highlightOrderId era deja setat
+// ÎNAINTE ca pagina asta să se monteze (router.push a dus aici), deci un
+// watcher non-immediate ar rata schimbarea.
+watch(() => vendorStore.highlightOrderId, (orderId) => {
+  if (!orderId) return
+
+  // tab-ul e determinat de statusul REAL al comenzii (opened/ready/closed),
+  // nu presupus "In progress" — o comandă poate ajunge deja Completed/Closed
+  // până apasă userul pe "View" din notificare.
+  const order = orders.value.find(o => o.id === orderId)
+  if (showTabs.value && order) activeTab.value = order.status
+
+  nextTick(() => {
+    setTimeout(() => {
+      const el = document.getElementById(`order-${orderId.replace('#', '')}`)
+      if (el) {
+        const rect = el.getBoundingClientRect()
+        const top = rect.top + window.scrollY - (window.innerHeight - rect.height) / 2
+        window.scrollTo({ top, behavior: 'smooth' })
+      }
+      setTimeout(() => vendorStore.clearHighlight(), 2600)
+    }, 350)
+  })
+}, { immediate: true })
 
 // ----- See all (tab Closed) -----
 // Un singur apel aduce TOATE comenzile closed rămase — nu există paginare,
