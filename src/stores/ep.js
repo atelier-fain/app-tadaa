@@ -9,10 +9,15 @@ export const ep = {
   cashOutPrepaidCard: '/v2/app/prepaid/cash_out/',
   purchasePrepaidCard: '/v2/app/prepaid/purchase/',
   vendorGet: '/v2/app/vendor/get/',
-  vendorEvent: '/v2/app/vendor/event/',
   vendorOrderCreate: '/v2/app/vendor/order/create/',
   vendorOrderStatus: '/v2/app/vendor/order/change_status/',
   vendorOrdersGetMore: '/v2/app/vendor/orders/get_more/',
+  // Endpoint confirmat: POST /v2/app/vendor/orders/get_new/. Request:
+  // { timestamp } (_created-ul — timestamp unix — al celei mai recente
+  // comenzi type: "online" cunoscute local, sau null la primul poll).
+  // Response: array direct de orders brute (aceeași formă ca `orders` din
+  // vendor/get) — vezi vendorStore.checkNewOnlineOrders().
+  vendorOrdersNew: '/v2/app/vendor/orders/get_new/',
   vendorSettingsUpdate: '/v2/app/vendor/settings/',
   reportTickets: '/v2/app/tickets/report/',
   reportVendor: '/v2/app/vendor/report/',

@@ -31,10 +31,16 @@ function mapOrder (raw, prefix) {
   return {
     id: `#${prefix}${String(raw.nominal_order_id).padStart(4, '0')}`,
     _id: raw._id,
+    // timestamp unix (metadată standard Cockpit CMS, ca la vendor) — folosit
+    // ca reper de "cea mai recentă comandă online" în checkNewOnlineOrders().
+    _created: raw._created,
     status: raw.status || ORDER_STATUS.OPENED,
     type: raw.type,
     items: products,
     total: Number(raw.subtotal) / 100,
+    // notă opțională lăsată de client la comandă — afișată pe card, sub
+    // ultimul item, indiferent de type (vezi VendorPage.vue)
+    comments: raw.comments || null,
   }
 }
 
@@ -90,11 +96,18 @@ export const useVendorStore = defineStore('vendor', {
 
     orders: [],
 
-    // id-ul comenzii (`order.id`, gen "#ita0406") care trebuie evidențiată
-    // în UI chiar acum — setat de vendorStream.js la click pe "View" din
-    // notificarea de comandă nouă, citit de VendorPage.vue ca să știe pe ce
-    // tab să sară și pe ce card să pună animația de highlight.
-    highlightOrderId: null,
+    // id-urile comenzilor (`order.id`, gen "#ita0406") care trebuie
+    // evidențiate în UI chiar acum — setate de vendorPolling.js atât automat
+    // (la sosirea unor comenzi noi), cât și la click pe "View" din
+    // notificare. NU implică scroll — doar animația de highlight pe carduri
+    // (vezi VendorPage.vue). Scroll-ul e un semnal separat, mai jos.
+    highlightOrderIds: [],
+
+    // id-ul comenzii spre care trebuie făcut scroll (+ switch de tab dacă e
+    // nevoie) — setat DOAR la click explicit pe "View" din notificare
+    // (vendorPolling.js), NICIODATĂ la highlight-ul automat de sosire, ca să
+    // nu sară userul de pe tab-ul/pagina pe care se uită fără să ceară el asta.
+    scrollToId: null,
   }),
 
   getters: {
@@ -249,34 +262,76 @@ export const useVendorStore = defineStore('vendor', {
       return newOrders
     },
 
-    // Apelat din vendorStream.js la evenimentul SSE 'order.created'. Payload-ul
-    // e o comandă brută, aceeași formă ca elementele din `orders` la
-    // vendor/get (vezi mapOrder/docs #4). Dacă userul curent chiar a creat
-    // comanda, saveOrder() (#3 mai sus) a adăugat-o deja local imediat după
-    // succesul POST-ului — cu mult înainte ca evenimentul să ajungă prin
-    // stream — deci deduplicăm după _id ca să nu apară de două ori.
-    // Întoarce comanda mapată (pentru mesajul notificării) doar dacă a fost
-    // efectiv adăugată; altfel null, ca vendorStream.js să știe că userul
-    // și-a văzut deja comanda și să nu se mai notifice singur.
-    addOrderFromStream (raw) {
-      if (!raw?._id) return null
-      if (this.orders.some(o => o._id === raw._id)) return null
+    // Apelat din vendorPolling.js la fiecare tick — trimite _created-ul
+    // (timestamp unix) celei mai recente comenzi ONLINE (comandă plasată
+    // prin coșul din app, type === 'online'; comenzile POS create local prin
+    // saveOrder au alt `type` — 'card'/'prepaid' — și nu intră în calcul
+    // aici) pe care o are deja în listă, ca EP-ul de polling să întoarcă doar
+    // ce e mai nou de-atât. Dacă nu există încă niciuna, trimite null (primul
+    // poll din sesiune) — EP-ul decide ce înseamnă asta.
+    //
+    // Endpoint confirmat (vezi ep.js -> vendorOrdersNew): POST
+    // /v2/app/vendor/orders/get_new/, request { timestamp }, response array
+    // direct de orders brute (aceeași formă ca `orders` din vendor/get).
+    async checkNewOnlineOrders () {
+      const lastOnline = this.orders.reduce((latest, o) => {
+        if (o.type !== 'online' || !o._created) return latest
+        return (!latest || o._created > latest._created) ? o : latest
+      }, null)
 
-      const prefix = this.vendor?.prefix || 'ita'
-      const order = mapOrder(raw, prefix)
-      this.orders.unshift(order)
-      return order
+      const dataStore = useDataStore()
+      const { data } = await dataStore._post(ep.vendorOrdersNew, { timestamp: lastOnline?._created ?? null })
+
+      return this.addNewOrders(toArray(data.orders ?? data))
     },
 
-    // Apelat din vendorStream.js la click pe "View" din notificarea de
-    // comandă nouă. VendorPage.vue urmărește highlightOrderId ca să sară pe
-    // tab-ul corect și să deruleze/evidențieze cardul comenzii.
-    highlightOrder (orderId) {
-      this.highlightOrderId = orderId
+    // Deduplichează după `_id` (id-ul real din backend, confirmat prezent în
+    // răspunsul de la /vendor/orders/get_new/) — nu după nominal_order_id.
+    // Adaugă doar comenzile chiar noi la începutul listei; întoarce doar
+    // pe-alea, ca vendorPolling.js să știe pentru care să notifice/evidențieze
+    // — dacă vine listă goală (nimic nou), nu se întâmplă nimic vizibil.
+    addNewOrders (rawOrders) {
+      const prefix = this.vendor?.prefix || 'ita'
+      const existingIds = new Set(this.orders.map(o => o._id).filter(Boolean))
+
+      const added = toArray(rawOrders)
+        .filter(raw => raw?._id && !existingIds.has(raw._id))
+        .map(raw => mapOrder(raw, prefix))
+
+      this.orders.unshift(...added)
+
+      return added
+    },
+
+    // Apelat din vendorPolling.js — automat la sosirea unor comenzi noi ȘI
+    // la click pe "View" din notificare. Doar evidențiere (fără scroll) —
+    // VendorPage.vue pune animația de highlight pe toate cardurile din listă,
+    // indiferent dacă e vizibil userul acum sau nu.
+    // [...orderIds] (nu doar `orderIds`) — dacă userul apasă "View" cât timp
+    // highlight-ul automat de la sosire e ÎNCĂ activ, array-ul primit e
+    // literalmente ACELAȘI obiect din closure-ul din vendorPolling.js; fără
+    // copiere, reasignarea n-ar schimba referința, iar Vue n-ar detecta nicio
+    // schimbare — watcher-ul din VendorPage.vue nu s-ar re-declanșa și
+    // highlight-ul NU s-ar reporni. Cu o copie nouă de fiecare dată, referința
+    // diferă mereu de valoarea anterioară, deci re-highlight-ul funcționează
+    // indiferent dacă orderele erau deja evidențiate default.
+    highlightOrders (orderIds) {
+      this.highlightOrderIds = [...orderIds]
     },
 
     clearHighlight () {
-      this.highlightOrderId = null
+      this.highlightOrderIds = []
+    },
+
+    // Apelat DOAR din vendorPolling.js la click explicit pe "View". VendorPage.vue
+    // urmărește asta separat de highlightOrderIds, ca să sară pe tab-ul
+    // corect și să deruleze la comandă doar când userul chiar a cerut asta.
+    scrollToOrder (orderId) {
+      this.scrollToId = orderId
+    },
+
+    clearScrollRequest () {
+      this.scrollToId = null
     },
 
     // Apelat din VendorSettings.vue la "Save", doar cu produsele modificate

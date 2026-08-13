@@ -5,7 +5,8 @@ import routes from './routes'
 import {pageTransition} from "src/mixins/promiseTransitions.js";
 import { useDataStore } from 'stores/data.js'
 import { useVendorStore } from 'stores/vendor.js'
-import { connectVendorStream, disconnectVendorStream, setRouter } from 'src/services/vendorStream.js'
+import { setRouter } from 'src/services/vendorPolling.js'
+import { connectVendorLiveUpdates, disconnectVendorLiveUpdates } from 'src/services/vendorLiveUpdates.js'
 
 // rutele modulului Vendor — navigarea între ele nu trebuie să re-declanșeze
 // fetchVendor() (vezi guard-ul de mai jos)
@@ -38,9 +39,10 @@ export default defineRouter(function ({ store }) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
-  // vendorStream.js are nevoie de instanța de router doar ca să poată naviga
-  // la /modules/vendor la click pe "View" din notificarea de comandă nouă —
-  // setter în loc de import direct, ca să nu apară un ciclu router -> stream -> router.
+  // vendorPolling.js are nevoie de instanța de router doar ca să poată
+  // naviga la /modules/vendor la click pe "View" din notificarea de comenzi
+  // noi — setter în loc de import direct, ca să nu apară un ciclu
+  // router -> polling -> router.
   setRouter(Router)
 
   // Viva Payments redirects back with a real page load to /modules/tickets/callback/?...
@@ -118,24 +120,19 @@ export default defineRouter(function ({ store }) {
     if (vendorModuleRoutes.includes(to.name) && !vendorModuleRoutes.includes(from.name)) {
       useVendorStore(store).fetchVendor()
         .then((data) => {
-          // Streamul se deschide DOAR dacă vendorul acceptă comenzi online
-          // (online_orders: true în răspunsul vendor/get) — un vendor
-          // value_only/fără online_orders nu are ce evenimente să primească.
-          // Id-ul din URL e mereu data._id (id-ul vendorului din vendor/get),
-          // nu ceva calculat local.
-          if (data?.online_orders) {
-            connectVendorStream(data._id)
-          }
+          // Live updates (polling, vezi vendorLiveUpdates.js) — gate-ul pe
+          // online_orders e verificat în connectVendorLiveUpdates însuși.
+          connectVendorLiveUpdates(data?.online_orders)
         })
         .catch((e) => console.error('[vendor/get] error:', e?.response?.data || e))
     }
 
-    // Conexiunea live rămâne deschisă cât timp userul e ORIUNDE sub
-    // /modules/vendor (vendor/vendor-new-order/vendor-settings), indiferent
-    // pe care din cele trei se navighează — se închide abia când iese
-    // complet din modul (to.name nu mai e în vendorModuleRoutes).
+    // Live updates rămân pornite cât timp userul e ORIUNDE sub /modules/vendor
+    // (vendor/vendor-new-order/vendor-settings), indiferent pe care din cele
+    // trei se navighează — se opresc abia când iese complet din modul
+    // (to.name nu mai e în vendorModuleRoutes).
     if (!vendorModuleRoutes.includes(to.name) && vendorModuleRoutes.includes(from.name)) {
-      disconnectVendorStream()
+      disconnectVendorLiveUpdates()
     }
   })
 

@@ -1,11 +1,31 @@
 <template>
-  <!-- Modal metodă de plată -->
   <q-dialog v-model="showPaymentModal" class="payment-method-dialog">
     <q-card class="payment-method-card">
       <div class="pm-header">
         <span class="pm-title">How would you like to pay?</span>
         <q-btn flat round dense icon="close" class="pm-close" @click="showPaymentModal = false" />
       </div>
+
+      <div v-if="cart.length" class="pm-order-details">
+        <div v-for="(item, i) in cart" :key="i" class="pm-order-row">
+          <div class="pm-order-main">
+            <span class="pm-order-name">{{ item.name }}</span>
+            <div class="pm-order-right">
+              <span class="pm-order-price" v-html="formatPrice(item.lineTotal)" />
+              <q-icon name="delete_outline" class="pm-order-delete" @click="removeFromCart(i)" />
+            </div>
+          </div>
+          <div v-if="item.extras?.length" class="pm-order-extras">
+            + {{ item.extras.map(e => e.name).join(', ') }}
+          </div>
+        </div>
+
+        <div class="pm-order-footer">
+          <span class="pm-order-total-label">Total</span>
+          <span class="pm-order-total" v-html="formatPrice(cartTotal)" />
+        </div>
+      </div>
+
       <div class="pm-options">
         <div class="pm-option pm-option--festival" @click="onFestivalCardClick">
           <div class="pm-option-icon">
@@ -28,7 +48,6 @@
     </q-card>
   </q-dialog>
 
-  <!-- Ecran scanare Card Festival -->
   <q-dialog v-model="showFestivalScan" maximized persistent class="festival-scan-dialog">
     <q-card class="festival-scan-card">
       <div class="festival-scan-header">
@@ -88,10 +107,21 @@ const router = useRouter()
 const dataStore = useDataStore()
 const isDev = !!process.env.DEV
 
+const cart = computed(() => props.cart)
 const cartTotal = computed(() => props.cartTotal)
 
 function formatPrice (value, withUnit = false) {
   return `${Math.floor(value)}<sup>00</sup>${withUnit ? ' lei' : ''}`
+}
+
+// șterge o linie direct din modalul de plată — props.cart e același array
+// (prin referință) cu cel din componenta părinte (VendorNewOrder.vue,
+// VendorPage.vue pentru "Custom amount", sau Callback.vue -> pendingOrder.cart
+// la retry), deci splice() se reflectă acolo fără alt cablaj. Dacă rămâne
+// gol, închidem tot modalul (nu are sens să rămână deschis pe un coș gol).
+function removeFromCart (index) {
+  props.cart.splice(index, 1)
+  if (!props.cart.length) showPaymentModal.value = false
 }
 
 // ----- metodă de plată -----
@@ -309,7 +339,7 @@ onBeforeUnmount(() => {
   }
 }
 .payment-method-card {
-  width: 320px;
+  width: 340px;
   border-radius: 20px !important;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14) !important;
@@ -328,6 +358,83 @@ onBeforeUnmount(() => {
 .pm-close {
   color: $grey-6;
 }
+
+/* Detaliile comenzii (item-uri + delete), fostul popup "Your order" */
+.pm-order-details {
+  padding: 6px 18px 0;
+  max-height: 260px;
+  overflow-y: auto;
+}
+.pm-order-row {
+  padding: 10px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+.pm-order-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.pm-order-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: $dark;
+}
+.pm-order-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.pm-order-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: $dark;
+
+  :deep(sup) {
+    font-size: 10px;
+  }
+}
+.pm-order-delete {
+  font-size: 22px;
+  color: $grey-6;
+  cursor: pointer;
+  padding: 6px;
+  margin: -6px;
+
+  &:active {
+    color: $negative;
+  }
+}
+.pm-order-extras {
+  font-size: 12px;
+  color: $grey-6;
+  margin-top: 4px;
+}
+.pm-order-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  padding-bottom: 4px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 15px;
+  font-weight: 600;
+  color: $dark;
+}
+.pm-order-total-label {
+  font-size: 20px;
+}
+.pm-order-total {
+  font-size: 20px;
+  font-weight: 700;
+  color: $primary;
+
+  :deep(sup) {
+    font-size: 10px;
+  }
+}
+
 .pm-options {
   display: flex;
   gap: 10px;

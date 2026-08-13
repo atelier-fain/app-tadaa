@@ -81,7 +81,7 @@
             :key="order.id"
             :id="`order-${order.id.replace('#', '')}`"
             class="order-card"
-            :class="{ 'order-card--highlight': highlightedOrderId === order.id }"
+            :class="{ 'order-card--highlight': activeHighlightIds.includes(order.id) }"
           >
             <div class="card-top">
               <div class="status-stripe" :class="stripeClass(order.status)" />
@@ -122,6 +122,8 @@
                     </div>
                   </div>
                 </div>
+
+                <div v-if="order.comments" class="order-comment">* {{ order.comments }}</div>
 
                 <div class="card-footer">
                   <div>
@@ -176,8 +178,6 @@
           </div>
         </div>
 
-        <!-- See all — doar în Closed; un singur apel aduce restul comenzilor,
-             apoi dispare definitiv (nu există altă pagină de cerut după el) -->
         <div v-if="tab.name === ORDER_STATUS.CLOSED && showSeeAllClosed" class="see-all-wrap">
           <q-btn
             no-caps
@@ -193,7 +193,6 @@
     </q-tab-panels>
     </template>
 
-    <!-- value_only: true — comenzi cu sumă custom, carduri minimale (doar id + total) -->
     <div v-else-if="valueOnly" class="value-only-panel">
       <div v-if="orders.length === 0" class="empty-state">
         <q-icon name="receipt_long" size="40px" color="grey-5" />
@@ -208,8 +207,6 @@
       </div>
     </div>
 
-    <!-- value_only: false + online_orders: false — fără tab-uri de status; carduri ca la
-         Completed (produse), dar fără stripe/badge/buton Close -->
     <div v-else class="value-only-panel">
       <div v-if="orders.length === 0" class="empty-state">
         <q-icon name="receipt_long" size="40px" color="grey-5" />
@@ -222,7 +219,7 @@
           :key="order.id"
           :id="`order-${order.id.replace('#', '')}`"
           class="order-card"
-          :class="{ 'order-card--highlight': highlightedOrderId === order.id }"
+          :class="{ 'order-card--highlight': activeHighlightIds.includes(order.id) }"
         >
           <div class="card-top">
             <div class="card-body">
@@ -245,6 +242,8 @@
 
               </div>
 
+              <div v-if="order.comments" class="order-comment">* {{ order.comments }}</div>
+
               <div class="card-footer">
                 <div>
                   <span class="total-label">Total</span>
@@ -257,7 +256,6 @@
       </div>
     </div>
 
-    <!-- Dialog sumă custom (vendor value_only, fără meniu de produse) -->
     <q-dialog v-model="showCustomValueModal" @show="onCustomValueDialogShow">
       <q-card class="custom-value-dialog">
         <div class="cv-dialog-body">
@@ -291,12 +289,10 @@
 
     <VendorPaymentModal v-model="showPayment" :cart="customCart" :cart-total="customCartTotal" />
 
-    <!-- FAB adaugă comandă -->
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn fab icon="add" color="dark" @click="addOrder" />
     </q-page-sticky>
 
-    <!-- FAB settings (doar dacă vendor-ul acceptă comenzi online) -->
     <q-page-sticky v-if="vendorStore.vendor?.online_orders" position="bottom-left" :offset="[18, 18]">
       <q-btn fab icon="settings" color="grey-7" @click="router.push({ name: 'vendor-settings' })" />
     </q-page-sticky>
@@ -314,10 +310,13 @@ import { useVendorStore, ORDER_STATUS } from 'stores/vendor.js'
 const router = useRouter()
 const vendorStore = useVendorStore()
 
-// setat de vendorStream.js (highlightOrder()) la click pe "View" din
-// notificarea de comandă nouă — vezi watcher-ul de mai jos, care face
-// switch de tab + scroll + animația de highlight.
-const highlightedOrderId = computed(() => vendorStore.highlightOrderId)
+// clasa CSS de highlight NU e legată direct de vendorStore.highlightOrderIds
+// (semnalul brut, setat de vendorPolling.js automat la sosire sau la click
+// pe "View") — dacă ar fi, animația ar porni chiar în clipa comutării de
+// tab, suprapunându-se cu slide-ul panoului Quasar (~300ms) și arătând
+// "întreruptă". activeHighlightIds se populează abia după ce tab-ul + scroll-ul
+// s-au așezat (vezi watcher-ul de mai jos).
+const activeHighlightIds = ref([])
 
 // vendor/get e în zbor (declanșat din router/index.js la intrarea pe modul) —
 // nu știm încă value_only/online_orders, deci arătăm un skeleton generic
@@ -352,21 +351,56 @@ const activeCount = computed(
 const filteredOrders = (status) =>
   orders.value.filter(o => o.status === status)
 
-// ----- highlight comandă nouă (din notificarea "View", vezi vendorStream.js) -----
-// `immediate: true` — dacă notificarea a fost apăsată de pe altă pagină
-// (vendor-new-order/vendor-settings), highlightOrderId era deja setat
-// ÎNAINTE ca pagina asta să se monteze (router.push a dus aici), deci un
-// watcher non-immediate ar rata schimbarea.
-watch(() => vendorStore.highlightOrderId, (orderId) => {
+// ----- highlight comenzi noi (automat la sosire ȘI la click pe "View" din
+// notificare, vezi vendorPolling.js) -----
+let highlightClearTimeout = null
+
+function startHighlightClear () {
+  clearTimeout(highlightClearTimeout)
+  highlightClearTimeout = setTimeout(() => {
+    activeHighlightIds.value = []
+    vendorStore.clearHighlight()
+  }, 2600)
+}
+
+// `immediate: true` — dacă pagina se montează cu highlightOrderIds deja
+// populat (ex. navigare venită din altă parte prin "View"), tot se aplică
+// highlight-ul, nu doar la schimbări ulterioare.
+watch(() => vendorStore.highlightOrderIds, (orderIds) => {
+  if (!orderIds || orderIds.length === 0) {
+    clearTimeout(highlightClearTimeout)
+    activeHighlightIds.value = []
+    return
+  }
+
+  // Dacă vine ÎMPREUNĂ cu o cerere de scroll (click pe "View" — vezi
+  // vendorPolling.js -> viewNewOrders, care setează highlightOrderIds ȘI
+  // scrollToId simultan), NU aplicăm încă highlight-ul aici — o face
+  // watcher-ul de mai jos, sincronizat cu momentul în care tab-ul + scroll-ul
+  // s-au așezat (altfel animația s-ar suprapune cu slide-ul panoului, exact
+  // bug-ul reparat anterior). Fără cerere de scroll (highlight automat la
+  // sosirea unei comenzi noi), se aplică imediat, fără să mute userul nicăieri.
+  if (vendorStore.scrollToId) return
+
+  activeHighlightIds.value = orderIds
+  startHighlightClear()
+}, { immediate: true })
+
+// ----- scroll + switch de tab la comanda nouă — DOAR la click explicit pe
+// "View" din notificare (vezi vendorStore.scrollToOrder/vendorPolling.js) -----
+watch(() => vendorStore.scrollToId, (orderId) => {
   if (!orderId) return
 
   // tab-ul e determinat de statusul REAL al comenzii (opened/ready/closed),
   // nu presupus "In progress" — o comandă poate ajunge deja Completed/Closed
   // până apasă userul pe "View" din notificare.
   const order = orders.value.find(o => o.id === orderId)
+  const tabChanged = showTabs.value && !!order && activeTab.value !== order.status
   if (showTabs.value && order) activeTab.value = order.status
 
   nextTick(() => {
+    // panoul Quasar alunecă ~300ms DOAR dacă am schimbat efectiv tab-ul —
+    // dacă eram deja pe tab-ul corect, nu mai așteptăm degeaba.
     setTimeout(() => {
       const el = document.getElementById(`order-${orderId.replace('#', '')}`)
       if (el) {
@@ -374,8 +408,14 @@ watch(() => vendorStore.highlightOrderId, (orderId) => {
         const top = rect.top + window.scrollY - (window.innerHeight - rect.height) / 2
         window.scrollTo({ top, behavior: 'smooth' })
       }
-      setTimeout(() => vendorStore.clearHighlight(), 2600)
-    }, 350)
+
+      // abia acum aplicăm efectiv highlight-ul — cardul e deja vizibil/
+      // centrat, animația nu mai concurează cu slide-ul de tab
+      activeHighlightIds.value = vendorStore.highlightOrderIds
+      startHighlightClear()
+
+      vendorStore.clearScrollRequest()
+    }, tabChanged ? 350 : 0)
   })
 }, { immediate: true })
 
@@ -522,6 +562,7 @@ onBeforeUnmount(() => {
     cancelAnimationFrame(rafId)
     clearTimeout(timeout)
   })
+  clearTimeout(highlightClearTimeout)
 })
 
 const addOrder = () => {
@@ -800,6 +841,13 @@ const onCustomValueOk = () => {
   font-size: 12px;
   color: $grey-6;
   margin-left: 26px;
+}
+.order-comment {
+  font-size: 12px;
+  font-style: italic;
+  color: $grey-6;
+  font-weight: 500;
+  margin-top: 6px;
 }
 /* Card footer */
 .card-footer {

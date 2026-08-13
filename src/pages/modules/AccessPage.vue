@@ -1,8 +1,6 @@
 <template>
   <div class="access-page">
     <div class="access-inner">
-<!--      <pre v-if="debugData" style="background:#000;color:#0f0;padding:12px;border-radius:8px;text-align:left;font-size:12px;word-break:break-all;white-space:pre-wrap;margin-bottom:12px">{{ debugData }}</pre>-->
-
       <Transition name="result-scale" mode="out-in">
         <div v-if="!ticketHtml" class="idle-state" key="idle">
           <q-icon

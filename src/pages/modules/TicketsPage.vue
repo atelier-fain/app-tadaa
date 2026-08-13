@@ -1,9 +1,5 @@
 <template>
   <q-page class="tickets-module">
-    <!-- Skeleton cât timp /v2/tickets/domain/get/ e în zbor — refolosește
-         chiar elementele/clasele reale din Tickets.vue (.title/.title-ticket/
-         .right/.price/.handle-qty), doar cu q-skeleton în loc de conținut,
-         ca spacing-ul și dimensiunile să fie identice cu cardul încărcat -->
     <div v-if="storeContent.loading" class="main-container">
       <div class="tickets">
         <q-card>

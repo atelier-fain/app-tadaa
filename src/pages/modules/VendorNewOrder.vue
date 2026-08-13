@@ -4,7 +4,6 @@
       <span class="page-title">New order</span>
     </div>
 
-    <!-- Loading: skeleton cu forma tab-urilor + rândurilor reale, cât timp vendor/get e în zbor -->
     <template v-if="vendorLoading">
       <div class="category-tabs category-tabs--skeleton">
         <q-skeleton v-for="n in 2" :key="n" type="QChip" width="80px" height="50px" class="category-tab-skeleton" />
@@ -122,13 +121,11 @@
     </div>
     </template>
 
-    <!-- Coș sticky -->
     <q-page-sticky v-if="cart.length" position="bottom-right" :offset="[18, 18]">
       <div class="cart-sticky-group" :class="{ 'cart-pulse': cartBump }">
-        <q-btn flat icon="info" class="cart-info-btn" @click="cartDialogOpen = true" />
         <q-btn no-caps unelevated class="cart-btn" @click="showPayment = true">
           <span class="cart-count">{{ cartQty }}</span>
-          <span class="cart-label">Place order</span>
+          <span class="cart-label">Payment</span>
           <span class="cart-total">{{ cartTotal }} lei</span>
         </q-btn>
       </div>
@@ -137,34 +134,6 @@
     <q-page-sticky position="bottom-left" :offset="[18, 18]">
       <q-btn fab icon="arrow_back" color="grey-7" @click="router.push({ name: 'vendor' })" />
     </q-page-sticky>
-
-    <!-- Popup comandă completă -->
-    <q-dialog v-model="cartDialogOpen">
-      <q-card class="cart-summary-card">
-        <div class="cart-summary-header">
-          <span class="cart-summary-title">Your order</span>
-          <q-icon name="close" class="cart-summary-close" @click="cartDialogOpen = false" />
-        </div>
-
-        <div v-for="(item, i) in cart" :key="i" class="cart-summary-row">
-          <div class="cart-summary-main">
-            <span class="cart-summary-name">{{ item.name }}</span>
-            <div class="cart-summary-right">
-              <span class="cart-summary-price" v-html="formatPrice(item.lineTotal)" />
-              <q-icon name="delete_outline" class="cart-summary-delete" @click="removeFromCart(i)" />
-            </div>
-          </div>
-          <div v-if="item.extras.length" class="cart-summary-extras">
-            + {{ item.extras.map(e => e.name).join(', ') }}
-          </div>
-        </div>
-
-        <div class="cart-summary-footer">
-          <span>Total</span>
-          <span class="cart-summary-total" v-html="formatPrice(cartTotal)" />
-        </div>
-      </q-card>
-    </q-dialog>
 
     <VendorPaymentModal v-model="showPayment" :cart="cart" :cart-total="cartTotal" />
   </q-page>
@@ -303,14 +272,6 @@ const cart = ref([])
 // fiecare linie din cart reprezintă 1 bucată (nu mai există qty per item)
 const cartQty = computed(() => cart.value.length)
 const cartTotal = computed(() => cart.value.reduce((sum, item) => sum + item.lineTotal, 0))
-const cartDialogOpen = ref(false)
-
-// șterge o linie din coș direct din popup-ul "Your order" — dacă rămâne
-// gol, închidem popup-ul (butonul sticky care l-a deschis dispare oricum)
-function removeFromCart (index) {
-  cart.value.splice(index, 1)
-  if (!cart.value.length) cartDialogOpen.value = false
-}
 
 // declanșează un puls dublu pe box-shadow-ul butonului "Place order" la fiecare adăugare
 const cartBump = ref(false)
@@ -587,14 +548,6 @@ function bumpCart () {
   70%  { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05), 0 0 0 14px rgba(25, 118, 210, 0); }
   100% { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05), 0 0 0 0 rgba(25, 118, 210, 0); }
 }
-.cart-info-btn {
-  background: white !important;
-  color: $primary !important;
-  border-radius: 0 !important;
-  padding: 0 18px !important;
-  min-height: 52px;
-  border-right: 1.5px solid $primary;
-}
 .cart-btn {
   background: white !important;
   color: $primary !important;
@@ -625,103 +578,6 @@ function bumpCart () {
 .cart-total {
   font-size: 15px;
   font-weight: 700;
-}
-
-/* Popup comandă completă */
-.cart-summary-card {
-  width: 100%;
-  max-width: 380px;
-  background: white;
-  color: $dark;
-  padding: 20px;
-  border-radius: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-}
-.cart-summary-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-.cart-summary-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: $dark;
-}
-.cart-summary-close {
-  cursor: pointer;
-  font-size: 26px;
-  color: $grey-7;
-  padding: 6px;
-  margin: -6px;
-}
-.cart-summary-row {
-  padding: 12px 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-
-  &:last-of-type {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  }
-}
-.cart-summary-main {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-.cart-summary-name {
-  font-size: 16px;
-  font-weight: 500;
-  color: $dark;
-}
-.cart-summary-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-shrink: 0;
-}
-.cart-summary-price {
-  font-size: 16px;
-  font-weight: 700;
-  color: $dark;
-
-  :deep(sup) {
-    font-size: 11px;
-  }
-}
-.cart-summary-delete {
-  font-size: 24px;
-  color: $grey-6;
-  cursor: pointer;
-  padding: 6px;
-  margin: -6px;
-
-  &:active {
-    color: $negative;
-  }
-}
-.cart-summary-extras {
-  font-size: 13px;
-  color: $grey-6;
-  margin-top: 4px;
-}
-.cart-summary-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 14px;
-  font-size: 16px;
-  font-weight: 600;
-  color: $dark;
-}
-.cart-summary-total {
-  font-size: 24px;
-  font-weight: 700;
-  color: $primary;
-
-  :deep(sup) {
-    font-size: 11px;
-  }
 }
 
 </style>

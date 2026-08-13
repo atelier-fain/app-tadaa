@@ -50,7 +50,6 @@
 
       <h1 class="topup-title">Select prepaid amount</h1>
 
-      <!-- Grid sume -->
       <div class="amounts-grid">
         <button
           v-for="amount in amounts"
@@ -71,7 +70,6 @@
         </button>
       </div>
 
-      <!-- Sumar suma selectata -->
       <transition name="fade">
         <div v-if="finalAmount" class="amount-summary">
           <span class="summary-label">Total to top up</span>
@@ -80,7 +78,6 @@
       </transition>
     </div>
 
-    <!-- Sticky bottom actions -->
     <div v-if="cardData" class="bottom-actions">
       <button
         class="btn-proceed"
@@ -98,7 +95,6 @@
       </button>
     </div>
 
-    <!-- Dialog custom amount -->
     <q-dialog v-model="showCustomDialog" @show="onDialogShow">
       <q-card class="custom-dialog">
         <div class="dialog-body">
@@ -130,7 +126,6 @@
       </q-card>
     </q-dialog>
 
-    <!-- Payment method dialog -->
     <q-dialog v-model="showPaymentModal" class="payment-method-dialog">
       <q-card class="payment-method-card">
         <div class="pm-header">
@@ -159,7 +154,6 @@
       </q-card>
     </q-dialog>
 
-    <!-- Cash confirm dialog -->
     <q-dialog v-model="showCashConfirm" persistent class="cash-confirm-dialog">
       <q-card class="cash-confirm-card">
         <div class="cc-icon-wrap">
@@ -182,7 +176,6 @@
       </q-card>
     </q-dialog>
 
-    <!-- Cash out confirm dialog -->
     <q-dialog v-model="showCashOutConfirm" persistent class="cashout-confirm-dialog">
       <q-card class="cashout-confirm-card">
         <div class="co-icon-wrap">

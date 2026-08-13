@@ -50,8 +50,6 @@
       :cart-total="retryCartTotal"
     />
 
-    <!-- debug Viva Pay — de reactivat (SHOW_VIVA_DEBUG = true) dacă mai
-         apar probleme de tipul RESELLER_ORDER_DECLINED -->
     <div v-if="SHOW_VIVA_DEBUG" class="callback-debug">
       <div class="callback-debug__title">Debug — Viva Pay</div>
       <div class="callback-debug__section">

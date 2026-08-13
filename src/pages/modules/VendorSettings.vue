@@ -102,7 +102,6 @@
       <q-btn fab icon="arrow_back" color="grey-7" @click="router.push({ name: 'vendor' })" />
     </q-page-sticky>
 
-    <!-- Save — apare doar cât timp există modificări nesalvate (on/off sau prep time) -->
     <q-page-sticky v-if="hasChanges" position="bottom-right" :offset="[18, 18]">
       <q-btn
         no-caps
