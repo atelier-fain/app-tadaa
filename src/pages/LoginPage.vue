@@ -2,11 +2,10 @@
   <div class="login-page">
     <div class="login-box">
       <div class="text-center q-mb-md">
-        <q-img
-          no-spinner
+        <img
           :src="$img('logo.png')"
           alt="Logo"
-          class="login-logo" />
+          class="q-img login-logo">
       </div>
 
       <q-form
