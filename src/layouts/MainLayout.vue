@@ -9,6 +9,7 @@
           icon="home"
           flat
           round
+          class="home-btn"
           @click="router.push({ name: 'dashboard' })"
         />
       </q-toolbar>
@@ -54,4 +55,7 @@ const componentKey = computed(() => {
 </script>
 
 <style lang="scss">
+.home-btn .q-icon {
+  font-size: 35px;
+}
 </style>

@@ -56,7 +56,15 @@ export default defineConfig(() => {
       pwa: false
     },
     pwa: {
-      workboxMode: 'InjectManifest'
+      workboxMode: 'InjectManifest',
+      // Quasar's default injectPwaMetaTags points several tags (apple-touch-icon
+      // variants, ms-icon, safari-pinned-tab.svg) at icons/* files that don't
+      // exist in this project — index.html already declares our own real
+      // apple-touch-icon. Keep only the tags that don't reference a missing file.
+      injectPwaMetaTags: ({ pwaManifest }) => (
+        `<meta name="theme-color" content="${pwaManifest.theme_color}">`
+        + '<meta name="mobile-web-app-capable" content="yes">'
+      )
     },
     cordova: {
     },

@@ -128,24 +128,6 @@
                     <span class="total-label">Total</span>
                     <span class="order-total">{{ order.total }} lei</span>
                   </div>
-                  <!-- @click.capture pe wrapper (nu pe q-btn): cât timp loading e true,
-                       QBtn face stopAndPrevent pe propriul click intern (vezi
-                       QBtn.js/onLoadingEvt), deci un @click direct pe buton nu se mai
-                       declanșează la al doilea click — capture pe un ancestor tot
-                       primește evenimentul, indiferent, fiindcă rulează înaintea
-                       handler-ului intern al butonului.
-                       @touchstart.capture e necesar separat pentru Android: QBtn leagă
-                       onLoadingEvt și pe touchstart (nu doar pe click) cât timp loading
-                       e true, iar preventDefault() pe touchstart suprimă complet click-ul
-                       sintetic pe care browserul l-ar genera după tap — pe mobil nu mai
-                       ajunge NICIUN eveniment de click la wrapper cât timp butonul așteaptă,
-                       fiindcă nu mai există deloc. Handler-ul de touchstart e separat de cel
-                       de click (nu același onStatusBtnClick) și acționează DOAR dacă butonul
-                       e deja în starea de waiting — pe primul tap (pornirea countdown-ului)
-                       QBtn nu face preventDefault pe touchstart-ul lui normal, deci click-ul
-                       sintetic tot ajunge; dacă am fi legat onStatusBtnClick direct și pe
-                       touchstart, primul tap ar fi pornit countdown-ul pe touchstart și l-ar
-                       fi anulat imediat pe click-ul care urmează, un fals "dublu tap". -->
                   <div
                     v-if="order.status !== ORDER_STATUS.CLOSED"
                     class="status-btn-wrap"
@@ -192,6 +174,20 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- See all — doar în Closed; un singur apel aduce restul comenzilor,
+             apoi dispare definitiv (nu există altă pagină de cerut după el) -->
+        <div v-if="tab.name === ORDER_STATUS.CLOSED && showSeeAllClosed" class="see-all-wrap">
+          <q-btn
+            no-caps
+            outline
+            label="See all"
+            class="btn-see-all"
+            :loading="loadingSeeAllClosed"
+            :disable="loadingSeeAllClosed"
+            @click="seeAllClosed"
+          />
         </div>
       </q-tab-panel>
     </q-tab-panels>
@@ -311,6 +307,7 @@
 <script setup>
 import {ref, reactive, computed, nextTick, onBeforeUnmount, onMounted} from 'vue'
 import { useRouter } from 'vue-router'
+import { Notify } from 'quasar'
 import VendorPaymentModal from 'components/VendorPaymentModal.vue'
 import { useVendorStore, ORDER_STATUS } from 'stores/vendor.js'
 
@@ -351,6 +348,28 @@ const activeCount = computed(
 )
 const filteredOrders = (status) =>
   orders.value.filter(o => o.status === status)
+
+// ----- See all (tab Closed) -----
+// Un singur apel aduce TOATE comenzile closed rămase — nu există paginare,
+// deci butonul dispare necondiționat după primul apel reușit (indiferent
+// câte comenzi a adus), nu doar când răspunsul e gol.
+const loadingSeeAllClosed = ref(false)
+const showSeeAllClosed = ref(true)
+
+const seeAllClosed = async () => {
+  if (loadingSeeAllClosed.value || !showSeeAllClosed.value) return
+
+  loadingSeeAllClosed.value = true
+  try {
+    await vendorStore.fetchMoreClosedOrders()
+    showSeeAllClosed.value = false
+  } catch (e) {
+    console.error('[vendor/orders/get_more] error:', e)
+    Notify.create({ type: 'negative', message: 'Could not load the rest of the orders', position: 'top' })
+  } finally {
+    loadingSeeAllClosed.value = false
+  }
+}
 
 // ----- helpers -----
 const statusLabel = (status) => ({
@@ -770,7 +789,7 @@ const onCustomValueOk = () => {
   margin-bottom: 1px;
 }
 .order-total {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: $dark;
 }
@@ -842,6 +861,22 @@ const onCustomValueOk = () => {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+.see-all-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0 8px;
+}
+
+.btn-see-all {
+  color: $grey-8 !important;
+  border-color: $grey-4 !important;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 24px;
+  min-height: 40px;
 }
 
 /* Dialog sumă custom (vendor value_only) */

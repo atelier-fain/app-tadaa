@@ -2,7 +2,7 @@
   <q-page class="settings-page">
 
     <div class="page-header">
-      <span class="page-title">Settings</span>
+      <span class="page-title">Online Ordering Settings</span>
     </div>
 
 

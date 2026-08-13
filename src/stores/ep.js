@@ -11,6 +11,7 @@ export const ep = {
   vendorGet: '/v2/app/vendor/get/',
   vendorOrderCreate: '/v2/app/vendor/order/create/',
   vendorOrderStatus: '/v2/app/vendor/order/change_status/',
+  vendorOrdersGetMore: '/v2/app/vendor/orders/get_more/',
   vendorSettingsUpdate: '/v2/app/vendor/settings/',
   reportTickets: '/v2/app/tickets/report/',
   reportVendor: '/v2/app/vendor/report/',

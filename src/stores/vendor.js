@@ -219,6 +219,30 @@ export const useVendorStore = defineStore('vendor', {
       return order
     },
 
+    // Apelat din VendorPage.vue la click pe "See all" (doar tab-ul Closed).
+    // Endpoint confirmat: POST /v2/app/vendor/orders/get_more/ — body-ul nu
+    // trimite niciun offset/cursor explicit, doar token-ul de auth injectat
+    // automat de _post (la fel ca la restul apelurilor). Un singur apel
+    // întoarce TOATE comenzile closed rămase (nu există paginare) — de-aia
+    // caller-ul (VendorPage.vue) ascunde butonul necondiționat după primul
+    // apel reușit, nu doar când vine un array gol. Comenzile primite au
+    // aceeași formă ca `orders` din vendor/get (vezi mapOrder) și se adaugă
+    // la finalul listei existente, fără duplicate (după _id).
+    async fetchMoreClosedOrders () {
+      const dataStore = useDataStore()
+      const { data } = await dataStore._post(ep.vendorOrdersGetMore)
+
+      const prefix = this.vendor?.prefix || 'ita'
+      const existingIds = new Set(this.orders.map(o => o._id).filter(Boolean))
+      const newOrders = toArray(data.orders ?? data)
+        .map(o => mapOrder(o, prefix))
+        .filter(o => !existingIds.has(o._id))
+
+      this.orders.push(...newOrders)
+
+      return newOrders
+    },
+
     // Apelat din VendorSettings.vue la "Save", doar cu produsele modificate
     // (on/off + timp de preparare). Endpoint confirmat: POST /v2/app/vendor/settings/,
     // body { products: [{ _id, duration, active }] }, răspuns:
