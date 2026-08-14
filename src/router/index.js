@@ -104,10 +104,21 @@ export default defineRouter(function ({ store }) {
 
           verifiedPermission = to.meta.permission
         })
-        .catch(() => {
+        .catch((e) => {
           if (Router.currentRoute.value.name !== to.name) return
 
-          Router.replace({ name: 'login' })
+          // 'Token not valid.' e tratat într-un singur loc, check_token()
+          // din data.js (logout() + redirect la login) — aici doar sărim
+          // peste el, ca să nu dublăm logout-ul; orice altă eroare (ex: net
+          // picat) nu trebuie să te scoată din aplicație, doar anunțăm că
+          // serverul n-a răspuns
+          if (e?.response?.data?.error === 'Token not valid.') return
+
+          Notify.create({
+            type: 'negative',
+            message: 'Server not responding, please try again',
+            position: 'top'
+          })
         })
     }
 

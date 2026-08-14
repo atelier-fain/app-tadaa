@@ -1,5 +1,6 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import axios from 'axios'
+import { Notify } from 'quasar'
 import { ep } from 'stores/ep.js'
 
 // get_data talks to a different app/domain on the same backend than the
@@ -71,7 +72,11 @@ export const useContentStore = defineStore('content', {
         this.content = data
         await this.set_offer_categories()
       } catch (e) {
-        router.push('/404')
+        Notify.create({
+          type: 'negative',
+          message: 'Server not responding, please try again',
+          position: 'top'
+        })
       } finally {
         this.loading = false
       }

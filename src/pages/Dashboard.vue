@@ -68,11 +68,6 @@ onMounted(() => {
     .then((user) => {
       debugInfo.value = JSON.stringify({ user }, null, 2)
     })
-    .catch((e) => {
-      debugInfo.value = JSON.stringify({ error: e?.message || String(e) }, null, 2)
-      $q.notify({ type: 'negative', message: 'Session expired, please log in again', position: 'top' })
-      router.push({name: 'login'})
-    })
     .finally(() => {
       checking.value = false
     })

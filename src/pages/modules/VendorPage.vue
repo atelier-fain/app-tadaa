@@ -290,7 +290,7 @@
     <VendorPaymentModal v-model="showPayment" :cart="customCart" :cart-total="customCartTotal" />
 
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-btn fab icon="add" color="dark" @click="addOrder" />
+      <q-btn no-caps unelevated icon="add" label="New order" class="new-order-btn" @click="addOrder" />
     </q-page-sticky>
 
     <q-page-sticky v-if="vendorStore.vendor?.online_orders" position="bottom-left" :offset="[18, 18]">
@@ -872,6 +872,23 @@ const onCustomValueOk = () => {
   :deep(.q-btn__progress-indicator) {
     background: $grey-5;
     transition: none !important;
+  }
+}
+.new-order-btn {
+  background: $positive !important;
+  color: white !important;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 22px;
+  min-height: 52px;
+
+  :deep(.q-btn__content) {
+    gap: 10px;
+  }
+
+  :deep(.q-icon.on-left) {
+    margin-right: 0;
   }
 }
 // Conținutul slotului "loading" e randat de Quasar într-un span separat,

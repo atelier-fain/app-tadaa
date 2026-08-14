@@ -26,10 +26,17 @@ export const useDataStore = defineStore('data', {
     },
 
     async check_token () {
-      const { data } = await this._post(ep.checkToken)
-      this.user = data.user
-      Cookies.set('user', data.user, { path: '/', expires: 5 })
-      return data.user
+      try {
+        const { data } = await this._post(ep.checkToken)
+        this.user = data.user
+        Cookies.set('user', data.user, { path: '/', expires: 5 })
+        return data.user
+      } catch (e) {
+        if (e?.response?.data?.error === 'Token not valid.') {
+          this.logout()
+        }
+        throw e
+      }
     },
 
     async check_prepaid_card (_id) {
