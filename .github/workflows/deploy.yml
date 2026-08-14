@@ -18,12 +18,15 @@ jobs:
           node-version: 20
           cache: npm
 
-      # npm ci nu instalează corect dependențele opționale specifice
-      # platformei (ex: @rollup/rollup-linux-x64-gnu) când package-lock.json
-      # a fost generat pe alt OS (aici, macOS) — bug cunoscut:
-      # https://github.com/npm/cli/issues/4828. npm install rezolvă corect.
+      # package-lock.json e generat pe macOS și nu conține deloc intrarea
+      # pentru @rollup/rollup-linux-x64-gnu (doar cea de darwin-arm64), deci
+      # nici npm ci, nici npm install (cu lockfile-ul existent) nu o rezolvă
+      # — bug cunoscut: https://github.com/npm/cli/issues/4828. Ștergem
+      # lockfile-ul în CI ca npm să recalculeze graful de la zero, pe Linux.
       - name: Install dependencies
-        run: npm install
+        run: |
+          rm -f package-lock.json
+          npm install
 
       - name: Build
         run: npm run build
