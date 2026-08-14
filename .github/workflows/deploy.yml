@@ -44,6 +44,6 @@ jobs:
           protocol: ftp
           local-dir: ./dist/spa/
           server-dir: /dev.tadaa.ro/
-          # curatare automata dezactivata temporar - se sterge manual pana la
-          # confirmarea ca build-ul ajunge exact in /dev.tadaa.ro
-          dangerous-clean-slate: false
+          # sterge tot continutul folderului de pe server inainte de upload,
+          # ca sa nu ramana fisiere vechi peste noul build
+          dangerous-clean-slate: true
