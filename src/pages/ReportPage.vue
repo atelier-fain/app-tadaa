@@ -1,6 +1,6 @@
 <template>
   <q-page class="report-page">
-    <!-- auto deploy -->
+    <!-- auto deploy 2 -->
     <div class="report-container">
       <h1 class="report-title">Report</h1>
 
