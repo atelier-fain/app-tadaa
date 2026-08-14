@@ -18,8 +18,12 @@ jobs:
           node-version: 20
           cache: npm
 
+      # npm ci nu instalează corect dependențele opționale specifice
+      # platformei (ex: @rollup/rollup-linux-x64-gnu) când package-lock.json
+      # a fost generat pe alt OS (aici, macOS) — bug cunoscut:
+      # https://github.com/npm/cli/issues/4828. npm install rezolvă corect.
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build
         run: npm run build
