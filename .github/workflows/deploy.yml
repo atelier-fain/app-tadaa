@@ -1,0 +1,42 @@
+name: Deploy to dev.tadaa.ro
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # distDir e fixat pe dist/spa în quasar.config.js, indiferent de mod (vezi comentariul de acolo)
+      - name: Inject .htaccess into build
+        run: cp .htaccess dist/spa/.htaccess
+
+      - name: Deploy over FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp
+          local-dir: ./dist/spa/
+          server-dir: /dev.tadaa.ro/
+          # sterge tot continutul folderului de pe server inainte de upload,
+          # ca sa nu ramana fisiere vechi peste noul build
+          dangerous-clean-slate: true
