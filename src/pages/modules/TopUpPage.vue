@@ -55,7 +55,6 @@
         <p class="amount-input-label">Amount</p>
         <div class="amount-input-row">
           <input
-            ref="amountInputRef"
             v-model="amount"
             type="number"
             inputmode="numeric"
@@ -161,7 +160,7 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import { Cookies, Notify } from 'quasar'
 import { useDataStore } from 'stores/data.js'
 import _formattedPrice from '../../mixins/formattedPrice.js'
@@ -362,13 +361,6 @@ onBeforeUnmount(() => {
 })
 
 const amount = ref('')
-const amountInputRef = ref(null)
-
-watch(cardData, async (val) => {
-  if (!val) return
-  await nextTick()
-  amountInputRef.value?.focus()
-})
 
 const showPaymentModal = ref(false)
 const showCashConfirm = ref(false)
@@ -614,17 +606,17 @@ const onConfirmCashOut = async () => {
   width: 100%;
   background: #fafafa;
   border: 1.5px solid #e0e0e0;
-  border-radius: 14px;
-  padding: 20px 22px;
+  border-radius: 12px;
+  padding: 12px 16px;
 }
 
 .amount-input-label {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: #999;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  margin: 0 0 12px;
+  margin: 0 0 4px;
 }
 
 .amount-input-row {
@@ -632,7 +624,7 @@ const onConfirmCashOut = async () => {
   align-items: baseline;
   gap: 8px;
   border-bottom: 2px solid #2e7d1f;
-  padding-bottom: 6px;
+  padding-bottom: 4px;
 }
 
 .amount-number-input {
@@ -640,7 +632,7 @@ const onConfirmCashOut = async () => {
   border: none;
   outline: none;
   background: transparent;
-  font-size: 40px;
+  font-size: 26px;
   font-weight: 700;
   color: #2e7d1f;
   width: 100%;
