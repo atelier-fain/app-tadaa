@@ -1,0 +1,24 @@
+{ 
+
+  "name": "Chew vendor app", 
+  "short_name": "Chew", 
+  "start_url": "https://vendor.chew.atelierfain.ro", 
+  "display": "fullscreen", 
+  "id": "/",
+  "theme_color": "#F89B2D",
+  "background_color": "#1d1d1d",
+  "orientation": "landscape",
+  "icons": [
+    { 
+      "src": "img/chew-icon.png?v=2",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    { 
+      "src": "https://vendor.chew.atelierfain.ro/img/chew-icon.svg?v=2", 
+      "sizes": "512x512", 
+      "type": "image/svg+xml" 
+    }
+  ] 
+
+}

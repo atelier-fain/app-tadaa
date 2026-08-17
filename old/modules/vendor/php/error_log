@@ -1,0 +1,69 @@
+[21-Mar-2022 13:55:06 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to a member function getEntries() on null in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php:24
+Stack trace:
+#0 {main}
+  thrown in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php on line 24
+[21-Mar-2022 13:55:48 Europe/Bucharest] PHP Warning:  include(vendor/cockpit.class/cockpit.class.php): failed to open stream: No such file or directory in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php on line 5
+[21-Mar-2022 13:55:48 Europe/Bucharest] PHP Warning:  include(): Failed opening 'vendor/cockpit.class/cockpit.class.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php on line 5
+[21-Mar-2022 13:55:48 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to a member function getEntries() on null in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php:26
+Stack trace:
+#0 {main}
+  thrown in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php on line 26
+[21-Mar-2022 13:56:02 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to a member function getEntries() on null in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php:26
+Stack trace:
+#0 {main}
+  thrown in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php on line 26
+[21-Mar-2022 13:58:51 Europe/Bucharest] PHP Parse error:  syntax error, unexpected ')' in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php on line 23
+[21-Mar-2022 13:59:08 Europe/Bucharest] PHP Parse error:  syntax error, unexpected ';', expecting ')' in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php on line 27
+[21-Mar-2022 13:59:21 Europe/Bucharest] PHP Warning:  json_encode() expects at least 1 parameter, 0 given in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php on line 27
+[21-Mar-2022 14:05:42 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php on line 37
+[21-Mar-2022 14:06:42 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php on line 37
+[21-Mar-2022 14:07:15 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php on line 37
+[21-Mar-2022 14:44:29 Europe/Bucharest] PHP Parse error:  syntax error, unexpected ')' in /home/r33126atel/timesheet.atelierfain.ro/php/switch.php on line 58
+[27-May-2024 15:42:08 Europe/Bucharest] PHP Warning:  Undefined variable $dTesTqPdYv23wlklW1aI in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 3
+[27-May-2024 15:44:08 Europe/Bucharest] PHP Parse error:  syntax error, unexpected variable "$curl" in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 4
+[27-May-2024 15:46:19 Europe/Bucharest] PHP Fatal error:  Uncaught ArgumentCountError: json_encode() expects at least 1 argument, 0 given in /home/chew/vendor.chew.atelierfain.ro/php/login.php:30
+Stack trace:
+#0 /home/chew/vendor.chew.atelierfain.ro/php/login.php(30): json_encode()
+#1 {main}
+  thrown in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 30
+[27-May-2024 20:40:29 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 31
+[27-May-2024 20:40:29 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 31
+[27-May-2024 20:40:46 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 31
+[27-May-2024 20:40:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 31
+[27-May-2024 20:41:02 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 31
+[27-May-2024 20:41:02 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 31
+[27-May-2024 20:41:19 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 31
+[27-May-2024 20:41:19 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 31
+[30-May-2024 11:14:17 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 36
+[30-May-2024 11:14:17 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 36
+[30-May-2024 11:14:51 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 36
+[30-May-2024 11:14:51 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 36
+[30-May-2024 11:14:53 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 36
+[30-May-2024 11:14:53 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 36
+[30-May-2024 11:15:04 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 36
+[30-May-2024 11:15:04 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 36
+[30-May-2024 16:32:19 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:32:22 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:32:25 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:33:23 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:33:26 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:33:29 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:33:32 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:33:35 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:33:38 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:33:41 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:33:44 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:33:47 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:33:50 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:33:53 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:33:56 Europe/Bucharest] PHP Warning:  Array to string conversion in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 7
+[30-May-2024 16:38:30 Europe/Bucharest] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 16
+[30-May-2024 16:39:01 Europe/Bucharest] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 16
+[30-May-2024 16:39:39 Europe/Bucharest] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/chew/vendor.chew.atelierfain.ro/php/test.php on line 16
+[11-Jun-2024 14:03:26 Europe/Bucharest] PHP Warning:  Undefined global variable $cockpit_url in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 21
+[11-Jun-2024 14:03:29 Europe/Bucharest] PHP Warning:  Undefined global variable $cockpit_url in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 21
+[11-Jun-2024 14:03:33 Europe/Bucharest] PHP Warning:  Undefined global variable $cockpit_url in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 21
+[11-Jun-2024 14:03:34 Europe/Bucharest] PHP Warning:  Undefined global variable $cockpit_url in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 21
+[11-Jun-2024 14:03:47 Europe/Bucharest] PHP Warning:  Undefined global variable $cockpit_url in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 21
+[11-Jun-2024 14:03:49 Europe/Bucharest] PHP Warning:  Undefined global variable $cockpit_url in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 21
+[11-Jun-2024 14:05:02 Europe/Bucharest] PHP Warning:  Undefined global variable $cockpit_url in /home/chew/vendor.chew.atelierfain.ro/php/login.php on line 21

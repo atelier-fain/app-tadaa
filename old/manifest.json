@@ -1,0 +1,21 @@
+{
+  "id": "urn:pwa:tada",
+  "name": "TADA",
+  "short_name": "TADA",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "description": "TADA app for events",
+  "start_url": "/index.php",
+  "scope": "/",
+  "icons": [{
+    "src": "img/icon.png",
+    "sizes": "400x400",
+    "type": "image/png"
+  }],
+  "screenshots": [{
+    "src": "img/screenshot.png",
+    "sizes": "566x479",
+    "type": "image/png"
+  }]
+}

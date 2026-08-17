@@ -1,0 +1,24 @@
+[06-Aug-2025 21:09:56 Europe/Bucharest] PHP Warning:  include(../../php/auth.php): Failed to open stream: No such file or directory in /home2/tadaa/app.tadaa.ro/modules/top_up/success/index.php on line 2
+[06-Aug-2025 21:09:56 Europe/Bucharest] PHP Warning:  include(): Failed opening '../../php/auth.php' for inclusion (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home2/tadaa/app.tadaa.ro/modules/top_up/success/index.php on line 2
+[06-Aug-2025 21:09:56 Europe/Bucharest] PHP Warning:  include(../../header.php): Failed to open stream: No such file or directory in /home2/tadaa/app.tadaa.ro/modules/top_up/success/index.php on line 3
+[06-Aug-2025 21:09:56 Europe/Bucharest] PHP Warning:  include(): Failed opening '../../header.php' for inclusion (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home2/tadaa/app.tadaa.ro/modules/top_up/success/index.php on line 3
+[06-Aug-2025 21:09:56 Europe/Bucharest] PHP Warning:  include(../../footer.php): Failed to open stream: No such file or directory in /home2/tadaa/app.tadaa.ro/modules/top_up/success/index.php on line 15
+[06-Aug-2025 21:09:56 Europe/Bucharest] PHP Warning:  include(): Failed opening '../../footer.php' for inclusion (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home2/tadaa/app.tadaa.ro/modules/top_up/success/index.php on line 15
+[11-Aug-2025 12:38:16 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 15
+[11-Aug-2025 12:42:13 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 15
+[11-Aug-2025 12:43:33 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 15
+[11-Aug-2025 13:16:36 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 15
+[11-Aug-2025 13:18:51 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 15
+[11-Aug-2025 13:38:36 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 27
+[11-Aug-2025 13:40:30 Europe/Bucharest] PHP Warning:  Undefined variable $url in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 16
+[11-Aug-2025 13:40:30 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 33
+[11-Aug-2025 13:41:50 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 27
+[11-Aug-2025 13:42:11 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 27
+[11-Aug-2025 13:43:24 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 27
+[11-Aug-2025 13:43:29 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 27
+[11-Aug-2025 13:44:18 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 27
+[11-Aug-2025 13:48:05 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 27
+[11-Aug-2025 13:48:42 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 27
+[11-Aug-2025 13:49:05 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 27
+[11-Aug-2025 13:49:18 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 27
+[11-Aug-2025 13:49:35 Europe/Bucharest] PHP Warning:  Undefined array key "balance" in /home2/tadaa/app.tadaa.ro/modules/top_up/callback/index.php on line 27

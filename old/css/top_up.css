@@ -1,0 +1,229 @@
+.select_amount {}
+
+.select_amount .list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.select_amount .list .item {
+    height: 90px;
+    width: 90px;
+    background: #278217;
+    color: #fff;
+    font-weight: 600;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.select_amount .list .item.go_home {
+    background: #FF5722;
+    font-size: 26px;
+}
+.select_amount .list .item.check_balance_buton {
+    background: #FF9800;
+    font-size: 16px;
+}
+
+.select_amount .list .item.cash_out_buton {
+    background: #FFC107;
+    font-size: 16px;
+}
+
+.select_amount .list .item.other {
+    background: #89b30c;
+    font-size: 16px;
+}
+
+.title {
+    font-size: 30px;
+    margin: 20px 0 30px 0;
+}
+.payment_method .amount,
+.confirm_cash .amount,
+.top_up .amount {
+    font-weight: 600;
+}
+
+.payment_method .list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 35px;
+    justify-content: center;
+}
+
+.payment_method .list .item {
+    height: 120px;
+    width: 120px;
+    background: #278217;
+    color: #fff;
+    font-weight: 600;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.payment_method .list .item.card {
+    background: #175282;
+} 
+
+.payment_method .list .item .fa {
+    font-size: 30px;
+}
+
+.back {
+    background: transparent;
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 10px;
+    left:  13px;
+    font-size: 50px
+}
+
+.confirm_cash .list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 35px;
+    justify-content: center;
+}
+.confirm_cash .list .item {
+    height: 120px;
+    width: 120px;
+    background: #278217;
+    color: #fff;
+    font-weight: 600;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirm_cash .list .item.no {
+    background: red;
+}
+
+.select_other_amount {
+    justify-content: flex-start;
+}
+
+.other_amount_input {
+    border: 2px solid #777;
+    padding: 0px 15px 0px 15px;
+}
+
+.other_amount_input input {
+    font-size: 25px;
+    width: 150px;
+    border: none;
+    text-align: center
+}
+
+.other_amount_input input:focus {
+    outline: none;
+}
+
+.other_amount_input span {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.other_amount_submit {
+    display: none;
+    background: #278217;
+    padding: 10px 35px;
+    width: 215px;
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.success {
+    background: #278217;
+    color: #fff;
+}
+
+.callback {
+    background: #278217;
+    color: #fff;
+}
+
+.check_balance .value {
+    font-size: 30px;
+    font-weight: 600;
+    display: none;
+}
+
+.check_balance .error {
+    font-size: 30px;
+    color: red;
+    display: none;
+}
+
+.cash_out .value {
+    font-size: 30px;
+    font-weight: 600;
+    display: none;
+}
+
+.cash_out .error {
+    font-size: 30px;
+    color: red;
+    display: none;
+}
+
+.table td {
+    text-align: left;
+}
+.buton {
+    background: #fff;
+    color: #333;
+    font-weight: 500;
+    font-size: 18px;
+    padding: 8px 20px;
+}
+
+.callback .buton {
+    margin-top: 30px;
+}
+
+.callback h2 {
+    margin: 0;
+}
+
+.cash_out {
+    background: #FFC107;
+}
+
+.cash_out .buttons {
+    display: flex;
+    display: none;
+    gap: 20px;
+}
+
+.cash_out .buttons .buton {
+    height: 100px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff
+}
+
+.cash_out .buttons .buton.yes {
+    background: #278217;
+}
+
+.cash_out .buttons .buton.no {
+    background: red;
+}

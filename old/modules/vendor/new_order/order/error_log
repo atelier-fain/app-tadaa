@@ -1,0 +1,262 @@
+[24-May-2024 14:27:00 Europe/Bucharest] PHP Fatal error:  Uncaught ArgumentCountError: Too few arguments to function order_get(), 0 passed in /home/chew/public_html/order/index.php on line 24 and exactly 1 expected in /home/chew/public_html/php/functions.php:119
+Stack trace:
+#0 /home/chew/public_html/order/index.php(24): order_get()
+#1 {main}
+  thrown in /home/chew/public_html/php/functions.php on line 119
+[24-May-2024 14:29:25 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 142
+[24-May-2024 14:29:25 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 142
+[24-May-2024 14:30:01 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 144
+[24-May-2024 14:30:01 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 144
+[24-May-2024 15:05:56 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 10
+[24-May-2024 15:06:26 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 11
+[24-May-2024 15:14:14 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function order_assign_id() in /home/chew/public_html/order/index.php:10
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/order/index.php on line 10
+[24-May-2024 15:14:31 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/php/functions.php on line 164
+[24-May-2024 15:14:31 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 164
+[24-May-2024 15:14:31 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 192
+[24-May-2024 15:14:31 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 192
+[24-May-2024 15:18:37 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function order_mark_as_paid() in /home/chew/public_html/order/index.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/order/index.php on line 12
+[24-May-2024 15:18:44 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/php/functions.php on line 164
+[24-May-2024 15:18:44 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 164
+[27-May-2024 11:03:34 Europe/Bucharest] PHP Parse error:  syntax error, unexpected variable "$order", expecting "," or ";" in /home/chew/public_html/order/index.php on line 35
+[27-May-2024 11:47:18 Europe/Bucharest] PHP Warning:  Undefined array key "tip" in /home/chew/public_html/order/index.php on line 17
+[27-May-2024 11:50:38 Europe/Bucharest] PHP Warning:  Undefined variable $vendor in /home/chew/public_html/order/index.php on line 19
+[27-May-2024 11:50:38 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 202
+[27-May-2024 11:50:38 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 202
+[27-May-2024 12:08:22 Europe/Bucharest] PHP Warning:  Undefined variable $next_order_id in /home/chew/public_html/order/index.php on line 41
+[27-May-2024 12:08:27 Europe/Bucharest] PHP Warning:  Undefined variable $next_order_id in /home/chew/public_html/order/index.php on line 41
+[27-May-2024 13:42:11 Europe/Bucharest] PHP Warning:  Undefined variable $order_id in /home/chew/public_html/php/functions.php on line 178
+[27-May-2024 13:42:11 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 215
+[27-May-2024 13:42:11 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 215
+[27-May-2024 13:42:11 Europe/Bucharest] PHP Warning:  Undefined variable $order_id in /home/chew/public_html/php/functions.php on line 179
+[27-May-2024 13:42:11 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chew/public_html/php/functions.php on line 179
+[27-May-2024 13:42:11 Europe/Bucharest] PHP Warning:  Undefined array key "vendor" in /home/chew/public_html/php/functions.php on line 179
+[27-May-2024 13:42:39 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/php/functions.php on line 178
+[27-May-2024 13:42:39 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 215
+[27-May-2024 13:42:39 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 215
+[27-May-2024 13:42:39 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/php/functions.php on line 179
+[27-May-2024 13:42:39 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chew/public_html/php/functions.php on line 179
+[27-May-2024 13:42:39 Europe/Bucharest] PHP Warning:  Undefined array key "vendor" in /home/chew/public_html/php/functions.php on line 179
+[27-May-2024 13:42:59 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home/chew/public_html/php/functions.php on line 178
+[27-May-2024 13:42:59 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 215
+[27-May-2024 13:42:59 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 215
+[27-May-2024 13:42:59 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home/chew/public_html/php/functions.php on line 179
+[27-May-2024 13:42:59 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chew/public_html/php/functions.php on line 179
+[27-May-2024 13:42:59 Europe/Bucharest] PHP Warning:  Undefined array key "vendor" in /home/chew/public_html/php/functions.php on line 179
+[28-May-2024 17:00:47 Europe/Bucharest] PHP Fatal error:  Uncaught TypeError: array_reverse(): Argument #1 ($array) must be of type array, bool given in /home/chew/public_html/php/functions.php:163
+Stack trace:
+#0 /home/chew/public_html/php/functions.php(163): array_reverse()
+#1 /home/chew/public_html/php/functions.php(174): get_next_nominal_id()
+#2 /home/chew/public_html/order/index.php(12): order_mark_as_paid()
+#3 {main}
+  thrown in /home/chew/public_html/php/functions.php on line 163
+[28-May-2024 17:01:39 Europe/Bucharest] PHP Fatal error:  Uncaught TypeError: array_reverse(): Argument #1 ($array) must be of type array, bool given in /home/chew/public_html/php/functions.php:164
+Stack trace:
+#0 /home/chew/public_html/php/functions.php(164): array_reverse()
+#1 /home/chew/public_html/php/functions.php(175): get_next_nominal_id()
+#2 /home/chew/public_html/order/index.php(12): order_mark_as_paid()
+#3 {main}
+  thrown in /home/chew/public_html/php/functions.php on line 164
+[04-Jun-2024 10:52:25 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 208
+[04-Jun-2024 10:52:25 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 208
+[04-Jun-2024 10:52:25 Europe/Bucharest] PHP Warning:  Undefined array key 1 in /home/chew/public_html/php/functions.php on line 208
+[04-Jun-2024 10:52:25 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 208
+[04-Jun-2024 10:54:26 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 208
+[04-Jun-2024 10:54:26 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 208
+[04-Jun-2024 10:54:26 Europe/Bucharest] PHP Warning:  Undefined array key 1 in /home/chew/public_html/php/functions.php on line 208
+[04-Jun-2024 10:54:26 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 208
+[04-Jun-2024 10:55:59 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 208
+[04-Jun-2024 10:55:59 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 208
+[04-Jun-2024 10:55:59 Europe/Bucharest] PHP Warning:  Undefined array key 1 in /home/chew/public_html/php/functions.php on line 208
+[04-Jun-2024 10:55:59 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 208
+[04-Jun-2024 11:00:47 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/php/functions.php on line 211
+[04-Jun-2024 11:00:47 Europe/Bucharest] PHP Warning:  Undefined array key "" in /home/chew/public_html/php/functions.php on line 211
+[04-Jun-2024 11:00:47 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 211
+[04-Jun-2024 11:00:47 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/php/functions.php on line 211
+[04-Jun-2024 11:00:47 Europe/Bucharest] PHP Warning:  Undefined array key "" in /home/chew/public_html/php/functions.php on line 211
+[04-Jun-2024 11:00:47 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 211
+[04-Jun-2024 11:01:30 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/php/functions.php on line 211
+[04-Jun-2024 11:01:30 Europe/Bucharest] PHP Warning:  Undefined array key "" in /home/chew/public_html/php/functions.php on line 211
+[04-Jun-2024 11:01:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 211
+[04-Jun-2024 11:02:51 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/php/functions.php on line 212
+[04-Jun-2024 11:02:51 Europe/Bucharest] PHP Warning:  Undefined array key "" in /home/chew/public_html/php/functions.php on line 212
+[04-Jun-2024 11:02:51 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 212
+[04-Jun-2024 11:05:06 Europe/Bucharest] PHP Warning:  Undefined array key "d6cdbd9a6566656f01000371" in /home/chew/public_html/php/functions.php on line 217
+[04-Jun-2024 11:05:06 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 217
+[04-Jun-2024 11:06:51 Europe/Bucharest] PHP Warning:  Undefined array key "d6ddce74643938c7c40001bf" in /home/chew/public_html/php/functions.php on line 217
+[04-Jun-2024 11:06:51 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 217
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined variable $vendor in /home/chew/public_html/order/index.php on line 38
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 315
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 315
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 38
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 38
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/views/order_status.php on line 7
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/views/order_status.php on line 7
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 315
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 315
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 315
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 315
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 44
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 44
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chew/public_html/order/index.php on line 44
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined variable $subtotal in /home/chew/public_html/order/index.php on line 61
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 61
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined variable $subtotal in /home/chew/public_html/order/index.php on line 61
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 61
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 64
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 64
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined variable $tip in /home/chew/public_html/order/index.php on line 65
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 65
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined variable $tip in /home/chew/public_html/order/index.php on line 65
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 65
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined variable $total in /home/chew/public_html/order/index.php on line 71
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 71
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined variable $total in /home/chew/public_html/order/index.php on line 71
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 71
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/order/index.php on line 75
+[11-Jun-2024 11:43:37 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 16
+[11-Jun-2024 11:43:37 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 256
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chew/public_html/php/functions.php on line 272
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 18
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 18
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 19
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 19
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 20
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 20
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 20
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 20
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined variable $vendor in /home/chew/public_html/order/index.php on line 38
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 38
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 38
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/views/order_status.php on line 7
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/views/order_status.php on line 7
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 44
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 44
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chew/public_html/order/index.php on line 44
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 64
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 64
+[11-Jun-2024 11:43:38 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/order/index.php on line 75
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined array key "Id" in /home/chew/public_html/order/index.php on line 3
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined variable $vendor in /home/chew/public_html/order/index.php on line 39
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 39
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 39
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/views/order_status.php on line 7
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/views/order_status.php on line 7
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 45
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 45
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chew/public_html/order/index.php on line 45
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined variable $subtotal in /home/chew/public_html/order/index.php on line 62
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 62
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined variable $subtotal in /home/chew/public_html/order/index.php on line 62
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 62
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chew/public_html/order/index.php on line 65
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 65
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined variable $tip in /home/chew/public_html/order/index.php on line 66
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 66
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined variable $tip in /home/chew/public_html/order/index.php on line 66
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 66
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined variable $total in /home/chew/public_html/order/index.php on line 72
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 72
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined variable $total in /home/chew/public_html/order/index.php on line 72
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/order/index.php on line 72
+[11-Jun-2024 11:44:30 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/order/index.php on line 76
+[11-Jun-2024 11:44:51 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chew/public_html/php/functions.php on line 257
+[11-Jun-2024 11:44:51 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chew/public_html/php/functions.php on line 272
+[11-Jun-2024 11:44:51 Europe/Bucharest] PHP Warning:  Undefined variable $vendor in /home/chew/public_html/order/index.php on line 38
+[11-Jun-2024 11:44:51 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:44:51 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:44:51 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chew/public_html/order/index.php on line 44
+[11-Jun-2024 11:44:51 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chew/public_html/order/index.php on line 44
+[11-Jun-2024 11:44:51 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/order/index.php on line 75
+[11-Jun-2024 11:46:05 Europe/Bucharest] PHP Warning:  Undefined variable $vendor in /home/chew/public_html/order/index.php on line 38
+[11-Jun-2024 11:46:05 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:46:05 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/php/functions.php on line 332
+[11-Jun-2024 11:46:05 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/order/index.php on line 75
+[11-Jun-2024 11:46:55 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/order/index.php on line 75
+[11-Jun-2024 12:06:40 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/order/index.php on line 75
+[11-Jun-2024 12:25:51 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/order/index.php on line 75
+[11-Jun-2024 12:26:06 Europe/Bucharest] PHP Warning:  Undefined array key "id" in /home/chew/public_html/order/index.php on line 75
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 18
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 18
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 19
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 19
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 20
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 20
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 20
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 20
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 41
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 41
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 41
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 41
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/views/order_status.php on line 7
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/views/order_status.php on line 7
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 47
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 47
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/order/index.php on line 47
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 79
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 79
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 91
+[21-Jun-2024 18:48:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 91
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 18
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 18
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 19
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 19
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 20
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 20
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 20
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 20
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 41
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 41
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 41
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 41
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/views/order_status.php on line 7
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/views/order_status.php on line 7
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 47
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 47
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/order/index.php on line 47
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 79
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 79
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home/chewblf/public_html/order/index.php on line 91
+[21-Jun-2024 18:48:18 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/order/index.php on line 91
+[21-Jun-2024 18:52:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home/chewblf/public_html/order/index.php on line 21
+[21-Jun-2024 18:52:07 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:52:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:52:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home/chewblf/public_html/order/index.php on line 44
+[21-Jun-2024 18:52:07 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:52:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:52:07 Europe/Bucharest] PHP Warning:  Undefined array key 0 in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:52:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/php/functions.php on line 408
+[21-Jun-2024 18:52:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home/chewblf/public_html/order/index.php on line 50
+[21-Jun-2024 18:52:07 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/order/index.php on line 50
+[21-Jun-2024 18:52:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home/chewblf/public_html/order/index.php on line 82

@@ -27,7 +27,7 @@ const bySource = {
 const config = {
   appId: 'org.chromium.webpack.abe660f465bd92ffd_v2',
   callback: 'https://dev.tadaa.ro/callback',
-  ISV_amount: 4,
+  ISV_amount: 0,
   ISV_clientId: dev ? process.env.DEV__ISVClientID : process.env.ISVClientID,
   ISV_clientSecret: dev ? process.env.DEV__ISVClientSecret : process.env.ISVClientSecret,
   ISV_merchantId: dev ? process.env.DEV__ISVMerchantID : process.env.ISVMerchantID,

@@ -43,7 +43,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
           local-dir: ./dist/spa/
-          server-dir: /dev.tadaa.ro/
+          server-dir: /app.tadaa.ro/
           # sterge tot continutul folderului de pe server inainte de upload,
           # ca sa nu ramana fisiere vechi peste noul build
           dangerous-clean-slate: true

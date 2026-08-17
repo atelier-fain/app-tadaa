@@ -1,0 +1,24 @@
+[24-Jul-2025 14:07:28 Europe/Bucharest] PHP Warning:  Undefined array key "auth" in /home2/tadaa/app.tadaa.ro/php/auth.php on line 31
+[24-Jul-2025 14:09:40 Europe/Bucharest] PHP Warning:  Undefined array key "auth" in /home2/tadaa/app.tadaa.ro/php/auth.php on line 33
+[25-Jul-2025 14:13:20 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[25-Jul-2025 15:24:41 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[25-Jul-2025 20:32:13 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[25-Jul-2025 20:33:43 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[25-Jul-2025 23:09:03 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[25-Jul-2025 23:09:29 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[26-Jul-2025 17:01:39 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[26-Jul-2025 22:47:44 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[26-Jul-2025 23:45:39 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[26-Jul-2025 23:46:00 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[26-Jul-2025 23:46:18 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[27-Jul-2025 17:14:54 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[27-Jul-2025 17:34:42 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[27-Jul-2025 17:35:48 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[27-Jul-2025 21:55:53 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[27-Jul-2025 21:57:43 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[29-Jul-2025 14:09:51 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[29-Jul-2025 14:09:56 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[29-Jul-2025 14:10:27 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[29-Jul-2025 14:10:29 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[29-Jul-2025 14:10:37 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[29-Jul-2025 14:12:05 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22

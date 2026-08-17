@@ -1,0 +1,335 @@
+[29-May-2024 14:34:30 Europe/Bucharest] PHP Warning:  Undefined variable $vendor in /home/chew/vendor.chew.atelierfain.ro/views/list-item.php on line 13
+[29-May-2024 14:34:30 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/vendor.chew.atelierfain.ro/views/list-item.php on line 13
+[29-May-2024 14:34:30 Europe/Bucharest] PHP Warning:  Undefined variable $time in /home/chew/vendor.chew.atelierfain.ro/views/list-item.php on line 34
+[29-May-2024 14:35:48 Europe/Bucharest] PHP Warning:  Undefined variable $time in /home/chew/vendor.chew.atelierfain.ro/views/list-item.php on line 35
+[30-Aug-2025 20:50:33 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 20:50:41 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 20:50:56 Europe/Bucharest] PHP Warning:  Undefined array key "total" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 46
+[30-Aug-2025 20:50:56 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 20:50:57 Europe/Bucharest] PHP Warning:  Undefined array key "total" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 46
+[30-Aug-2025 20:50:57 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 20:50:58 Europe/Bucharest] PHP Warning:  Undefined array key "total" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 46
+[30-Aug-2025 20:50:58 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 20:50:59 Europe/Bucharest] PHP Warning:  Undefined array key "total" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 46
+[30-Aug-2025 20:50:59 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 20:58:12 Europe/Bucharest] PHP Warning:  Undefined array key "total" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 46
+[30-Aug-2025 20:58:12 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 20:58:57 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:58:57 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:58:57 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 20:59:05 Europe/Bucharest] PHP Warning:  Undefined array key "vendor" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 5
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 20:59:22 Europe/Bucharest] PHP Warning:  Undefined array key "vendor" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 5
+[30-Aug-2025 20:59:26 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 20:59:26 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 20:59:27 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 9
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 27
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 44
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 47
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 48
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 51
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 91
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 102
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 119
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 120
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 20:59:32 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 126
+[30-Aug-2025 20:59:33 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 20:59:35 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "vendor" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 5
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 9
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 27
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 44
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 47
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 48
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 51
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 91
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 102
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 119
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 120
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 126
+[30-Aug-2025 21:04:08 Europe/Bucharest] PHP Warning:  Undefined array key "total" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 46
+[30-Aug-2025 21:04:08 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 140
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "vendor" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 5
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 9
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 27
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 44
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 47
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 48
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 51
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 91
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 102
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 119
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 120
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:10 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 126
+[30-Aug-2025 21:04:12 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 21:04:12 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 21:04:13 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 21:04:13 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "total" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 46
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 9
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 27
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 44
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 47
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 48
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 51
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 91
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 102
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 119
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 120
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 126
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "vendor" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 5
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "vendor" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 5
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 9
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "vendor" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 5
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 27
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 44
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 47
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 48
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 51
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 91
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 102
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 103
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 119
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 120
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 126
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 9
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 27
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 44
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 47
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 48
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 51
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 91
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 102
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 103
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 119
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 120
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 126
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 9
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 27
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 44
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 47
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 48
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 51
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 91
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 102
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 103
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 119
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 120
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 126
+[30-Aug-2025 21:04:15 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "vendor" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 5
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 9
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 15
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 16
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 27
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 44
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 47
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 48
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 49
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 51
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "status" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "refunded" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "refunded_pg" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "ready" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "_created" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 90
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 91
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "nominal_order_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 102
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 103
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 119
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 120
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "subtotal" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "tip_amount" in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 121
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type bool in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 126
+[30-Aug-2025 21:04:16 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 21:04:17 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 21:04:17 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 21:04:17 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/php/functions.php on line 149
+[30-Aug-2025 21:04:17 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28
+[30-Aug-2025 21:04:17 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/views/list-item.php on line 28

@@ -1,0 +1,11 @@
+.back {
+    background: transparent;
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 10px;
+    left:  13px;
+    font-size: 50px
+}

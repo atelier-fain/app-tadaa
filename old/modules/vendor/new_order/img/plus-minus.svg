@@ -1,0 +1,17 @@
+<svg id="Group_9" data-name="Group 9" xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27">
+  <g id="Group_5" data-name="Group 5">
+    <g id="Group_4" data-name="Group 4">
+      <path id="Path_16" data-name="Path 16" d="M13.5,0A13.5,13.5,0,1,0,27,13.5,13.515,13.515,0,0,0,13.5,0Zm0,24.909A11.409,11.409,0,1,1,24.909,13.5,11.422,11.422,0,0,1,13.5,24.909Z" fill="#ffc906"/>
+    </g>
+  </g>
+  <g id="plus" transform="translate(6.81 7.143)">
+    <g id="Group_6" data-name="Group 6">
+      <path id="Path_17" data-name="Path 17" d="M149.287,140.457h-4.46v-4.175a1.117,1.117,0,0,0-2.23,0v4.175h-4.46a1.046,1.046,0,1,0,0,2.088h4.46v4.175a1.117,1.117,0,0,0,2.23,0v-4.175h4.46a1.046,1.046,0,1,0,0-2.088Z" transform="translate(-137.022 -135.238)" fill="#ffc906"/>
+    </g>
+  </g>
+  <g id="minus" transform="translate(6.81 -16.857)">
+    <g id="Group_6-2" data-name="Group 6">
+      <path id="Path_17-2" data-name="Path 17" d="M149.287,140.457c-11.079.025-5.67.067-11.15,0a1.046,1.046,0,1,0,0,2.088c11.142.05-.014.008,11.15,0a1.046,1.046,0,1,0,0-2.088Z" transform="translate(-137.022 -111.238)" fill="#ffc906"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,19 @@
+#ticketCode {
+    font-size: 22px;
+    color: #fff;
+}
+
+#scanInput {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.scanning {
+    background: #333;
+    height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+

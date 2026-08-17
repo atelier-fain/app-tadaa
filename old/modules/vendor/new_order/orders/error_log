@@ -1,0 +1,141 @@
+[06-Jun-2024 15:40:21 Europe/Bucharest] PHP Warning:  Undefined variable $vendors in /home/chew/public_html/orders/index.php on line 24
+[06-Jun-2024 15:40:21 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chew/public_html/orders/index.php on line 24
+[06-Jun-2024 15:40:41 Europe/Bucharest] PHP Warning:  include(../../header.php): Failed to open stream: No such file or directory in /home/chew/public_html/orders/index.php on line 2
+[06-Jun-2024 15:40:41 Europe/Bucharest] PHP Warning:  include(): Failed opening '../../header.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/chew/public_html/orders/index.php on line 2
+[06-Jun-2024 15:40:41 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function vendors_get() in /home/chew/public_html/orders/index.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/orders/index.php on line 4
+[06-Jun-2024 15:43:03 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function get_user_orders() in /home/chew/public_html/orders/index.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/orders/index.php on line 4
+[06-Jun-2024 15:46:26 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function get_user_orders() in /home/chew/public_html/orders/index.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/orders/index.php on line 4
+[06-Jun-2024 15:46:32 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function get_user_orders() in /home/chew/public_html/orders/index.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/orders/index.php on line 4
+[06-Jun-2024 15:52:53 Europe/Bucharest] PHP Warning:  Undefined variable $vendors in /home/chew/public_html/orders/index.php on line 24
+[06-Jun-2024 15:52:53 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chew/public_html/orders/index.php on line 24
+[06-Jun-2024 16:15:15 Europe/Bucharest] PHP Warning:  Undefined variable $vendor in /home/chew/public_html/orders/index.php on line 34
+[06-Jun-2024 16:15:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/orders/index.php on line 34
+[06-Jun-2024 16:15:15 Europe/Bucharest] PHP Warning:  Undefined variable $vendor in /home/chew/public_html/orders/index.php on line 35
+[06-Jun-2024 16:15:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chew/public_html/orders/index.php on line 35
+[07-Jun-2024 11:49:30 Europe/Bucharest] PHP Parse error:  syntax error, unexpected token "}", expecting ";" in /home/chew/public_html/php/functions.php on line 385
+[07-Jun-2024 11:49:38 Europe/Bucharest] PHP Warning:  Undefined variable $line_price in /home/chew/public_html/php/functions.php on line 383
+[11-Jun-2024 16:17:45 Europe/Bucharest] PHP Warning:  Undefined array key "netopia_order_id" in /home/chew/public_html/orders/index.php on line 37
+[21-Jun-2024 23:54:26 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 39
+[21-Jun-2024 23:54:26 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[21-Jun-2024 23:54:26 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 40
+[21-Jun-2024 23:54:26 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[21-Jun-2024 23:54:31 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 39
+[21-Jun-2024 23:54:31 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[21-Jun-2024 23:54:31 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 40
+[21-Jun-2024 23:54:31 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[21-Jun-2024 23:55:05 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 39
+[21-Jun-2024 23:55:05 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[21-Jun-2024 23:55:05 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 40
+[21-Jun-2024 23:55:05 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 08:39:46 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 08:39:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 08:39:46 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 08:39:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 08:39:46 Europe/Bucharest] PHP Warning:  Undefined array key "deb6f7b63935624bb00000be" in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 08:39:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 08:39:46 Europe/Bucharest] PHP Warning:  Undefined array key "deb6f7b63935624bb00000be" in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 08:39:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 08:39:46 Europe/Bucharest] PHP Warning:  Undefined array key "26b0445d383565e9d300022d" in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 08:39:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 08:39:46 Europe/Bucharest] PHP Warning:  Undefined array key "26b0445d383565e9d300022d" in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 08:39:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 08:39:59 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 08:39:59 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 08:39:59 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 08:39:59 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 08:39:59 Europe/Bucharest] PHP Warning:  Undefined array key "deb6f7b63935624bb00000be" in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 08:39:59 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 08:39:59 Europe/Bucharest] PHP Warning:  Undefined array key "deb6f7b63935624bb00000be" in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 08:39:59 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 08:39:59 Europe/Bucharest] PHP Warning:  Undefined array key "26b0445d383565e9d300022d" in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 08:39:59 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 08:39:59 Europe/Bucharest] PHP Warning:  Undefined array key "26b0445d383565e9d300022d" in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 08:39:59 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 09:45:10 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 09:45:10 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 09:45:10 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 09:45:10 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 09:45:17 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 09:45:17 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[22-Jun-2024 09:45:17 Europe/Bucharest] PHP Warning:  Undefined array key "1ac84aaa333563cff6000023" in /home/chewblf/public_html/orders/index.php on line 40
+[22-Jun-2024 09:45:17 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Undefined array key "1391c62330383379760003de" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Undefined array key "1391c62330383379760003de" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Undefined array key "12d9107b333237b18e00003d" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Undefined array key "12d9107b333237b18e00003d" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Undefined array key "deb6f7b63935624bb00000be" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Undefined array key "deb6f7b63935624bb00000be" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Undefined array key "2952cd0e633365f7040000da" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Undefined array key "2952cd0e633365f7040000da" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Undefined array key "2952cd0e633365f7040000da" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Undefined array key "2952cd0e633365f7040000da" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:33 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Undefined array key "1391c62330383379760003de" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Undefined array key "1391c62330383379760003de" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Undefined array key "12d9107b333237b18e00003d" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Undefined array key "12d9107b333237b18e00003d" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Undefined array key "deb6f7b63935624bb00000be" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Undefined array key "deb6f7b63935624bb00000be" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Undefined array key "2952cd0e633365f7040000da" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Undefined array key "2952cd0e633365f7040000da" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Undefined array key "2952cd0e633365f7040000da" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Undefined array key "2952cd0e633365f7040000da" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 09:29:46 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 16:20:37 Europe/Bucharest] PHP Warning:  Undefined array key "2b19ac296139355b0a000213" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 16:20:37 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 16:20:37 Europe/Bucharest] PHP Warning:  Undefined array key "2b19ac296139355b0a000213" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 16:20:37 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 16:20:54 Europe/Bucharest] PHP Warning:  Undefined array key "2b19ac296139355b0a000213" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 16:20:54 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 16:20:54 Europe/Bucharest] PHP Warning:  Undefined array key "2b19ac296139355b0a000213" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 16:20:54 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 21:12:09 Europe/Bucharest] PHP Warning:  Undefined array key "2b19ac296139355b0a000213" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 21:12:09 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 21:12:09 Europe/Bucharest] PHP Warning:  Undefined array key "2b19ac296139355b0a000213" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 21:12:09 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 21:16:15 Europe/Bucharest] PHP Warning:  Undefined array key "2b19ac296139355b0a000213" in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 21:16:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[23-Jun-2024 21:16:15 Europe/Bucharest] PHP Warning:  Undefined array key "2b19ac296139355b0a000213" in /home/chewblf/public_html/orders/index.php on line 40
+[23-Jun-2024 21:16:15 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[24-Jun-2024 09:41:37 Europe/Bucharest] PHP Warning:  Undefined array key "e175ea5c39336409aa0001d7" in /home/chewblf/public_html/orders/index.php on line 39
+[24-Jun-2024 09:41:37 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[24-Jun-2024 09:41:37 Europe/Bucharest] PHP Warning:  Undefined array key "e175ea5c39336409aa0001d7" in /home/chewblf/public_html/orders/index.php on line 40
+[24-Jun-2024 09:41:37 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[24-Jun-2024 09:41:37 Europe/Bucharest] PHP Warning:  Undefined array key "26b0445d383565e9d300022d" in /home/chewblf/public_html/orders/index.php on line 39
+[24-Jun-2024 09:41:37 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[24-Jun-2024 09:41:37 Europe/Bucharest] PHP Warning:  Undefined array key "26b0445d383565e9d300022d" in /home/chewblf/public_html/orders/index.php on line 40
+[24-Jun-2024 09:41:37 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40
+[04-Jul-2024 18:53:12 Europe/Bucharest] PHP Warning:  Undefined array key "7777a45b653966acef0001a1" in /home/chewblf/public_html/orders/index.php on line 39
+[04-Jul-2024 18:53:12 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 39
+[04-Jul-2024 18:53:12 Europe/Bucharest] PHP Warning:  Undefined array key "7777a45b653966acef0001a1" in /home/chewblf/public_html/orders/index.php on line 40
+[04-Jul-2024 18:53:12 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home/chewblf/public_html/orders/index.php on line 40

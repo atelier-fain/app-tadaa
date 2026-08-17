@@ -1,0 +1,40 @@
+[30-Aug-2025 20:51:13 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/php/auth.php on line 33
+[30-Aug-2025 20:51:13 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[30-Aug-2025 20:51:13 Europe/Bucharest] PHP Warning:  Undefined variable $user in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:51:13 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:51:13 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/footer.php on line 8
+[30-Aug-2025 20:53:14 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/php/auth.php on line 33
+[30-Aug-2025 20:53:14 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[30-Aug-2025 20:53:14 Europe/Bucharest] PHP Warning:  Undefined variable $user in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:53:14 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:53:14 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/footer.php on line 8
+[30-Aug-2025 20:53:16 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/php/auth.php on line 33
+[30-Aug-2025 20:53:16 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[30-Aug-2025 20:53:16 Europe/Bucharest] PHP Warning:  Undefined variable $user in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:53:16 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:53:16 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/footer.php on line 8
+[30-Aug-2025 20:58:19 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/php/auth.php on line 33
+[30-Aug-2025 20:58:19 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[30-Aug-2025 20:58:19 Europe/Bucharest] PHP Warning:  Undefined variable $user in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:58:19 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:58:19 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/footer.php on line 8
+[30-Aug-2025 20:59:11 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/php/auth.php on line 33
+[30-Aug-2025 20:59:11 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[30-Aug-2025 20:59:11 Europe/Bucharest] PHP Warning:  Undefined variable $user in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:59:11 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:59:11 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/footer.php on line 8
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/php/auth.php on line 33
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Undefined variable $user in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:59:12 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/footer.php on line 8
+[30-Aug-2025 20:59:13 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/php/auth.php on line 33
+[30-Aug-2025 20:59:13 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[30-Aug-2025 20:59:13 Europe/Bucharest] PHP Warning:  Undefined variable $user in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:59:13 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[30-Aug-2025 20:59:13 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/footer.php on line 8
+[31-Aug-2025 18:51:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/php/auth.php on line 33
+[31-Aug-2025 18:51:07 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/header.php on line 22
+[31-Aug-2025 18:51:07 Europe/Bucharest] PHP Warning:  Undefined variable $user in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[31-Aug-2025 18:51:07 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/top_up/index.php on line 98
+[31-Aug-2025 18:51:07 Europe/Bucharest] PHP Warning:  Undefined variable $module in /home2/tadaa/app.tadaa.ro/footer.php on line 8

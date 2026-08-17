@@ -1,0 +1,334 @@
+[11-Jun-2024 11:35:06 Europe/Bucharest] PHP Warning:  Undefined variable $objPmReq in /home/chew/public_html/api/confirm_order.php on line 123
+[11-Jun-2024 11:35:06 Europe/Bucharest] PHP Warning:  Attempt to read property "objPmNotify" on null in /home/chew/public_html/api/confirm_order.php on line 123
+[11-Jun-2024 11:35:06 Europe/Bucharest] PHP Warning:  Attempt to read property "errorCode" on null in /home/chew/public_html/api/confirm_order.php on line 123
+[11-Jun-2024 11:35:06 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function order_mark_as_paid() in /home/chew/public_html/api/confirm_order.php:124
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/api/confirm_order.php on line 124
+[11-Jun-2024 11:35:21 Europe/Bucharest] PHP Warning:  Undefined variable $objPmReq in /home/chew/public_html/api/confirm_order.php on line 123
+[11-Jun-2024 11:35:21 Europe/Bucharest] PHP Warning:  Attempt to read property "objPmNotify" on null in /home/chew/public_html/api/confirm_order.php on line 123
+[11-Jun-2024 11:35:21 Europe/Bucharest] PHP Warning:  Attempt to read property "errorCode" on null in /home/chew/public_html/api/confirm_order.php on line 123
+[11-Jun-2024 11:35:21 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function order_mark_as_paid() in /home/chew/public_html/api/confirm_order.php:124
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/api/confirm_order.php on line 124
+[11-Jun-2024 11:38:08 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function order_mark_as_paid() in /home/chew/public_html/api/confirm_order.php:124
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/api/confirm_order.php on line 124
+[11-Jun-2024 11:38:19 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function order_mark_as_paid() in /home/chew/public_html/api/confirm_order.php:124
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/api/confirm_order.php on line 124
+[11-Jun-2024 11:47:59 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function order_mark_as_paid() in /home/chew/public_html/api/confirm_order.php:124
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/api/confirm_order.php on line 124
+[11-Jun-2024 11:48:14 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function order_mark_as_paid() in /home/chew/public_html/api/confirm_order.php:124
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/api/confirm_order.php on line 124
+[11-Jun-2024 11:53:17 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function order_mark_as_paid() in /home/chew/public_html/api/confirm_order.php:124
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/api/confirm_order.php on line 124
+[11-Jun-2024 11:53:38 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function order_mark_as_paid() in /home/chew/public_html/api/confirm_order.php:124
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/api/confirm_order.php on line 124
+[11-Jun-2024 12:03:16 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function order_mark_as_paid() in /home/chew/public_html/api/confirm_order.php:127
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/api/confirm_order.php on line 127
+[11-Jun-2024 12:03:33 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function order_mark_as_paid() in /home/chew/public_html/api/confirm_order.php:127
+Stack trace:
+#0 {main}
+  thrown in /home/chew/public_html/api/confirm_order.php on line 127
+[19-Jun-2024 10:36:04 Europe/Bucharest] PHP Warning:  Undefined variable $id in /home/chew/public_html/php/functions.php on line 126
+[19-Jun-2024 10:36:46 Europe/Bucharest] PHP Warning:  Undefined array key "vendor" in /home/chew/public_html/php/functions.php on line 126
+[19-Jun-2024 14:32:04 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chew/public_html/php/functions.php on line 148
+[19-Jun-2024 14:32:04 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chew/public_html/php/functions.php on line 148
+[19-Jun-2024 14:32:04 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chew/public_html/php/functions.php on line 188
+[19-Jun-2024 14:32:04 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chew/public_html/php/functions.php on line 188
+[19-Jun-2024 14:32:04 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chew/public_html/php/functions.php on line 148
+[19-Jun-2024 14:32:04 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chew/public_html/php/functions.php on line 148
+[19-Jun-2024 14:32:04 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chew/public_html/php/functions.php on line 188
+[19-Jun-2024 14:32:04 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chew/public_html/php/functions.php on line 188
+[20-Jun-2024 23:13:31 Europe/Bucharest] PHP Parse error:  syntax error, unexpected token "exit" in /home/chew/public_html/api/save_order.php on line 19
+[21-Jun-2024 13:01:15 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 13:01:15 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 13:01:15 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 13:01:15 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 13:01:17 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 13:01:17 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 13:01:17 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 13:01:17 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 13:01:19 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 13:01:19 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 13:01:19 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 13:01:19 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 13:01:22 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 13:01:22 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 13:01:22 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 13:01:22 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 13:29:30 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 13:29:30 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 13:29:30 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 13:29:30 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 15:43:51 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 15:43:51 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 15:43:51 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 15:43:51 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 15:43:52 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 15:43:52 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 15:43:52 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 15:43:52 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 15:43:53 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 15:43:53 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 15:43:53 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 15:43:53 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 16:49:04 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 16:49:04 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 16:49:04 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 16:49:04 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 19:23:53 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 19:23:53 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 19:23:53 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 19:23:53 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 21:29:14 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 21:29:14 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 21:29:14 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 21:29:14 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 21:35:30 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 21:35:30 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 21:35:31 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 21:35:31 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 22:10:57 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 22:10:57 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 22:10:57 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 22:10:57 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 22:10:58 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 22:10:58 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 22:10:58 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 22:10:58 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 22:11:00 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 22:11:00 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 22:11:00 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 22:11:00 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 22:11:27 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 22:11:27 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[21-Jun-2024 22:11:27 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[21-Jun-2024 22:11:27 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 09:54:50 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 09:54:50 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 09:54:50 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 09:54:50 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 12:41:38 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 12:41:38 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 12:41:38 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 12:41:38 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 14:12:34 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 14:12:34 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 14:12:34 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 14:12:34 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 14:12:37 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 14:12:37 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 14:12:37 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 14:12:37 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 14:12:45 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 14:12:45 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 14:12:45 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 14:12:45 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 14:43:25 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 14:43:25 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 14:43:25 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 14:43:25 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 15:05:02 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 15:05:02 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 15:05:02 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 15:05:02 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 15:34:25 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 15:34:25 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 15:34:25 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 15:34:25 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 15:34:30 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 15:34:30 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 15:34:30 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 15:34:30 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 15:34:35 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 15:34:35 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 15:34:35 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 15:34:35 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 15:34:40 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 15:34:40 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 15:34:40 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 15:34:40 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 18:15:22 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 18:15:22 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 18:15:22 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 18:15:22 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 18:38:15 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 18:38:15 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 18:38:15 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 18:38:15 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 19:09:34 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 19:09:34 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 19:09:34 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 19:09:34 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 19:13:47 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 19:13:47 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 19:13:47 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 19:13:47 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 19:13:48 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 19:13:48 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 19:13:48 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 19:13:48 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 20:16:03 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 20:16:03 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 20:16:03 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 20:16:03 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 20:19:48 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 20:19:48 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 20:19:48 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 20:19:48 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 20:56:27 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 20:56:27 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 20:56:27 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 20:56:27 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 21:33:39 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 21:33:39 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 21:33:39 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 21:33:39 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 22:06:23 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 22:06:23 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 22:06:23 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 22:06:23 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 22:06:23 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 22:06:23 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 22:06:23 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 22:06:23 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 22:06:24 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 22:06:24 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 22:06:24 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 22:06:24 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 22:06:24 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 22:06:24 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 22:06:24 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 22:06:24 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 22:06:24 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 22:06:24 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 22:06:24 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 22:06:24 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 23:00:46 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 23:00:46 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[22-Jun-2024 23:00:46 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[22-Jun-2024 23:00:46 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[23-Jun-2024 11:47:50 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[23-Jun-2024 11:47:50 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[23-Jun-2024 11:47:50 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[23-Jun-2024 11:47:50 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[23-Jun-2024 14:09:55 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[23-Jun-2024 14:09:55 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[23-Jun-2024 14:09:55 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[23-Jun-2024 14:09:55 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[23-Jun-2024 15:56:49 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 177
+[23-Jun-2024 15:56:49 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 177
+[23-Jun-2024 15:56:49 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home/chewblf/public_html/php/functions.php on line 217
+[23-Jun-2024 15:56:49 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home/chewblf/public_html/php/functions.php on line 217
+[18-Aug-2025 16:14:20 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 411
+[18-Aug-2025 16:14:20 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 411
+[18-Aug-2025 16:16:48 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 411
+[18-Aug-2025 16:16:48 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 411
+[18-Aug-2025 18:54:05 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 18:54:05 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 18:54:05 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[18-Aug-2025 18:54:05 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[18-Aug-2025 18:56:24 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 18:56:24 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 18:56:24 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[18-Aug-2025 18:56:24 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[18-Aug-2025 18:57:59 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 18:57:59 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 18:57:59 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[18-Aug-2025 18:57:59 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[18-Aug-2025 18:58:11 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 18:58:11 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 18:58:11 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[18-Aug-2025 18:58:11 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[18-Aug-2025 18:59:44 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 18:59:44 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 18:59:44 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[18-Aug-2025 18:59:44 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[18-Aug-2025 19:00:16 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 19:00:16 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 19:00:16 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[18-Aug-2025 19:00:16 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[18-Aug-2025 19:01:44 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 19:01:44 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[18-Aug-2025 19:01:44 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[18-Aug-2025 19:01:44 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 230
+[25-Aug-2025 22:35:12 Europe/Bucharest] PHP Warning:  Undefined array key "order" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php on line 10
+[25-Aug-2025 22:35:12 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 176
+[25-Aug-2025 22:35:12 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[25-Aug-2025 22:35:12 Europe/Bucharest] PHP Warning:  Undefined array key "order" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php on line 16
+[25-Aug-2025 22:35:12 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php on line 16
+[25-Aug-2025 22:36:11 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[25-Aug-2025 22:36:11 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[26-Aug-2025 14:34:04 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[26-Aug-2025 14:34:04 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[26-Aug-2025 14:34:04 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 206
+[26-Aug-2025 14:34:04 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 234
+[26-Aug-2025 14:34:04 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 234
+[26-Aug-2025 14:35:26 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[26-Aug-2025 14:35:26 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[26-Aug-2025 14:35:26 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 206
+[26-Aug-2025 14:35:26 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 234
+[26-Aug-2025 14:35:26 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 234
+[26-Aug-2025 14:35:48 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, string given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[26-Aug-2025 14:35:48 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 206
+[26-Aug-2025 14:35:48 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, string given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 234
+[26-Aug-2025 14:37:24 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, string given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[26-Aug-2025 14:37:24 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 206
+[26-Aug-2025 14:37:24 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, string given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 234
+[26-Aug-2025 14:41:14 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 209
+[26-Aug-2025 14:41:14 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, string given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 237
+[26-Aug-2025 14:41:56 Europe/Bucharest] PHP Warning:  Undefined array key "comments" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 209
+[26-Aug-2025 14:41:56 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, string given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 237
+[26-Aug-2025 14:42:22 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, string given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 237
+[26-Aug-2025 15:22:20 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function viva_order_exists() in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php:30
+Stack trace:
+#0 {main}
+  thrown in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php on line 30
+[26-Aug-2025 15:22:23 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function viva_order_exists() in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php:30
+Stack trace:
+#0 {main}
+  thrown in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php on line 30
+[26-Aug-2025 15:22:24 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function viva_order_exists() in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php:30
+Stack trace:
+#0 {main}
+  thrown in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php on line 30
+[26-Aug-2025 15:22:45 Europe/Bucharest] PHP Fatal error:  Uncaught Error: Call to undefined function viva_order_exists() in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php:30
+Stack trace:
+#0 {main}
+  thrown in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php on line 30
+[26-Aug-2025 15:23:19 Europe/Bucharest] PHP Warning:  Undefined variable $id in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php on line 30
+[26-Aug-2025 15:34:14 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php on line 34
+[26-Aug-2025 15:34:59 Europe/Bucharest] PHP Warning:  Undefined array key "type" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php on line 30
+[26-Aug-2025 15:34:59 Europe/Bucharest] PHP Warning:  Undefined variable $order in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/api/save_order.php on line 34
+[29-Aug-2025 14:05:56 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[30-Aug-2025 19:16:44 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[30-Aug-2025 19:42:48 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[30-Aug-2025 20:15:25 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[30-Aug-2025 20:51:14 Europe/Bucharest] PHP Warning:  Undefined array key "total" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 300
+[30-Aug-2025 20:53:07 Europe/Bucharest] PHP Warning:  Undefined array key "total" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 343
+[30-Aug-2025 20:53:10 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 124
+[30-Aug-2025 20:53:10 Europe/Bucharest] PHP Warning:  foreach() argument must be of type array|object, null given in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 127
+[30-Aug-2025 20:53:34 Europe/Bucharest] PHP Warning:  Undefined array key "total" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 82
+[30-Aug-2025 20:55:25 Europe/Bucharest] PHP Warning:  Undefined array key "entries" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 450
+[30-Aug-2025 20:55:25 Europe/Bucharest] PHP Warning:  Trying to access array offset on value of type null in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 450
+[31-Aug-2025 18:50:18 Europe/Bucharest] PHP Warning:  Undefined array key "user" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 239
+[31-Aug-2025 18:50:18 Europe/Bucharest] PHP Warning:  Undefined array key "_id" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 240
+[31-Aug-2025 18:50:40 Europe/Bucharest] PHP Warning:  Undefined array key "total" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 300
+[31-Aug-2025 18:51:07 Europe/Bucharest] PHP Warning:  Undefined array key "total" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 300
+[31-Aug-2025 19:35:03 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180
+[31-Aug-2025 21:08:53 Europe/Bucharest] PHP Warning:  Undefined array key "products" in /home2/tadaa/app.tadaa.ro/modules/vendor/new_order/php/functions.php on line 180

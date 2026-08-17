@@ -1,0 +1,457 @@
+:root {
+  touch-action: pan-x pan-y;
+  height: 100% 
+}
+
+@font-face {
+    font-family: Axiforma;
+    font-weight: 400;
+    src: url("Kastelov  Axiforma Regular.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Axiforma;
+    font-weight: 500;
+    src: url("Kastelov  Axiforma Medium.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Axiforma;
+    font-weight: 700;
+    src: url("Kastelov  Axiforma Bold.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Axiforma;
+    font-weight: 800;
+    src: url("Kastelov  Axiforma Book.otf") format("opentype");
+}
+
+html {
+	width: 100%;
+	font-family: 'Axiforma', sans-serif;
+	overflow-x: hidden;
+}
+
+body {
+	width: 100%;
+	font-family: 'Axiforma', sans-serif;
+	font-size: 14px;
+	color: #434343;
+}
+
+p {
+	margin: 0;
+}
+
+a {
+	color: inherit;
+	text-decoration: inherit;
+	font-size: inherit;
+}
+
+a:focus {
+	outline: none;
+}
+
+a, input, .buton{
+    touch-action: manipulation;
+}
+
+audio {
+	display: none;
+}
+
+.top .view {
+	display: flex;
+	width: 180px;
+	height: 35px;
+	border: 1px solid #1D1D1D;
+	border-radius: 10px;
+	line-height: 12px;
+	font-size: 13px;
+	font-weight: 700;
+	overflow: hidden;
+}
+
+.top .view div {
+	width: 50%;
+	height:  100%;
+	/* display:  flex; */
+	justify-content: center;
+	align-items: center;
+	padding-top: 4px;
+	padding: 12px 5px 5px 8px;
+	text-align: center;
+	transition: all 0.1s ease-in-out;
+}
+
+.top .view div.selected {
+	background: #434343;
+	color: #fff;
+}
+
+.top .view :first-of-type {
+	border-right: 1px solid #1D1D1D;
+}
+
+.top {
+	padding: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid #eee;
+}
+
+.top .vendor {
+	font-size: 18px;
+	font-weight: 700
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding:  15px;
+}
+
+.list.orders {
+	display: none;
+}
+
+.list.orders.opened {
+	display: block;
+}
+
+.new-order-mobile {
+	position: fixed;
+	bottom: 4px;
+	right: 10px;
+	font-size: 50px;
+	color: #04a504;
+}
+
+.back-home {
+	position: fixed;
+	bottom: 4px;
+	left: 10px;
+	font-size: 50px;
+	color: #f91818;
+}
+
+
+
+.list .item.mobile {
+	display: none;
+}
+
+.list .item {
+	display: flex;
+	align-items: center;
+	padding: 35px 0;
+	width: 100%;
+	gap: 2%;
+	border-bottom: 1px solid #eee;
+	justify-content: space-between;
+	position: relative;
+	padding-left: 25px;
+}
+
+.list.settings .item {
+	padding-left: 0;
+	position: relative;
+	padding-top: 53px;
+}
+
+.list.settings .item.off {
+	opacity: 0.7;
+}
+
+.list.settings .item.off:before {
+	content: "";
+	width: 10px;
+	height: 100%;
+	position: absolute;
+	left: -15px;
+	top: 0;
+	display: block;
+	z-index: 1;
+	background: rgb(255, 0, 6);
+}
+
+.list.settings .item:before {
+	content: "";
+	width: 10px;
+	height: 100%;
+	position: absolute;
+	left: -15px;
+	top: 0;
+	display: block;
+	z-index: 1;
+	background: #1bb325;
+}
+
+.list.settings .item:first-of-type:before {
+	display: none;
+}
+
+.list .item.waiting .buton:not(.undo),
+.list .item.waiting .col-1,
+.list .item.waiting .col-2,
+.list .item.waiting .col-3,
+.list .item.waiting .col-4,
+.list .item.waiting .col-6,
+.list .item.waiting .color {
+	opacity: 0.3;
+	pointer-events: none;
+}
+
+.list .item.waiting .mark-ready,
+.list .item.waiting .mark-closed,
+.list .item.waiting .mark-refunded {
+	display: none;
+}
+
+.list .item.waiting .undo {
+	display: inline-block;
+}
+
+.list .item .undo {
+	display: none;
+}
+
+.list .item .status p {
+	writing-mode: vertical-lr;
+	text-orientation: mixed;
+}
+
+.list .item .status {
+	color: #fff;
+	padding: 5px;
+	box-sizing: content-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.list .item .color {
+	height: calc(100% - 20px);
+	width: 1px;
+	display: block;
+	position: absolute;
+	top: 10px;
+	left: 0;
+	border-radius: 7px;
+}
+
+.list .item.status-opened .color {
+	border-left: 9px solid #FFC906;
+}
+
+.list .item.status-ready .color {
+	border-left: 9px solid #1bb325;
+}
+
+.list .item.status-closed .color {
+	border-left: 9px solid #888;
+}
+
+.orders.list .col-1 {
+	width: 79px;
+}
+
+.orders.list .col-2 {
+	width: 252px;
+}
+
+.orders.list .col-2 p {
+	margin-bottom: 5px
+}
+
+.orders.list .col-3 {
+	width: 200px;
+}
+
+.orders.list .col-4 {
+	width: 186px;
+}
+
+.orders.list .col-4.day {
+	width: 82px;
+}
+
+.orders.list .col-5 {
+	width: 130px;
+}
+.orders.list .col-6 {
+	width: 140px;
+}
+
+.orders.list.settings .col-1 {
+	width: 200px;
+}
+
+.orders.list.settings .col-2 {
+	width: 150px;
+}
+
+.orders.list.settings .col-3 {
+	width: 120px;
+}
+
+.orders.list.settings .col-4 {
+	width: 150px;
+}
+
+.orders.list.settings .col-5 {
+	width: 100px;
+}
+.orders.list.settings .col-6 {
+	width: 110px;
+}
+
+.orders.list .actions {
+	text-align: center;
+}
+
+.orders.list.ready .actions {
+	width: 130px
+}
+
+.orders.list.closed .actions {
+	width: 160px;
+}
+
+.orders.list .products p>span {
+	text-align: right;
+	display: inline-block;
+	width: 20px;
+	padding-right: 5px;
+	font-family: 'Axiforma';
+	font-weight: 500;
+}
+
+.orders.list .products p span.extras {
+	
+text-align: left;
+	
+width: auto;
+	
+display: flex;
+	
+flex-direction: column;
+	
+padding-left: 20px;
+	
+font-weight:  300;
+}
+
+.orders.list .time {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.orders.list .time .nr {
+	margin-bottom: 5px;
+	margin-top: -27px;
+}
+
+.orders.list .time .buttons {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+}
+
+.orders.list .time .buttons span {
+	border: 1px solid #eee;
+	padding: 15px 19px;
+	display: inline-block;
+	border-radius: 50%;
+}
+
+.orders.list .time .buttons span img {
+	width: 12px;
+}
+
+.orders.list .refund-pending,
+.orders.list .refunded.confirmed .refund-pending{
+	color: red;
+	font-weight: 700;
+	display: none;
+}
+
+.orders.list .refund-confirmed {
+	color: green;
+	font-weight: 700;
+	display: none;
+}
+
+.orders.list .refunded .refund-pending {
+	display: block;
+}
+
+.orders.list .confirmed .refund-confirmed {
+	display: block;
+}
+
+.orders.list .refunded .undo,
+.orders.list .refunded .mark-refunded {
+	display: none;
+}
+
+.buton {
+	border: 1px solid #1D1D1D;
+	font-size: 14px;
+	font-weight: 700;
+	padding: 14px 30px 12px 30px;
+	border-radius: 10px;
+	display:  inline-block;
+	margin-right: 5px;
+	line-height: 16px;
+	background: #fff;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.buton.selected {
+	background: #434343;
+	color: #fff;
+}
+
+.sound svg {
+	width: 28px;
+	position: relative;
+	top: 3px;
+}
+
+.sound.on svg #off {
+	display: none;
+}
+
+.settings svg {
+	width: 29px;
+	position: relative;
+	top: 2px;
+}
+
+.settings.selected svg path {
+	fill: rgb(255 163 0);
+}
+
+.top .action-buttons {
+	display: flex;
+	gap: 35px;
+	align-items: center;
+}
+
+.top .action-buttons>div {
+	padding: 10px 13px;
+	margin: -10px;
+	cursor: pointer;
+}
+
+.orders.list.settings .item.header p {
+	font-weight: 700;
+	padding: 10px 0
+}
