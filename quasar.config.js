@@ -5,7 +5,8 @@ export default defineConfig(() => {
     boot: [
       'axios',
       'image-helper',
-      'wake-lock'
+      'wake-lock',
+      'notify'
     ],
     css: [
       'app.scss'
