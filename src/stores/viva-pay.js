@@ -46,7 +46,7 @@ export function buildVivaPayUrl (payload = {}) {
     action: 'sale',
     amount: payload?.totalPrice,
     callback: config.callback,
-    ISV_amount: payload?.totalPrice * config.ISV_amount / 100,
+    ISV_amount: 0,
     ISV_clientId: config.ISV_clientId,
     ISV_clientSecret: config.ISV_clientSecret,
     ISV_merchantId: config.ISV_merchantId,

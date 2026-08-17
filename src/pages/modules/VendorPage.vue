@@ -289,7 +289,7 @@
 
     <VendorPaymentModal v-model="showPayment" :cart="customCart" :cart-total="customCartTotal" />
 
-    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+    <q-page-sticky v-if="!vendorLoading" position="bottom-right" :offset="[18, 18]">
       <q-btn no-caps unelevated icon="add" label="New order" class="new-order-btn" @click="addOrder" />
     </q-page-sticky>
 
