@@ -36,7 +36,7 @@
         </div>
         <div v-if="cardData.balance !== undefined" class="card-details-row">
           <span class="card-details-label">Balance</span>
-          <span class="card-details-value" v-html="_formattedPrice(Number(cardData.balance) || 0)" />
+          <span class="card-details-value card-details-value--balance" v-html="_formattedPrice(Number(cardData.balance) || 0)" />
         </div>
 
         <q-btn
@@ -49,23 +49,37 @@
         />
       </div>
 
-      <h1 class="topup-title">Enter amount</h1>
+      <h1 class="topup-title">Select prepaid amount</h1>
 
-      <div class="amount-input-card">
-        <p class="amount-input-label">Amount</p>
-        <div class="amount-input-row">
-          <input
-            v-model="amount"
-            type="number"
-            inputmode="numeric"
-            placeholder="0"
-            class="amount-number-input"
-            @wheel.prevent
-          />
-          <span class="amount-input-currency">lei</span>
-        </div>
+      <div class="amounts-grid">
+        <button
+          v-for="amt in amounts"
+          :key="amt"
+          class="amount-btn"
+          :class="{ selected: selectedAmount === amt }"
+          @click="selectAmount(amt)"
+        >
+          {{ amt }} lei
+        </button>
+
+        <button
+          class="amount-btn amount-other"
+          :class="{ selected: selectedAmount === 'other' }"
+          @click="selectOther"
+        >
+          Other...
+        </button>
       </div>
 
+      <transition name="fade">
+        <div v-if="finalAmount" class="amount-summary">
+          <span class="summary-label">Total to top up</span>
+          <span class="summary-value">{{ finalAmount }} lei</span>
+        </div>
+      </transition>
+    </div>
+
+    <div v-if="cardData" class="bottom-actions">
       <button
         class="btn-proceed"
         :disabled="!finalAmount"
@@ -73,16 +87,45 @@
       >
         Top Up
       </button>
-    </div>
-
-    <div v-if="cardData && Number(cardData?.balance) > 0" class="bottom-actions">
       <button
+        v-if="Number(cardData?.balance) > 0"
         class="btn-cashout"
         @click="onCashOutClick"
       >
         Cash Out
       </button>
     </div>
+
+    <q-dialog v-model="showCustomDialog" @show="onDialogShow">
+      <q-card class="custom-dialog">
+        <div class="dialog-body">
+          <p class="dialog-label">Custom amount</p>
+          <div class="dialog-input-row">
+            <input
+              ref="customInputRef"
+              v-model="tempAmount"
+              type="number"
+              inputmode="numeric"
+              placeholder="0"
+              class="dialog-number-input"
+              @wheel.prevent
+              @keyup.enter="onDialogOk"
+            />
+            <span class="dialog-currency">lei</span>
+          </div>
+        </div>
+        <div class="dialog-actions">
+          <button class="dialog-btn btn-cancel" @click="onDialogCancel">Cancel</button>
+          <button
+            class="dialog-btn btn-ok"
+            :disabled="!(Number(tempAmount) > 0)"
+            @click="onDialogOk"
+          >
+            OK
+          </button>
+        </div>
+      </q-card>
+    </q-dialog>
 
     <q-dialog v-model="showPaymentModal" class="payment-method-dialog">
       <q-card class="payment-method-card">
@@ -160,7 +203,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, nextTick, watch, onMounted, onBeforeUnmount } from 'vue'
 import { Cookies, Notify } from 'quasar'
 import { useDataStore } from 'stores/data.js'
 import _formattedPrice from '../../mixins/formattedPrice.js'
@@ -360,19 +403,53 @@ onBeforeUnmount(() => {
   Cookies.remove('scannedCard', { path: '/' })
 })
 
-const amount = ref('')
+const amounts = [50, 100, 150, 200, 250, 300, 350, 400, 450]
+const selectedAmount = ref(null)
+const customAmount = ref('')
+const showCustomDialog = ref(false)
+const tempAmount = ref('')
+const customInputRef = ref(null)
 
 const showPaymentModal = ref(false)
 const showCashConfirm = ref(false)
 const showCashOutConfirm = ref(false)
 const isCashingOut = ref(false)
 
-const finalAmount = computed(() => Number(amount.value) > 0 ? Number(amount.value) : null)
+const finalAmount = computed(() => {
+  if (selectedAmount.value === 'other') return Number(customAmount.value) || null
+  return selectedAmount.value
+})
 
 watch(() => store.isFetching, (val, oldVal) => {
   if (oldVal === 'pay_cash' && val === null) showCashConfirm.value = false
   if (oldVal === 'pay_card' && val === null) showPaymentModal.value = false
 })
+
+const selectAmount = (amt) => {
+  selectedAmount.value = amt
+  customAmount.value = ''
+}
+
+const selectOther = () => {
+  tempAmount.value = customAmount.value
+  showCustomDialog.value = true
+}
+
+const onDialogShow = async () => {
+  await nextTick()
+  customInputRef.value?.focus()
+}
+
+const onDialogOk = () => {
+  if (!(Number(tempAmount.value) > 0)) return
+  selectedAmount.value = 'other'
+  customAmount.value = tempAmount.value
+  showCustomDialog.value = false
+}
+
+const onDialogCancel = () => {
+  showCustomDialog.value = false
+}
 
 const onCashOut = () => {
   showPaymentModal.value = true
@@ -400,7 +477,8 @@ const onConfirmCash = () => {
     source: 'topup'
   }, async () => {
     showCashConfirm.value = false
-    amount.value = ''
+    selectedAmount.value = null
+    customAmount.value = ''
     await refreshCardBalance()
   })
 }
@@ -574,6 +652,11 @@ const onConfirmCashOut = async () => {
     font-family: monospace;
     word-break: break-all;
     text-align: right;
+
+    &--balance {
+      font-size: 14px;
+      font-weight: 700;
+    }
   }
 }
 
@@ -587,7 +670,7 @@ const onConfirmCashOut = async () => {
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
-  padding: 32px 0 110px;
+  padding: 32px 0 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -601,61 +684,77 @@ const onConfirmCashOut = async () => {
   text-align: center;
 }
 
-/* Amount input */
-.amount-input-card {
+.amounts-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 5px;
   width: 100%;
-  background: #fafafa;
-  border: 1.5px solid #e0e0e0;
-  border-radius: 12px;
-  padding: 12px 16px;
 }
 
-.amount-input-label {
-  font-size: 12px;
-  font-weight: 500;
-  color: #999;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  margin: 0 0 4px;
-}
-
-.amount-input-row {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  border-bottom: 2px solid #2e7d1f;
-  padding-bottom: 4px;
-}
-
-.amount-number-input {
-  flex: 1;
+.amount-btn {
+  aspect-ratio: 1;
   border: none;
-  outline: none;
-  background: transparent;
-  font-size: 26px;
-  font-weight: 700;
-  color: #2e7d1f;
-  width: 100%;
+  border-radius: 6px;
+  background: #2e7d1f;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  &::placeholder {
-    color: #ddd;
+  &:active {
+    transform: scale(0.95);
   }
 
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+  &.selected {
+    background: #1a4f10;
+    outline: 3px solid #f5c518;
+    outline-offset: -3px;
   }
 
-  &[type='number'] {
-    -moz-appearance: textfield;
+  &:hover:not(.selected) {
+    background: #3a9426;
   }
 }
 
-.amount-input-currency {
-  font-size: 18px;
-  font-weight: 600;
-  color: #2e7d1f;
-  flex-shrink: 0;
+.amount-other {
+  background: #8db800;
+
+  &:hover:not(.selected) {
+    background: #a0d400;
+  }
+
+  &.selected {
+    background: #5a7a00;
+    outline: 3px solid #f5c518;
+    outline-offset: -3px;
+  }
+}
+
+/* Sumar */
+.amount-summary {
+  width: 100%;
+  background: #f0f9ee;
+  border: 1.5px solid #2e7d1f;
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .summary-label {
+    font-size: 14px;
+    color: #555;
+  }
+
+  .summary-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2e7d1f;
+  }
 }
 
 /* Sticky footer */
@@ -743,6 +842,121 @@ const onConfirmCashOut = async () => {
   &:not(:disabled):hover {
     background: #f5871f;
   }
+}
+
+/* Dialog custom amount */
+.custom-dialog {
+  width: 300px;
+  border-radius: 14px !important;
+  overflow: hidden;
+}
+
+.dialog-body {
+  padding: 28px 24px 20px;
+}
+
+.dialog-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 0 0 12px;
+}
+
+.dialog-input-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  border-bottom: 2px solid #2e7d1f;
+  padding-bottom: 6px;
+}
+
+.dialog-number-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 36px;
+  font-weight: 700;
+  color: #2e7d1f;
+  width: 100%;
+
+  &::placeholder {
+    color: #ddd;
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  &[type='number'] {
+    -moz-appearance: textfield;
+  }
+}
+
+.dialog-currency {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2e7d1f;
+  flex-shrink: 0;
+}
+
+.dialog-actions {
+  display: flex;
+  border-top: 1px solid #f0f0f0;
+}
+
+.dialog-btn {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:active {
+    background: #f5f5f5;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+.btn-cancel {
+  color: #999;
+  border-right: 1px solid #f0f0f0;
+}
+
+.btn-ok {
+  color: #2e7d1f;
+}
+
+/* Transition */
+.fade-enter-active {
+  transition: opacity 0.18s ease;
+}
+
+.fade-leave-active {
+  transition: opacity 0.2s ease, max-height 0.25s ease, padding-top 0.25s ease, padding-bottom 0.25s ease;
+  max-height: 100px;
+  overflow: hidden;
+}
+
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-leave-to {
+  opacity: 0;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 /* ── Payment method dialog ─────────────────────────── */
