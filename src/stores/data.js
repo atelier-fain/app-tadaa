@@ -167,8 +167,9 @@ export const useDataStore = defineStore('data', {
     async pay_card (payload) {
       this.isFetching = 'pay_card'
       try {
-        // payload.source is only set on the initial call from TicketsPage/TopUpPage; a
-        // retry from Callback.vue omits it and reuses the pendingOrder from the failed attempt.
+        // source is required (not optional) so buildVivaPayUrl can resolve the right
+        // ISV_merchantSourceCode/ISV_sourceCode — Callback.vue's retry forwards it from
+        // the cookie'd pendingOrder rather than omitting it, so this re-saves the same data.
         if (payload.source) {
           this.pendingOrder = {
             paymentMethod: payload?.paymentMethod,

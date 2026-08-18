@@ -205,7 +205,15 @@ function onNewOrder () {
 }
 
 function onRetry () {
-  store.pay_card({ amount: 1, totalPrice: amount.value, user: store.user?.user })
+  store.pay_card({
+    totalPrice: amount.value,
+    user: store.user?.user,
+    source: pendingOrder.value?.source,
+    cardId: pendingOrder.value?.cardId,
+    cart: pendingOrder.value?.cart,
+    tickets: pendingOrder.value?.tickets,
+    paymentMethod: pendingOrder.value?.paymentMethod
+  })
 }
 
 // Comenzile "de meniu" (item-uri cu productId, venite din VendorNewOrder.vue)
