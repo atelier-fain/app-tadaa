@@ -6,7 +6,7 @@ import { useVendorStore } from 'stores/vendor.js'
 // recentă comandă online cunoscută (vezi checkNewOnlineOrders în
 // stores/vendor.js) și primim înapoi doar ce e mai nou.
 // TODO: 10s doar pentru testare — de pus înapoi la 60000 (60s) după.
-const POLL_INTERVAL_MS = 10000
+const POLL_INTERVAL_MS = 30000
 
 let intervalId = null
 
