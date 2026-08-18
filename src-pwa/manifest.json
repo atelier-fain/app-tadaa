@@ -5,6 +5,13 @@
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#e15350",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
+  "capture_links": "existing-client-navigate",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
   "icons": [
     {
       "src": "icons/web-app-manifest-512x512.png",

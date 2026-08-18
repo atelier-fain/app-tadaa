@@ -205,6 +205,18 @@
           <span class="vo-order-total">{{ order.total }} lei</span>
         </div>
       </div>
+
+      <div v-if="showSeeAllClosed" class="see-all-wrap">
+        <q-btn
+          no-caps
+          outline
+          label="See all"
+          class="btn-see-all"
+          :loading="loadingSeeAllClosed"
+          :disable="loadingSeeAllClosed"
+          @click="seeAllClosed"
+        />
+      </div>
     </div>
 
     <div v-else class="value-only-panel">
@@ -253,6 +265,18 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <div v-if="showSeeAllClosed" class="see-all-wrap">
+        <q-btn
+          no-caps
+          outline
+          label="See all"
+          class="btn-see-all"
+          :loading="loadingSeeAllClosed"
+          :disable="loadingSeeAllClosed"
+          @click="seeAllClosed"
+        />
       </div>
     </div>
 
@@ -382,10 +406,13 @@ watch(() => vendorStore.scrollToId, (orderId) => {
   })
 }, { immediate: true })
 
-// ----- See all (tab Closed) -----
-// Un singur apel aduce TOATE comenzile closed rămase — nu există paginare,
-// deci butonul dispare necondiționat după primul apel reușit (indiferent
-// câte comenzi a adus), nu doar când răspunsul e gol.
+// ----- See all -----
+// Comun celor trei variante de layout (tab-ul Closed când showTabs, lista
+// plată când online_orders: false, grid-ul value_only) — starea e comună
+// fiindcă la un moment dat e vizibil un singur layout. Un singur apel aduce
+// TOATE comenzile closed rămase — nu există paginare, deci butonul dispare
+// necondiționat după primul apel reușit (indiferent câte comenzi a adus),
+// nu doar când răspunsul e gol.
 const loadingSeeAllClosed = ref(false)
 const showSeeAllClosed = ref(true)
 

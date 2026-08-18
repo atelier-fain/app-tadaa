@@ -6,7 +6,7 @@
         <q-btn flat round dense icon="close" class="pm-close" @click="showPaymentModal = false" />
       </div>
 
-      <div v-if="cart.length" class="pm-order-details">
+      <div v-if="cart.length && !vendorStore.vendor?.value_only" class="pm-order-details">
         <div v-for="(item, i) in cart" :key="i" class="pm-order-row">
           <div class="pm-order-main">
             <span class="pm-order-name">{{ item.name }}</span>
@@ -94,6 +94,7 @@ import { ref, computed, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { Cookies } from 'quasar'
 import { useDataStore } from 'stores/data.js'
+import { useVendorStore } from 'stores/vendor.js'
 import _formattedPrice from '../mixins/formattedPrice.js'
 
 const props = defineProps({
@@ -105,6 +106,7 @@ const emit = defineEmits(['update:modelValue'])
 
 const router = useRouter()
 const dataStore = useDataStore()
+const vendorStore = useVendorStore()
 const isDev = !!process.env.DEV
 
 const cart = computed(() => props.cart)

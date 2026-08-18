@@ -131,6 +131,22 @@ export default defineRouter(function ({ store }) {
     if (vendorModuleRoutes.includes(to.name) && !vendorModuleRoutes.includes(from.name)) {
       useVendorStore(store).fetchVendor()
         .then((data) => {
+          if (Router.currentRoute.value.name !== to.name) return
+
+          // online_orders: true + value_only: true = vendor "doar sumă
+          // custom" (fără meniu/comenzi online reale) — indiferent de
+          // app_vendor (verificat separat, mai sus), un cont ca ăsta nu are
+          // ce căuta în modulul Vendor.
+          if (data?.online_orders && data?.value_only) {
+            Notify.create({
+              type: 'negative',
+              message: 'There is a problem with your account. Please contact support.',
+              position: 'top',
+            })
+            Router.replace({ name: 'dashboard' })
+            return
+          }
+
           // Live updates (polling, vezi vendorLiveUpdates.js) — gate-ul pe
           // online_orders e verificat în connectVendorLiveUpdates însuși.
           connectVendorLiveUpdates(data?.online_orders)
