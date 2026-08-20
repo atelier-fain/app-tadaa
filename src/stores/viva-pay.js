@@ -1,6 +1,6 @@
 import { Cookies } from 'quasar'
 
-const dev = true
+const dev = false
 
 // de reactivat dacă mai apar probleme de tipul RESELLER_ORDER_DECLINED —
 // controlează atât salvarea cookie-ului de debug de aici, cât și afișarea
