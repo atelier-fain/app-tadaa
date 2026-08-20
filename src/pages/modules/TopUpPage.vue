@@ -682,6 +682,7 @@ const onConfirmCashOut = async () => {
   font-weight: 500;
   color: #1a1a1a;
   text-align: center;
+  margin-bottom: 0;
 }
 
 .amounts-grid {
@@ -740,7 +741,7 @@ const onConfirmCashOut = async () => {
   background: #f0f9ee;
   border: 1.5px solid #2e7d1f;
   border-radius: 10px;
-  padding: 16px 20px;
+  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
