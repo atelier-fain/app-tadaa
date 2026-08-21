@@ -74,7 +74,7 @@
       <transition name="fade">
         <div v-if="finalAmount" class="amount-summary">
           <span class="summary-label">Total to top up</span>
-          <span class="summary-value">{{ finalAmount }} lei</span>
+          <span class="summary-value" v-html="_formattedPrice(toCents(finalAmount))" />
         </div>
       </transition>
     </div>
@@ -161,7 +161,7 @@
           <q-icon name="payments" />
         </div>
         <div class="cc-title">Cash Payment</div>
-        <div class="cc-amount" v-html="_formattedPrice(finalAmount * 100)" />
+        <div class="cc-amount" v-html="_formattedPrice(toCents(finalAmount))" />
         <div class="cc-desc">Have you received the above amount from the customer?</div>
         <div class="cc-actions">
           <q-btn outline no-caps label="Cancel" class="cc-btn cc-btn--cancel" v-close-popup />
@@ -206,7 +206,7 @@
 import { ref, computed, nextTick, watch, onMounted, onBeforeUnmount } from 'vue'
 import { Cookies, Notify } from 'quasar'
 import { useDataStore } from 'stores/data.js'
-import _formattedPrice from '../../mixins/formattedPrice.js'
+import _formattedPrice, { toCents } from '../../mixins/formattedPrice.js'
 
 const store = useDataStore()
 
@@ -463,7 +463,7 @@ const onCashClick = () => {
 const onCardClick = () => {
   if (store.isFetching === 'pay_card') return
   store.pay_card({
-    totalPrice: finalAmount.value * 100,
+    totalPrice: toCents(finalAmount.value),
     user: store.user?.user,
     cardId: cardData.value?._id,
     source: 'topup'
@@ -472,7 +472,7 @@ const onCardClick = () => {
 
 const onConfirmCash = () => {
   store.pay_cash({
-    amount: finalAmount.value * 100,
+    amount: toCents(finalAmount.value),
     cardId: cardData.value?._id,
     source: 'topup'
   }, async () => {

@@ -53,7 +53,7 @@
         <div class="product-main">
           <div class="product-info">
             <span class="product-name">{{ product.name }}</span>
-            <span class="product-price">{{ product.price }} lei</span>
+            <span class="product-price" v-html="_formattedPrice(product.priceRaw)" />
           </div>
           <div class="product-actions">
             <q-btn
@@ -102,12 +102,12 @@
                 <q-icon v-if="isSelected(opt, group)" name="check" size="17px" />
               </div>
               <span class="extras-name">{{ opt.name }}</span>
-              <span class="extras-price" v-html="formatPrice(opt.price, true)" />
+              <span class="extras-price" v-html="_formattedPrice(opt.priceRaw)" />
             </div>
           </div>
 
           <div class="extras-footer">
-            <span class="extras-total" v-html="formatPrice(expandedTotal, true)" />
+            <span class="extras-total" v-html="_formattedPrice(expandedTotal)" />
             <q-btn
               no-caps
               unelevated
@@ -126,7 +126,7 @@
         <q-btn no-caps unelevated class="cart-btn" @click="showPayment = true">
           <span class="cart-count">{{ cartQty }}</span>
           <span class="cart-label">Payment</span>
-          <span class="cart-total">{{ cartTotal }} lei</span>
+          <span class="cart-total" v-html="_formattedPrice(cartTotal)" />
         </q-btn>
       </div>
     </q-page-sticky>
@@ -146,6 +146,7 @@ import { Cookies } from 'quasar'
 import { useVendorStore } from 'stores/vendor.js'
 import { useDataStore } from 'stores/data.js'
 import VendorPaymentModal from 'components/VendorPaymentModal.vue'
+import _formattedPrice from '../../mixins/formattedPrice.js'
 
 const router = useRouter()
 const vendorStore = useVendorStore()
@@ -210,8 +211,13 @@ function toggleExtra (group, opt) {
 const expandedProduct = computed(
   () => productsInCategory.value.find(p => p.id === expandedId.value)
 )
+// bani (cenți) — nu lei: preluăm priceRaw (exact cum vine din baza de date,
+// vezi mapProduct din stores/vendor.js), nu price (lei, doar pentru afișare
+// simplă, ex. VendorSettings.vue). Number(...) fiindcă priceRaw e păstrat
+// neatins (poate fi string) — fără el, suma ar face concatenare, nu adunare.
 const expandedTotal = computed(
-  () => (expandedProduct.value?.price || 0) + selectedExtras.value.reduce((sum, e) => sum + e.price, 0)
+  () => (Number(expandedProduct.value?.priceRaw) || 0) +
+    selectedExtras.value.reduce((sum, e) => sum + (Number(e.priceRaw) || 0), 0)
 )
 
 // grupurile obligatorii (accept_no_selection: false pe backend) fără nicio
@@ -220,10 +226,6 @@ const missingRequiredGroups = computed(() => (expandedProduct.value?.extraGroups
   .filter(group => group.required && selectedCount(group) === 0)
   .map(group => group.title)
 )
-
-function formatPrice (value, withUnit = false) {
-  return `${Math.floor(value)}<sup>00</sup>${withUnit ? ' lei' : ''}`
-}
 
 // fiecare click de "Add" creează o linie nouă în coș (nu incrementează o
 // cantitate), deci nu există un câmp qty pe item.
@@ -245,8 +247,9 @@ function quickAdd (product) {
     plu: product.plu,
     priceRaw: product.priceRaw,
     extras: [],
-    lineTotal: product.price,
+    lineTotal: Number(product.priceRaw) || 0,
   })
+
   bumpCart()
 }
 
@@ -297,6 +300,8 @@ function takeOverFailedCart () {
 const cart = ref(takeOverFailedCart())
 // fiecare linie din cart reprezintă 1 bucată (nu mai există qty per item)
 const cartQty = computed(() => cart.value.length)
+// sumă de întregi (bani) — fiecare lineTotal e deja în cenți, deci fără risc
+// de virgulă mobilă, spre deosebire de sumele în lei de dinainte
 const cartTotal = computed(() => cart.value.reduce((sum, item) => sum + item.lineTotal, 0))
 
 // declanșează un puls dublu pe box-shadow-ul butonului "Place order" la fiecare adăugare

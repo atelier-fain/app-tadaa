@@ -128,7 +128,7 @@
                 <div class="card-footer">
                   <div>
                     <span class="total-label">Total</span>
-                    <span class="order-total">{{ order.total }} lei</span>
+                    <span class="order-total" v-html="_formattedPrice(toCents(order.total))" />
                   </div>
                   <div
                     v-if="order.status !== ORDER_STATUS.CLOSED"
@@ -202,7 +202,7 @@
       <div v-else class="value-only-grid">
         <div v-for="order in orders" :key="order.id" class="value-only-card">
           <span class="vo-order-id">{{ order.id }}</span>
-          <span class="vo-order-total">{{ order.total }} lei</span>
+          <span class="vo-order-total" v-html="_formattedPrice(toCents(order.total))" />
         </div>
       </div>
 
@@ -259,7 +259,7 @@
               <div class="card-footer">
                 <div>
                   <span class="total-label">Total</span>
-                  <span class="order-total">{{ order.total }} lei</span>
+                  <span class="order-total" v-html="_formattedPrice(toCents(order.total))" />
                 </div>
               </div>
             </div>
@@ -330,6 +330,7 @@ import { useRouter } from 'vue-router'
 import { Notify } from 'quasar'
 import VendorPaymentModal from 'components/VendorPaymentModal.vue'
 import { useVendorStore, ORDER_STATUS } from 'stores/vendor.js'
+import _formattedPrice, { toCents } from 'src/mixins/formattedPrice.js'
 
 const router = useRouter()
 const vendorStore = useVendorStore()
@@ -587,7 +588,11 @@ const customCartTotal = computed(() => customCart.value.reduce((sum, item) => su
 const onCustomValueOk = () => {
   if (!(Number(tempCustomValue.value) > 0)) return
 
-  customCart.value = [{ name: 'Custom amount', qty: 1, extras: [], lineTotal: Number(tempCustomValue.value) }]
+  // "Custom amount" n-are priceRaw din backend (nu e produs real de meniu) —
+  // userul introduce suma direct în lei, deci aici e singurul loc unde chiar
+  // convertim lei -> bani; de aici încolo (lineTotal, cartTotal, saveOrder,
+  // Viva) totul circulă deja ca bani, la fel ca la coșul de meniu.
+  customCart.value = [{ name: 'Custom amount', qty: 1, extras: [], lineTotal: toCents(Number(tempCustomValue.value)) }]
   showCustomValueModal.value = false
   showPayment.value = true
 }

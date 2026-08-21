@@ -23,7 +23,15 @@
         <p v-if="message" class="callback-subtitle">Reason: <strong>{{ message }}</strong></p>
         <div class="callback-actions">
           <q-btn
-            v-if="orderSource === 'vendor'"
+            v-if="paymentSucceededButSaveFailed"
+            no-caps
+            label="Try again"
+            class="callback-btn callback-btn--primary"
+            :loading="isRetryingSave"
+            @click="onRetrySave"
+          />
+          <q-btn
+            v-else-if="orderSource === 'vendor'"
             no-caps
             label="Try another payment method"
             class="callback-btn callback-btn--primary"
@@ -39,6 +47,18 @@
             @click="onRetry"
           />
           <q-btn no-caps outline label="Cancel" class="callback-btn callback-btn--cancel" @click="onCancel" />
+        </div>
+
+        <div v-if="hasError" class="callback-debug">
+          <div class="callback-debug__title">Debug — eroare</div>
+          <div class="callback-debug__section">
+            <strong>Params primite (route.query):</strong>
+            <pre>{{ JSON.stringify(route.query, null, 2) }}</pre>
+          </div>
+          <div class="callback-debug__section">
+            <strong>Detalii eroare:</strong>
+            <pre>{{ JSON.stringify(errorDetails, null, 2) }}</pre>
+          </div>
         </div>
       </template>
     </div>
@@ -81,15 +101,23 @@ const vendorStore = useVendorStore()
 
 const hasError = ref(false)
 const errorMessage = ref('')
+const errorDetails = ref(null)
+const isRetryingSave = ref(false)
 const orderSource = ref(null)
 const pendingOrder = ref(null)
 const showPayment = ref(false)
 const debugRequest = ref(null)
 const retryCart = computed(() => pendingOrder.value?.cart || [])
+// retryCart vine din pendingOrder.cart (cookie) — aceeași formă ca la
+// VendorNewOrder.vue/VendorPage.vue, deci lineTotal e deja în bani (cenți)
 const retryCartTotal = computed(() => retryCart.value.reduce((sum, item) => sum + item.lineTotal, 0))
 
 const status = computed(() => route.query.status)
 const isSuccess = computed(() => status.value === 'success' && !hasError.value)
+// plata a reușit la Viva, doar salvarea în backend a picat (ex: eroare de
+// rețea) — "Try again" retrimite DOAR request-ul de salvare, fără să
+// reia plata (Viva nu ar trebui debitată a doua oară pentru același transactionId)
+const paymentSucceededButSaveFailed = computed(() => status.value === 'success' && hasError.value)
 const amount = computed(() => Number(route.query.amount) || 0)
 const balance = computed(() => route.query.balance !== undefined ? Number(route.query.balance) || 0 : null)
 const message = computed(() => errorMessage.value || route.query.message || '')
@@ -100,6 +128,11 @@ const destinationRoute = computed(() => {
   if (orderSource.value === 'topup') return 'top_up'
   if (orderSource.value === 'vendor') return 'vendor'
   return 'tickets'
+})
+const saveErrorMessage = computed(() => {
+  if (orderSource.value === 'topup') return 'Could not complete the top up'
+  if (orderSource.value === 'vendor') return 'Payment succeeded, but the order could not be sent. Please contact support.'
+  return 'Could not complete the order'
 })
 
 // watch pe route.query (nu onMounted) — "Try another payment method" pentru
@@ -126,6 +159,7 @@ watch(() => route.query, () => {
   // permanent (isSuccess = status === 'success' && !hasError)
   hasError.value = false
   errorMessage.value = ''
+  errorDetails.value = null
 
   // dacă userul dă refresh pe /callback după ce plata a fost deja trimisă
   // către backend (orderSaved: true, setat de buy_tickets/charge_prepaid_card/
@@ -136,35 +170,41 @@ watch(() => route.query, () => {
     return
   }
 
-  if (isSuccess.value && pendingOrder.value.source === 'tickets') {
-    store.buy_tickets({
+  if (isSuccess.value) {
+    persistOrder().catch((e) => {
+      console.error(`${orderSource.value} save failed`, e?.response?.data || e)
+      hasError.value = true
+      errorMessage.value = saveErrorMessage.value
+      errorDetails.value = e?.response?.data || e?.message || String(e)
+    })
+  }
+}, { immediate: true })
+
+// trimite comanda/plata către backend, DOAR salvarea — folosită atât la
+// primul mount cât și de "Try again" (paymentSucceededButSaveFailed), care
+// nu trebuie să reia plata la Viva, doar request-ul de salvare care a picat
+function persistOrder () {
+  if (pendingOrder.value.source === 'tickets') {
+    return store.buy_tickets({
       tickets: pendingOrder.value.tickets,
       method: 'card',
       transactionId: transactionId.value,
       shortOrderCode: shortOrderCode.value
-    }).catch((e) => {
-      console.error('buy_tickets failed', e)
-      hasError.value = true
-      errorMessage.value = 'Could not complete the order'
     })
   }
 
-  if (isSuccess.value && pendingOrder.value.source === 'topup') {
-    store.charge_prepaid_card({
+  if (pendingOrder.value.source === 'topup') {
+    return store.charge_prepaid_card({
       _id: pendingOrder.value.cardId,
       amount: amount.value,
       method: 'card',
       transactionId: transactionId.value,
       shortOrderCode: shortOrderCode.value
-    }).catch((e) => {
-      console.error('charge_prepaid_card failed', e)
-      hasError.value = true
-      errorMessage.value = 'Could not complete the top up'
     })
   }
 
-  if (isSuccess.value && pendingOrder.value.source === 'vendor') {
-    vendorStore.saveOrder(
+  if (pendingOrder.value.source === 'vendor') {
+    return vendorStore.saveOrder(
       pendingOrder.value.cart || [],
       pendingOrder.value?.paymentMethod || 'card',
       transactionId.value,
@@ -174,13 +214,11 @@ watch(() => route.query, () => {
       // altfel o comandă netrimisă în DB ar bloca orice reîncercare ulterioară
       store.pendingOrder = { source: 'vendor', orderSaved: true }
       Cookies.set('pendingOrder', store.pendingOrder, { path: '/', expires: 1 })
-    }).catch((e) => {
-      console.error('[vendor/orders] error:', e?.response?.data || e)
-      hasError.value = true
-      errorMessage.value = 'Payment succeeded, but the order could not be sent. Please contact support.'
     })
   }
-}, { immediate: true })
+
+  return Promise.resolve()
+}
 
 // odată ce userul pleacă de pe /callback (navigare internă Vue Router —
 // New order/Cancel/redirect-ul automat de mai sus), ștergem cookie-ul DOAR
@@ -202,6 +240,25 @@ onBeforeUnmount(() => {
 // pagina următoare să nu aterizeze din nou pe ecranul de succes
 function onNewOrder () {
   router.replace({ name: destinationRoute.value })
+}
+
+// "Try again" pentru cazul plată reușită / salvare eșuată — reia DOAR
+// request-ul de salvare (fără onRetry, care ar deschide un nou pay_card
+// și ar debita userul din nou pentru aceeași comandă)
+async function onRetrySave () {
+  isRetryingSave.value = true
+
+  try {
+    await persistOrder()
+    hasError.value = false
+    errorMessage.value = ''
+    errorDetails.value = null
+  } catch (e) {
+    console.error(`${orderSource.value} retry save failed`, e?.response?.data || e)
+    errorDetails.value = e?.response?.data || e?.message || String(e)
+  } finally {
+    isRetryingSave.value = false
+  }
 }
 
 function onRetry () {

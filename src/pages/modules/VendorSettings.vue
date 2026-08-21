@@ -69,7 +69,7 @@
             </div>
 
             <div class="card-meta">
-              <span>{{ product.price }} lei</span>
+              <span v-html="_formattedPrice(product.priceRaw)" />
             </div>
 
             <div class="card-footer">
@@ -123,6 +123,7 @@ import { useRouter } from 'vue-router'
 import { Notify } from 'quasar'
 import { useVendorStore, toArray } from 'stores/vendor.js'
 import NotificationsBell from 'components/NotificationsBell.vue'
+import _formattedPrice from 'src/mixins/formattedPrice.js'
 
 const router = useRouter()
 const vendorStore = useVendorStore()

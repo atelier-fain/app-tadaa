@@ -153,11 +153,11 @@ export const useVendorStore = defineStore('vendor', {
       const prefix = this.vendor?.prefix || 'ita'
 
       // preț brut per item/extra — cel primit de la backend prin vendor/get
-      // (item.priceRaw/e.priceRaw, vezi mapProduct), nu valoarea în lei
-      // folosită pentru display; "Custom amount" (value_only) n-are
-      // priceRaw fiindcă nu vine dintr-un produs real, deci cade pe
-      // lineTotal-ul introdus manual convertit în bani.
-      const rawPrice = (value, fallbackLei) => value ?? String(Math.round(fallbackLei * 100))
+      // (item.priceRaw/e.priceRaw, vezi mapProduct); "Custom amount"
+      // (value_only) n-are priceRaw fiindcă nu vine dintr-un produs real, deci
+      // cade pe item.lineTotal — care e deja în bani (cenți), la fel ca
+      // priceRaw, nu în lei (vezi VendorPage.vue/VendorNewOrder.vue).
+      const rawPrice = (value, fallbackCents) => value ?? String(Math.round(fallbackCents))
 
       const products = cartItems.map(item => ({
         price: rawPrice(item.priceRaw, item.lineTotal),
@@ -208,7 +208,10 @@ export const useVendorStore = defineStore('vendor', {
             status: ORDER_STATUS.OPENED,
             items: cartItems.map(item => ({ name: item.name })),
             extra: cartItems.flatMap(item => item.extras.map(e => e.name)).join(', ') || null,
-            total: cartItems.reduce((sum, item) => sum + item.lineTotal, 0),
+            // total e afișat direct ca "{{ order.total }} lei" (VendorPage.vue),
+            // la fel ca mapOrder de mai sus — deci trebuie lei, nu bani, spre
+            // deosebire de item.lineTotal (bani) folosit mai sus la products
+            total: cartItems.reduce((sum, item) => sum + item.lineTotal, 0) / 100,
           }
 
       this.orders.unshift(order)

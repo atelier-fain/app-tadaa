@@ -64,6 +64,10 @@ export function buildVivaPayUrl (payload = {}) {
     Cookies.set('vivaDebugRequest', params, { path: '/', expires: 1 })
   }
 
+  console.log(params)
+
+
+
   return 'vivapayclient://pay/v1?' + Object.entries(params)
     .map(([key, value]) => `${key}=${value}`)
     .join('&')

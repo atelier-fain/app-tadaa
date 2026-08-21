@@ -11,7 +11,7 @@
           <div class="pm-order-main">
             <span class="pm-order-name">{{ item.name }}</span>
             <div class="pm-order-right">
-              <span class="pm-order-price" v-html="formatPrice(item.lineTotal)" />
+              <span class="pm-order-price" v-html="_formattedPrice(item.lineTotal)" />
               <q-icon name="delete_outline" class="pm-order-delete" @click="removeFromCart(i)" />
             </div>
           </div>
@@ -22,7 +22,7 @@
 
         <div class="pm-order-footer">
           <span class="pm-order-total-label">Total</span>
-          <span class="pm-order-total" v-html="formatPrice(cartTotal)" />
+          <span class="pm-order-total" v-html="_formattedPrice(cartTotal)" />
         </div>
       </div>
 
@@ -67,7 +67,7 @@
           @click="['error', 'unsupported'].includes(festivalStatus) && onFestivalScanClick()"
         />
         <p class="nfc-text">{{ festivalStatusText }}</p>
-        <div class="nfc-amount" v-html="formatPrice(cartTotal, true)" />
+        <div class="nfc-amount" v-html="_formattedPrice(cartTotal)" />
         <p v-if="festivalError" class="nfc-error-text">{{ festivalError }}</p>
         <button
           v-if="['error', 'unsupported'].includes(festivalStatus)"
@@ -81,7 +81,7 @@
       <div v-else class="festival-result festival-result--error">
         <q-icon name="cancel" size="64px" />
         <p class="festival-result-title">Insufficient credit</p>
-        <p class="festival-result-desc">This card doesn't have enough balance for <span v-html="formatPrice(cartTotal, true)" />.</p>
+        <p class="festival-result-desc">This card doesn't have enough balance for <span v-html="_formattedPrice(cartTotal)" />.</p>
         <p class="festival-result-desc">Your Balance is: <strong v-html="_formattedPrice(Number(festivalCardData?.balance) || 0)" /></p>
         <button class="nfc-scan-btn" @click="backToPaymentMethods">Try another payment method</button>
       </div>
@@ -99,6 +99,11 @@ import _formattedPrice from '../mixins/formattedPrice.js'
 
 const props = defineProps({
   cart: { type: Array, required: true },
+  // bani (cenți întregi), nu lei — vine deja convertit din priceRaw
+  // (VendorNewOrder.vue), toCents(tempCustomValue) (VendorPage.vue) sau
+  // pendingOrder.cart (Callback.vue, care are aceeași formă). Se trimite ca
+  // atare la pay_card/purchase_prepaid_card — Viva primește exact valoarea
+  // asta ca `amount`, deci nu se mai convertește nimic aici.
   cartTotal: { type: Number, required: true },
   modelValue: { type: Boolean, default: false }
 })
@@ -111,10 +116,6 @@ const isDev = !!process.env.DEV
 
 const cart = computed(() => props.cart)
 const cartTotal = computed(() => props.cartTotal)
-
-function formatPrice (value, withUnit = false) {
-  return `${Math.floor(value)}<sup>00</sup>${withUnit ? ' lei' : ''}`
-}
 
 // șterge o linie direct din modalul de plată — props.cart e același array
 // (prin referință) cu cel din componenta părinte (VendorNewOrder.vue,
@@ -140,7 +141,7 @@ function onCardClick () {
   if (dataStore.isFetching === 'pay_card') return
 
   dataStore.pay_card({
-    totalPrice: cartTotal.value * 100,
+    totalPrice: cartTotal.value,
     user: dataStore.user?.user,
     source: 'vendor',
     cart: props.cart,
@@ -301,7 +302,7 @@ async function chargeFestivalCard (scannedTdid) {
   festivalStatus.value = 'charging'
 
   try {
-    const data = await dataStore.purchase_prepaid_card(scannedTdid, cartTotal.value * 100)
+    const data = await dataStore.purchase_prepaid_card(scannedTdid, cartTotal.value)
     festivalCardData.value = data
 
     if (data.error) {
@@ -318,7 +319,7 @@ async function chargeFestivalCard (scannedTdid) {
       name: 'tickets-callback',
       query: {
         status: 'success',
-        amount: String(cartTotal.value * 100),
+        amount: String(cartTotal.value),
         paymentMethod: 'prepaid',
         balance: String(data.balance)
       }
