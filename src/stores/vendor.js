@@ -78,8 +78,8 @@ function mapProduct (raw) {
       required: !e.value.accept_no_selection,
       options: toArray(e.value.items).map(i => ({
         name: i.value.title.trim(),
-        price: Number(i.value.price) / 100,
-        priceRaw: i.value.price,
+        price: Number(i.value.price) / 100 || 0,
+        priceRaw: i.value.price || 0,
         plu: i.value.plu,
       })),
     })),
