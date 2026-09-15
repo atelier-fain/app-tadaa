@@ -4,6 +4,7 @@ import {ep} from "stores/ep.js";
 import { Cookies, Notify } from 'quasar'
 import {nextTick} from "vue";
 import {buildVivaPayUrl} from "stores/viva-pay.js";
+import {enqueueUpdate} from "src/services/retryQueue.js";
 
 export const useDataStore = defineStore('data', {
   state: () => ({
@@ -100,15 +101,18 @@ export const useDataStore = defineStore('data', {
           }
           Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
 
+          const ticketsPayload = { tickets: payload.tickets || [], method: 'cash', transactionId: '', shortOrderCode: '' }
+
           try {
-            data = await this.buy_tickets({ tickets: payload.tickets || [], method: 'cash', transactionId: '', shortOrderCode: '' })
+            data = await this.buy_tickets(ticketsPayload)
           } catch (e) {
-            Notify.create({
-              type: 'negative',
-              message: e?.response?.data?.message || 'Payment could not be confirmed',
-              position: 'top'
-            })
-            return
+            // spre deosebire de Card Festival (purchase_prepaid_card), unde
+            // răspunsul chiar contează (sold/card invalid trebuie arătate
+            // direct), aici doar ÎNREGISTRĂM cash-ul deja încasat de vendor —
+            // orice eșec (rețea sau răspuns de eroare) intră în coadă și se
+            // reîncearcă automat în fundal, fără să blocăm userul
+            console.error('[pay_cash/tickets] save failed, queued for retry', e?.response?.data || e?.message || e)
+            enqueueUpdate('tickets', ticketsPayload)
           }
 
           Notify.create({
@@ -125,30 +129,22 @@ export const useDataStore = defineStore('data', {
           }
           Cookies.set('pendingOrder', this.pendingOrder, { path: '/', expires: 1 })
 
+          const topupPayload = { _id: payload.cardId, amount: payload.amount, method: 'cash', transactionId: '', shortOrderCode: '' }
+
           try {
-            data = await this.charge_prepaid_card({
-              _id: payload.cardId,
-              amount: payload.amount,
-              method: 'cash',
-              transactionId: '',
-              shortOrderCode: ''
-            })
+            data = await this.charge_prepaid_card(topupPayload)
           } catch (e) {
-            Notify.create({
-              type: 'negative',
-              message: e?.response?.data?.message || 'Payment could not be confirmed',
-              position: 'top'
-            })
-            return
+            // aceeași logică ca la tickets mai sus — doar înregistrare, nu
+            // debitare, deci orice eșec intră în coadă (vezi comentariul de acolo)
+            console.error('[pay_cash/topup] save failed, queued for retry', e?.response?.data || e?.message || e)
+            enqueueUpdate('topup', topupPayload)
           }
 
-          if (data?.message) {
-            Notify.create({
-              type: 'positive',
-              message: data.message || 'Transaction succesfull',
-              position: 'top'
-            })
-          }
+          Notify.create({
+            type: 'positive',
+            message: data?.message || 'Transaction succesfull',
+            position: 'top'
+          })
         }
 
         if (onSuccess) {

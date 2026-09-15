@@ -1,6 +1,6 @@
 import { Cookies } from 'quasar'
 
-const dev = false
+const dev = !!process.env.DEV
 
 // de reactivat dacă mai apar probleme de tipul RESELLER_ORDER_DECLINED —
 // controlează atât salvarea cookie-ului de debug de aici, cât și afișarea
@@ -32,7 +32,7 @@ const config = {
   ISV_clientSecret: dev ? process.env.DEV__ISVClientSecret : process.env.ISVClientSecret,
   ISV_merchantId: dev ? process.env.DEV__ISVMerchantID : process.env.ISVMerchantID,
   ISV_currencyCode: '946',
-  ISV_customerTrns: 'BigLittleFestival 2026',
+  ISV_customerTrns: 'DEMO',
   // default pentru toate fluxurile (tickets/topup/vendor) — payload.paymentMethod
   // poate suprascrie per apel dacă vreun flux are nevoie de altă valoare
   paymentMethod: 'CARD_PRESENT'

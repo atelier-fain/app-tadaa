@@ -150,6 +150,7 @@ watch(() => vendorStore.products, (list) => {
     name: p.name,
     category: p.category,
     price: p.price,
+    priceRaw: p.priceRaw,
     active: p.active,
     duration: p.duration,
   }))

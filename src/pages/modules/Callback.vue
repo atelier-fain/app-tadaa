@@ -23,15 +23,7 @@
         <p v-if="message" class="callback-subtitle">Reason: <strong>{{ message }}</strong></p>
         <div class="callback-actions">
           <q-btn
-            v-if="paymentSucceededButSaveFailed"
-            no-caps
-            label="Try again"
-            class="callback-btn callback-btn--primary"
-            :loading="isRetryingSave"
-            @click="onRetrySave"
-          />
-          <q-btn
-            v-else-if="orderSource === 'vendor'"
+            v-if="orderSource === 'vendor'"
             no-caps
             label="Try another payment method"
             class="callback-btn callback-btn--primary"
@@ -47,18 +39,6 @@
             @click="onRetry"
           />
           <q-btn no-caps outline label="Cancel" class="callback-btn callback-btn--cancel" @click="onCancel" />
-        </div>
-
-        <div v-if="hasError" class="callback-debug">
-          <div class="callback-debug__title">Debug — eroare</div>
-          <div class="callback-debug__section">
-            <strong>Params primite (route.query):</strong>
-            <pre>{{ JSON.stringify(route.query, null, 2) }}</pre>
-          </div>
-          <div class="callback-debug__section">
-            <strong>Detalii eroare:</strong>
-            <pre>{{ JSON.stringify(errorDetails, null, 2) }}</pre>
-          </div>
         </div>
       </template>
     </div>
@@ -91,6 +71,7 @@ import { Cookies } from 'quasar'
 import { useDataStore } from 'stores/data.js'
 import { useVendorStore } from 'stores/vendor.js'
 import { SHOW_VIVA_DEBUG } from 'stores/viva-pay.js'
+import { enqueueUpdate, isRetryableError } from 'src/services/retryQueue.js'
 import VendorPaymentModal from 'components/VendorPaymentModal.vue'
 import _formattedPrice from '../../mixins/formattedPrice.js'
 
@@ -99,10 +80,6 @@ const router = useRouter()
 const store = useDataStore()
 const vendorStore = useVendorStore()
 
-const hasError = ref(false)
-const errorMessage = ref('')
-const errorDetails = ref(null)
-const isRetryingSave = ref(false)
 const orderSource = ref(null)
 const pendingOrder = ref(null)
 const showPayment = ref(false)
@@ -113,14 +90,14 @@ const retryCart = computed(() => pendingOrder.value?.cart || [])
 const retryCartTotal = computed(() => retryCart.value.reduce((sum, item) => sum + item.lineTotal, 0))
 
 const status = computed(() => route.query.status)
-const isSuccess = computed(() => status.value === 'success' && !hasError.value)
-// plata a reușit la Viva, doar salvarea în backend a picat (ex: eroare de
-// rețea) — "Try again" retrimite DOAR request-ul de salvare, fără să
-// reia plata (Viva nu ar trebui debitată a doua oară pentru același transactionId)
-const paymentSucceededButSaveFailed = computed(() => status.value === 'success' && hasError.value)
+// userul vede DOAR ce vine din Viva — nu există nicio ramură vizibilă
+// pentru "salvarea în backend a eșuat" (nici măcar pentru o respingere
+// reală, nu doar rețea); vezi handleSaveFailure mai jos, care doar loghează/
+// pune în coadă, fără să atingă vreodată starea de UI
+const isSuccess = computed(() => status.value === 'success')
 const amount = computed(() => Number(route.query.amount) || 0)
 const balance = computed(() => route.query.balance !== undefined ? Number(route.query.balance) || 0 : null)
-const message = computed(() => errorMessage.value || route.query.message || '')
+const message = computed(() => route.query.message || '')
 const transactionId = computed(() => route.query.transactionId || '')
 const shortOrderCode = computed(() => route.query.shortOrderCode || '')
 const newOrderLabel = computed(() => orderSource.value === 'topup' ? 'Top up again' : 'New order')
@@ -128,11 +105,6 @@ const destinationRoute = computed(() => {
   if (orderSource.value === 'topup') return 'top_up'
   if (orderSource.value === 'vendor') return 'vendor'
   return 'tickets'
-})
-const saveErrorMessage = computed(() => {
-  if (orderSource.value === 'topup') return 'Could not complete the top up'
-  if (orderSource.value === 'vendor') return 'Payment succeeded, but the order could not be sent. Please contact support.'
-  return 'Could not complete the order'
 })
 
 // watch pe route.query (nu onMounted) — "Try another payment method" pentru
@@ -154,13 +126,6 @@ watch(() => route.query, () => {
 
   orderSource.value = pendingOrder.value.source
 
-  // reset — un retry rulează acest handler din nou pe aceeași instanță;
-  // hasError trebuie golit, altfel eșecul anterior ar bloca isSuccess
-  // permanent (isSuccess = status === 'success' && !hasError)
-  hasError.value = false
-  errorMessage.value = ''
-  errorDetails.value = null
-
   // dacă userul dă refresh pe /callback după ce plata a fost deja trimisă
   // către backend (orderSaved: true, setat de buy_tickets/charge_prepaid_card/
   // saveOrder după succes), sărim peste retrimitere și îl ducem direct la
@@ -171,44 +136,79 @@ watch(() => route.query, () => {
   }
 
   if (isSuccess.value) {
-    persistOrder().catch((e) => {
-      console.error(`${orderSource.value} save failed`, e?.response?.data || e)
-      hasError.value = true
-      errorMessage.value = saveErrorMessage.value
-      errorDetails.value = e?.response?.data || e?.message || String(e)
-    })
+    persistOrder().catch((e) => handleSaveFailure(e))
   }
 }, { immediate: true })
 
-// trimite comanda/plata către backend, DOAR salvarea — folosită atât la
-// primul mount cât și de "Try again" (paymentSucceededButSaveFailed), care
-// nu trebuie să reia plata la Viva, doar request-ul de salvare care a picat
-function persistOrder () {
+// plata a reușit deja la Viva — userul nu trebuie să știe niciodată că mai
+// există un pas separat de salvare în backend, indiferent cum eșuează:
+// - eroare de rețea (niciun răspuns primit) => intră în coada de retry,
+//   se reîncearcă automat din minut în minut, în fundal (retryQueue.js)
+// - eroare reală (backend-ul A răspuns: sold insuficient, date invalide
+//   etc.) => nu se reîncearcă la infinit (degeaba, rezultatul ar fi
+//   identic de fiecare dată), doar se loghează pentru investigare manuală
+// În ambele cazuri, ecranul rămâne "Payment successful" — nicio schimbare
+// vizibilă pentru user.
+function handleSaveFailure (e) {
+  if (isRetryableError(e)) {
+    console.error(`${orderSource.value} save failed (network), queued for retry`, e?.message || e)
+    enqueueUpdate(orderSource.value, persistOrderPayload())
+    return
+  }
+
+  console.error(`${orderSource.value} save failed (not retried — backend rejected it)`, e?.response?.data || e)
+}
+
+// forma payload-ului pentru fiecare source, aceeași folosită mai jos de
+// persistOrder() și de retryQueue.js (vezi handlers din acel fișier) — un
+// singur loc care descrie "ce trebuie apelat" pentru fiecare tip de comandă
+function persistOrderPayload () {
   if (pendingOrder.value.source === 'tickets') {
-    return store.buy_tickets({
+    return {
       tickets: pendingOrder.value.tickets,
       method: 'card',
       transactionId: transactionId.value,
       shortOrderCode: shortOrderCode.value
-    })
+    }
   }
 
   if (pendingOrder.value.source === 'topup') {
-    return store.charge_prepaid_card({
+    return {
       _id: pendingOrder.value.cardId,
       amount: amount.value,
       method: 'card',
       transactionId: transactionId.value,
       shortOrderCode: shortOrderCode.value
-    })
+    }
   }
 
   if (pendingOrder.value.source === 'vendor') {
+    return {
+      cartItems: pendingOrder.value.cart || [],
+      paymentMethod: pendingOrder.value?.paymentMethod || 'card',
+      transactionId: transactionId.value,
+      shortOrderCode: shortOrderCode.value
+    }
+  }
+
+  return null
+}
+
+// trimite comanda/plata către backend, DOAR salvarea — folosită la primul
+// mount; dacă eșuează, watch-ul de mai sus o pune în coada de retry
+function persistOrder () {
+  if (pendingOrder.value.source === 'tickets') {
+    return store.buy_tickets(persistOrderPayload())
+  }
+
+  if (pendingOrder.value.source === 'topup') {
+    return store.charge_prepaid_card(persistOrderPayload())
+  }
+
+  if (pendingOrder.value.source === 'vendor') {
+    const payload = persistOrderPayload()
     return vendorStore.saveOrder(
-      pendingOrder.value.cart || [],
-      pendingOrder.value?.paymentMethod || 'card',
-      transactionId.value,
-      shortOrderCode.value
+      payload.cartItems, payload.paymentMethod, payload.transactionId, payload.shortOrderCode
     ).then(() => {
       // orderSaved se setează DOAR la succes real (saveOrder aruncă la eșec) —
       // altfel o comandă netrimisă în DB ar bloca orice reîncercare ulterioară
@@ -240,25 +240,6 @@ onBeforeUnmount(() => {
 // pagina următoare să nu aterizeze din nou pe ecranul de succes
 function onNewOrder () {
   router.replace({ name: destinationRoute.value })
-}
-
-// "Try again" pentru cazul plată reușită / salvare eșuată — reia DOAR
-// request-ul de salvare (fără onRetry, care ar deschide un nou pay_card
-// și ar debita userul din nou pentru aceeași comandă)
-async function onRetrySave () {
-  isRetryingSave.value = true
-
-  try {
-    await persistOrder()
-    hasError.value = false
-    errorMessage.value = ''
-    errorDetails.value = null
-  } catch (e) {
-    console.error(`${orderSource.value} retry save failed`, e?.response?.data || e)
-    errorDetails.value = e?.response?.data || e?.message || String(e)
-  } finally {
-    isRetryingSave.value = false
-  }
 }
 
 function onRetry () {

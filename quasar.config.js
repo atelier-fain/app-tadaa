@@ -6,7 +6,8 @@ export default defineConfig(() => {
       'axios',
       'image-helper',
       'wake-lock',
-      'notify'
+      'notify',
+      'retry-queue'
     ],
     css: [
       'app.scss'
